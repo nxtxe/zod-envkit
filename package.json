@@ -2,6 +2,23 @@
   "name": "zod-envkit",
   "version": "1.0.4",
   "description": "Validate environment variables with Zod and generate .env.example",
+  "license": "MIT",
+  "author": "",
+  "homepage": "https://github.com/nxtxe/zod-envkit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nxtxe/zod-envkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nxtxe/zod-envkit/issues"
+  },
+  "keywords": [
+    "env",
+    "dotenv",
+    "zod",
+    "validation",
+    "cli"
+  ],
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -13,7 +30,6 @@
       "require": "./dist/index.cjs"
     }
   },
-  
   "bin": {
     "zod-envkit": "dist/cli.js"
   },
@@ -23,39 +39,16 @@
     "CHANGELOG.md",
     "LICENSE"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nxtxe/zod-envkit.git"
-  },
-  "bugs": {
-    "url": "https://github.com/nxtxe/zod-envkit/issues"
-  },
-  "homepage": "https://github.com/nxtxe/zod-envkit#readme",
   "scripts": {
     "build": "tsup src/index.ts src/cli.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts src/cli.ts --watch --dts",
-    "release": "semantic-release",
-    "test": "vitest run"
+    "test": "vitest run",
+    "release": "semantic-release"
   },
-  "keywords": [
-    "env",
-    "dotenv",
-    "zod",
-    "validation",
-    "cli"
-  ],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "commander": "^13.1.0",
     "dotenv": "^17.2.3",
     "zod": "^4.3.6"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": ">=18"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -70,5 +63,12 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.15.9"
 }
