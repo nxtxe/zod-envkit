@@ -1,6 +1,6 @@
 {
   "name": "zod-envkit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Validate environment variables with Zod and generate .env.example",
   "type": "module",
   "main": "dist/index.cjs",
