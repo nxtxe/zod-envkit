@@ -5,7 +5,9 @@
   </p>
   <br />
   <p>
-    <a href="https://github.com/nxtxe/zod-envkit"><img src="https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white"></a>
+    <a href="https://github.com/nxtxe/zod-envkit">
+      <img src="https://github.com/nxtxe/zod-envkit/actions/workflows/release.yml/badge.svg" />
+    </a>
     <a href="https://www.npmjs.com/package/zod-envkit">
       <img src="https://img.shields.io/npm/v/zod-envkit.svg?maxAge=100" alt="npm version" />
     </a>
@@ -13,17 +15,28 @@
       <img src="https://img.shields.io/npm/dt/zod-envkit.svg?maxAge=100" alt="npm downloads" />
     </a>
   </p>
+
+  <p>
+    <a href="./README.md">
+      <p>English</p>
+    </a>
+    <a href="./README.RU.md">
+      <p>Русский</p>
+    </a>
+  </p>
 </div>
 
 Type-safe environment variable validation and documentation using **Zod**.
 
-**zod-envkit** is a small library + CLI that helps you treat environment variables as an **explicit runtime contract**, not an implicit guessing game.
+**zod-envkit** is a small library + CLI that helps you treat environment variables as an  
+**explicit runtime contract**, not an implicit guessing game.
 
 - validate `process.env` at startup
 - get fully typed environment variables
 - generate `.env.example`
 - generate readable documentation (`ENV.md`)
 - inspect and verify env state via CLI
+- fail fast in CI/CD before deploy
 
 No cloud. No magic. Just code.
 
@@ -33,7 +46,7 @@ No cloud. No magic. Just code.
 
 Environment variables are critical, but usually poorly handled.
 
-The usual problems:
+Typical problems:
 - `process.env` is just `string | undefined`
 - missing or invalid variables fail **at runtime**
 - `.env.example` and docs get outdated
@@ -53,13 +66,13 @@ The usual problems:
 npm install zod-envkit
 ````
 
-````bash
+```bash
 yarn add zod-envkit
-````
+```
 
 ```bash
 pnpm add zod-envkit
-````
+```
 
 ---
 
@@ -70,14 +83,18 @@ Create a single file responsible for loading and validating env.
 ```ts
 import "dotenv/config";
 import { z } from "zod";
-import { loadEnv, formatZodError } from "zod-envkit";
+import { loadEnv, mustLoadEnv, formatZodError } from "zod-envkit";
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   PORT: z.coerce.number().int().min(1).max(65535),
   DATABASE_URL: z.string().url(),
 });
+```
 
+### Option 1 — safe mode (no throw)
+
+```ts
 const result = loadEnv(EnvSchema);
 
 if (!result.ok) {
@@ -86,6 +103,12 @@ if (!result.ok) {
 }
 
 export const env = result.env;
+```
+
+### Option 2 — fail-fast (recommended)
+
+```ts
+export const env = mustLoadEnv(EnvSchema);
 ```
 
 Now:
@@ -158,11 +181,11 @@ Loads `.env`, masks secrets, and displays a readable table.
 npx zod-envkit show
 ```
 
-Example output:
+Shows:
 
 * which variables are required
 * which are present
-* masked values for secrets
+* masked values for secrets (`TOKEN`, `SECRET`, `*_KEY`, etc.)
 
 ---
 
@@ -173,7 +196,13 @@ npx zod-envkit check
 ```
 
 * exits with code `1` if any required variable is missing
-* perfect for CI/CD pipelines and pre-deploy checks
+* ideal for CI/CD pipelines and pre-deploy checks
+
+Example CI step:
+
+```bash
+npx zod-envkit check
+```
 
 ---
 
@@ -245,4 +274,3 @@ They are designed to be used **together**.
 ## License
 
 MIT
-

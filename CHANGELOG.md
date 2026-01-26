@@ -5,7 +5,36 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.5] – 2026-01-26
+
+### Added
+- `mustLoadEnv` helper for fail-fast env loading (throws on invalid env)
+- Default CLI behavior: running `zod-envkit` without subcommand now behaves like `zod-envkit generate`
+- Better secret masking in `zod-envkit show` (TOKEN / SECRET / PASSWORD / *_KEY / PRIVATE)
+
+### Changed
+- Public API (`loadEnv`, `mustLoadEnv`, `formatZodError`) stabilized and separated from CLI/generators
+- CLI error handling improved:
+  - no stack traces for user errors
+  - consistent human-readable messages
+  - strict exit codes (`0` success, `1` error)
+- `ENV.md` generation now produces fully centered, width-aware Markdown tables
+- CLI now reliably resolves `env.meta.json` from:
+  - project root
+  - `./examples/`
+  - explicit `-c/--config` path
+
+### Fixed
+- TypeScript type narrowing issues in CLI (`fs.readFileSync` with undefined paths)
+- Potential double execution when running CLI without subcommands
+- Inconsistent env loading behavior across CLI commands
+
+[1.0.5]: https://www.npmjs.com/package/zod-envkit/v/1.0.5
+
+---
+
 ## [1.0.4] – 2026-01-26
+
 ### Added
 - `zod-envkit show` command to display env status in a readable table (with secret masking)
 - `zod-envkit check` command to validate required variables (CI-friendly exit codes)

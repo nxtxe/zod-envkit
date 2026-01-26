@@ -9,8 +9,9 @@ export type EnvMeta = Record<
   }
 >;
 
+// сейчас делаем простую длину (без учета wide/unicode) — для env ключей/примеров ок
 function strLen(s: string): number {
-  return s.length;
+  return (s ?? "").length;
 }
 
 function padCenter(text: string, width: number): string {
@@ -21,13 +22,6 @@ function padCenter(text: string, width: number): string {
   const left = Math.floor(diff / 2);
   const right = diff - left;
   return " ".repeat(left) + t + " ".repeat(right);
-}
-
-function padRight(text: string, width: number): string {
-  const t = text ?? "";
-  const diff = width - strLen(t);
-  if (diff <= 0) return t;
-  return t + " ".repeat(diff);
 }
 
 function makeDivider(width: number, align: "left" | "center" | "right"): string {
@@ -43,8 +37,8 @@ function makeDivider(width: number, align: "left" | "center" | "right"): string 
 }
 
 /**
- * Генерит .env.example красиво:
- * - комментарий с description
+ * Generate .env.example:
+ * - comment with description (if present)
  * - KEY=example
  */
 export function generateEnvExample(meta: EnvMeta): string {
@@ -56,14 +50,14 @@ export function generateEnvExample(meta: EnvMeta): string {
     lines.push("");
   }
 
-  return lines.join("\n").trim() + "\n";
+  return lines.join("\n").trimEnd() + "\n";
 }
 
 /**
- * Генерит ENV.md как ровную таблицу:
- * - вычисляет ширины колонок по максимальной длине
- * - паддит значения пробелами
- * - ставит выравнивание :---: чтобы центрировалось в Markdown
+ * Generate ENV.md as a nicely aligned Markdown table:
+ * - calculates column widths from content
+ * - centers cells (including keys) like CLI table
+ * - uses :---: alignment markers for centered markdown columns
  */
 export function generateEnvDocs(meta: EnvMeta): string {
   const headers = ["Key", "Required", "Example", "Description"] as const;
@@ -92,6 +86,7 @@ export function generateEnvDocs(meta: EnvMeta): string {
     widths.Description = Math.max(widths.Description, strLen(r.Description));
   }
 
+  // немного воздуха, чтобы центрирование выглядело красиво
   widths.Key += 2;
   widths.Required += 2;
   widths.Example += 2;
@@ -117,7 +112,6 @@ export function generateEnvDocs(meta: EnvMeta): string {
       `| ${padCenter(r.Description, widths.Description)} |`
     );
   });
-
 
   return [
     `# Environment variables`,
