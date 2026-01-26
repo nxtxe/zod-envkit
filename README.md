@@ -1,26 +1,28 @@
 <div align="center">
-	<br />
-	<p>
-		<img src="./zod-envkit.svg" width="546" alt="zod-envkit" /><
-	</p>
-	<br />
-	<p>
-		<a href="https://www.npmjs.com/package/zod-envkit"><img src="https://img.shields.io/npm/v/zod-envkit.svg?maxAge=100" alt="npm version" /></a>
-		<a href="https://www.npmjs.com/package/zod-envkit"><img src="https://img.shields.io/npm/dt/zod-envkit.svg?maxAge=100" alt="npm downloads" /></a>
-	</p>
-  <p align="center">
-    <b> A framework for developing bots based using discord.js. </b>
+  <br />
+  <p>
+    <img src="./zod-envkit.svg" width="546" alt="zod-envkit" />
+  </p>
+  <br />
+  <p>
+    <a href="https://www.npmjs.com/package/zod-envkit">
+      <img src="https://img.shields.io/npm/v/zod-envkit.svg?maxAge=100" alt="npm version" />
+    </a>
+    <a href="https://www.npmjs.com/package/zod-envkit">
+      <img src="https://img.shields.io/npm/dt/zod-envkit.svg?maxAge=100" alt="npm downloads" />
+    </a>
   </p>
 </div>
 
-Type-safe environment variable validation and documentation using Zod.
+Type-safe environment variable validation and documentation using **Zod**.
 
-`zod-envkit` is a small library and CLI tool that helps you:
-- validate `process.env`
-- get **fully typed environment variables**
-- automatically generate `.env.example`
-- generate environment documentation (`ENV.md`)
-- treat environment variables as an **explicit contract**, not guesswork
+**zod-envkit** is a small library + CLI that helps you treat environment variables as an **explicit runtime contract**, not an implicit guessing game.
+
+- validate `process.env` at startup
+- get fully typed environment variables
+- generate `.env.example`
+- generate readable documentation (`ENV.md`)
+- inspect and verify env state via CLI
 
 No cloud. No magic. Just code.
 
@@ -28,18 +30,19 @@ No cloud. No magic. Just code.
 
 ## Why
 
-The problem:
-- `process.env` is just `string | undefined`
-- environment errors often appear **only at runtime**
-- `.env.example` and documentation are often outdated or missing
+Environment variables are critical, but usually poorly handled.
 
-The solution:
-- define your environment **once**
-- get:
-  - early validation
-  - TypeScript types
-  - up-to-date `.env.example`
-  - up-to-date documentation
+The usual problems:
+- `process.env` is just `string | undefined`
+- missing or invalid variables fail **at runtime**
+- `.env.example` and docs get outdated
+- CI/CD breaks late and unpredictably
+
+**zod-envkit** solves this by making env:
+- validated early
+- typed
+- documented
+- checkable in CI
 
 ---
 
@@ -57,7 +60,9 @@ pnpm add zod-envkit
 
 ---
 
-## Quick start
+## Library usage (runtime validation)
+
+Create a single file responsible for loading and validating env.
 
 ```ts
 import "dotenv/config";
@@ -67,7 +72,7 @@ import { loadEnv, formatZodError } from "zod-envkit";
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   PORT: z.coerce.number().int().min(1).max(65535),
-  DATABASE_URL: z.string().url()
+  DATABASE_URL: z.string().url(),
 });
 
 const result = loadEnv(EnvSchema);
@@ -85,86 +90,102 @@ Now:
 * `env.PORT` is a **number**
 * `env.DATABASE_URL` is a **string**
 * TypeScript knows everything at compile time
+* your app fails fast if env is invalid
 
 ---
 
-## CLI: generate `.env.example` and `ENV.md`
+## CLI usage
 
-### 1️⃣ Create `env.meta.json` in your project root
+The CLI works from a simple metadata file: `env.meta.json`.
+
+By default, it is searched in:
+
+* `./env.meta.json`
+* `./examples/env.meta.json`
+
+---
+
+### Example `env.meta.json`
 
 ```json
 {
   "NODE_ENV": {
-    "description": "Application runtime environment",
-    "example": "development"
+    "description": "Runtime mode",
+    "example": "development",
+    "required": true
   },
   "PORT": {
-    "description": "HTTP server port",
-    "example": "3000"
+    "description": "HTTP port",
+    "example": "3000",
+    "required": true
   },
   "DATABASE_URL": {
-    "description": "PostgreSQL connection string",
-    "example": "postgresql://user:pass@localhost:5432/db"
+    "description": "Postgres connection string",
+    "example": "postgresql://user:pass@localhost:5432/db",
+    "required": true
   }
 }
 ```
 
 ---
 
-### 2️⃣ Run the CLI
+## CLI commands
+
+### Generate `.env.example` and `ENV.md`
+
+(Default behavior)
 
 ```bash
 npx zod-envkit
 ```
 
-Or locally during development:
+or explicitly:
 
 ```bash
-node dist/cli.js
+npx zod-envkit generate
 ```
 
 ---
 
-### 3️⃣ Output
+### Show current environment status
 
-#### `.env.example`
+Loads `.env`, masks secrets, and displays a readable table.
 
-```env
-# Application runtime environment
-NODE_ENV=development
-
-# HTTP server port
-PORT=3000
-
-# PostgreSQL connection string
-DATABASE_URL=postgresql://user:pass@localhost:5432/db
+```bash
+npx zod-envkit show
 ```
 
-#### `ENV.md`
+Example output:
 
-```md
-# Environment variables
-
-| Key | Required | Example | Description |
-|---|---:|---|---|
-| NODE_ENV | yes | development | Application runtime environment |
-| PORT | yes | 3000 | HTTP server port |
-| DATABASE_URL | yes | postgresql://... | PostgreSQL connection string |
-```
+* which variables are required
+* which are present
+* masked values for secrets
 
 ---
 
-## CLI options
+### Validate required variables (CI-friendly)
+
+```bash
+npx zod-envkit check
+```
+
+* exits with code `1` if any required variable is missing
+* perfect for CI/CD pipelines and pre-deploy checks
+
+---
+
+### CLI options
 
 ```bash
 zod-envkit --help
 ```
 
+Common flags:
+
 ```bash
-zod-envkit \
-  --config env.meta.json \
-  --out-example .env.example \
-  --out-docs ENV.md
+zod-envkit show \
+  --config examples/env.meta.json \
+  --env-file .env
 ```
 
 ---
@@ -176,6 +197,7 @@ zod-envkit \
 * ❌ no validation
 * ❌ no types
 * ❌ no documentation
+* ❌ no CI checks
 
 `zod-envkit`:
 
@@ -184,39 +206,40 @@ zod-envkit \
 * ✅ documentation
 * ✅ CLI tooling
 
-They work **great together**.
+They are designed to be used **together**.
 
 ---
 
-## Design decisions
+## Design principles
 
-* ❌ does not try to automatically parse Zod schemas
-* ❌ does not couple to any framework
-* ✅ explicit configuration over magic
-* ✅ small, predictable API
-* ✅ library + CLI, both optional
+* explicit configuration over magic
+* no framework coupling
+* small and predictable API
+* library and CLI are independent but complementary
+* environment variables are a runtime contract
 
 ---
 
 ## Roadmap
 
 * [ ] schema ↔ meta consistency checks
-* [ ] `zod-envkit check` (validation only)
-* [ ] grouping / sections in docs
-* [ ] prettier, human-friendly error output
+* [ ] grouped sections in generated docs
+* [ ] prettier, more human-friendly error output
 * [ ] JSON schema export
+* [ ] stricter validation modes for production
 
 ---
 
 ## Who is this for?
 
 * backend and fullstack projects
-* Node.js / Bun services
+* Node.js and Bun services
 * CI/CD pipelines
-* teams that treat env as part of their contract
+* teams that want env errors to fail fast, not late
 
 ---
 
 ## License
 
 MIT
+
