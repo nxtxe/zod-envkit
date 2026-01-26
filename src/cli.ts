@@ -7,7 +7,7 @@ import { generateEnvDocs, generateEnvExample, type EnvMeta } from "./generate.js
 const program = new Command();
 
 program
-  .name("smart-env")
+  .name("zod-envkit")
   .description("Generate .env.example and ENV.md from env.meta.json")
   .option("-c, --config <file>", "Path to env meta json", "env.meta.json")
   .option("--out-example <file>", "Output file for .env.example", ".env.example")

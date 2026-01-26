@@ -1,6 +1,6 @@
 Type-safe environment variable validation and documentation using Zod.
 
-`smart-env` is a small library and CLI tool that helps you:
+`zod-envkit` is a small library and CLI tool that helps you:
 - validate `process.env`
 - get **fully typed environment variables**
 - automatically generate `.env.example`
@@ -31,13 +31,13 @@ The solution:
 ## Installation
 
 ```bash
-npm install smart-env
+npm install zod-envkit
 ````
 
 or
 
 ```bash
-pnpm add smart-env
+pnpm add zod-envkit
 ```
 
 ---
@@ -47,7 +47,7 @@ pnpm add smart-env
 ```ts
 import "dotenv/config";
 import { z } from "zod";
-import { loadEnv, formatZodError } from "smart-env";
+import { loadEnv, formatZodError } from "zod-envkit";
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
@@ -99,7 +99,7 @@ Now:
 ### 2️⃣ Run the CLI
 
 ```bash
-npx smart-env
+npx zod-envkit
 ```
 
 Or locally during development:
@@ -142,11 +142,11 @@ DATABASE_URL=postgresql://user:pass@localhost:5432/db
 ## CLI options
 
 ```bash
-smart-env --help
+zod-envkit --help
 ```
 
 ```bash
-smart-env \
+zod-envkit \
   --config env.meta.json \
   --out-example .env.example \
   --out-docs ENV.md
@@ -162,7 +162,7 @@ smart-env \
 * ❌ no types
 * ❌ no documentation
 
-`smart-env`:
+`zod-envkit`:
 
 * ✅ validation
 * ✅ TypeScript inference
@@ -186,7 +186,7 @@ They work **great together**.
 ## Roadmap
 
 * [ ] schema ↔ meta consistency checks
-* [ ] `smart-env check` (validation only)
+* [ ] `zod-envkit check` (validation only)
 * [ ] grouping / sections in docs
 * [ ] prettier, human-friendly error output
 * [ ] JSON schema export
