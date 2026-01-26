@@ -17,26 +17,40 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
           cache: npm
 
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+      - name: Upgrade npm
+        run: npm i -g npm@latest
 
-      - run: |
+      - name: Install dependencies (retry on optional deps glitch)
+        run: |
+          npm ci || (rm -rf node_modules package-lock.json && npm i)
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure git user
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - run: npx semantic-release
+      - name: Release (semantic-release)
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
