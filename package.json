@@ -1,5 +1,5 @@
 {
-  "name": "smart-env",
+  "name": "zod-envkit",
   "version": "1.0.0",
   "description": "Validate environment variables with Zod and generate .env.example",
   "type": "module",
@@ -17,7 +17,7 @@
   },
 
   "bin": {
-    "smart-env": "dist/cli.js"
+    "zod-envkit": "dist/cli.js"
   },
 
   "scripts": {
