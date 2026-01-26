@@ -17,12 +17,8 @@
   </p>
 
   <p>
-    <a href="./README.md">
-      <p>English</p>
-    </a>
-    <a href="./README.RU.md">
-      <p>Русский</p>
-    </a>
+    <a href="./README.md">English</a> |
+    <a href="./README.RU.md">Русский</a>
   </p>
 </div>
 
