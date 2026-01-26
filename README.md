@@ -53,11 +53,13 @@ The usual problems:
 npm install zod-envkit
 ````
 
-or
+````bash
+yarn add zod-envkit
+````
 
 ```bash
 pnpm add zod-envkit
-```
+````
 
 ---
 

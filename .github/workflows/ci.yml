@@ -1,14 +1,33 @@
-- uses: actions/setup-node@v4
-  with:
-    node-version: 20
-    cache: npm
+name: CI
 
-- name: Upgrade npm
-  run: npm i -g npm@latest
+on:
+  push:
+  pull_request:
 
-- name: Install dependencies (retry on optional deps glitch)
-  run: |
-    npm ci || (rm -rf node_modules package-lock.json && npm i)
+jobs:
+  ci:
+    runs-on: ubuntu-latest
 
-- run: npm test
-- run: npm run build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm run build
