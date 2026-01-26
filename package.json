@@ -1,13 +1,11 @@
 {
   "name": "zod-envkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validate environment variables with Zod and generate .env.example",
   "type": "module",
-
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,44 +13,43 @@
       "require": "./dist/index.cjs"
     }
   },
-
   "bin": {
     "zod-envkit": "dist/cli.js"
   },
-
   "files": [
-  "dist",
-  "README.md",
-  "CHANGELOG.md",
-  "LICENSE"
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
   ],
-
   "repository": {
-  "type": "git",
-  "url": "git+https://github.com/nxtxe/zod-envkit.git"
+    "type": "git",
+    "url": "git+https://github.com/nxtxe/zod-envkit.git"
   },
   "bugs": {
     "url": "https://github.com/nxtxe/zod-envkit/issues"
   },
   "homepage": "https://github.com/nxtxe/zod-envkit#readme",
-
   "scripts": {
     "build": "tsup src/index.ts src/cli.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts src/cli.ts --watch --dts",
     "test": "vitest run",
     "prepublishOnly": "npm run test && npm run build"
   },
-
-  "keywords": ["env", "dotenv", "zod", "validation", "cli"],
+  "keywords": [
+    "env",
+    "dotenv",
+    "zod",
+    "validation",
+    "cli"
+  ],
   "author": "",
   "license": "MIT",
-
   "dependencies": {
     "commander": "^13.1.0",
     "dotenv": "^17.2.3",
     "zod": "^4.3.6"
   },
-
   "devDependencies": {
     "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
