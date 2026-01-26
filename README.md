@@ -1,3 +1,18 @@
+<div align="center">
+	<br />
+	<p>
+		<img src="./zod-envkit.svg" width="546" alt="zod-envkit" /><
+	</p>
+	<br />
+	<p>
+		<a href="https://www.npmjs.com/package/zod-envkit"><img src="https://img.shields.io/npm/v/zod-envkit.svg?maxAge=100" alt="npm version" /></a>
+		<a href="https://www.npmjs.com/package/zod-envkit"><img src="https://img.shields.io/npm/dt/zod-envkit.svg?maxAge=100" alt="npm downloads" /></a>
+	</p>
+  <p align="center">
+    <b> A framework for developing bots based using discord.js. </b>
+  </p>
+</div>
+
 Type-safe environment variable validation and documentation using Zod.
 
 `zod-envkit` is a small library and CLI tool that helps you:
