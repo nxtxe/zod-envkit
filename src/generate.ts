@@ -1,3 +1,5 @@
+// src/generate.ts
+
 export type EnvMeta = Record<
   string,
   {
@@ -7,6 +9,44 @@ export type EnvMeta = Record<
   }
 >;
 
+function strLen(s: string): number {
+  return s.length;
+}
+
+function padCenter(text: string, width: number): string {
+  const t = text ?? "";
+  const diff = width - strLen(t);
+  if (diff <= 0) return t;
+
+  const left = Math.floor(diff / 2);
+  const right = diff - left;
+  return " ".repeat(left) + t + " ".repeat(right);
+}
+
+function padRight(text: string, width: number): string {
+  const t = text ?? "";
+  const diff = width - strLen(t);
+  if (diff <= 0) return t;
+  return t + " ".repeat(diff);
+}
+
+function makeDivider(width: number, align: "left" | "center" | "right"): string {
+  // Markdown alignment:
+  // left   : --- 
+  // center : :---:
+  // right  : ---:
+  if (width < 3) width = 3;
+
+  if (align === "center") return ":" + "-".repeat(width - 2) + ":";
+  if (align === "right") return "-".repeat(width - 1) + ":";
+  return "-".repeat(width);
+}
+
+/**
+ * Генерит .env.example красиво:
+ * - комментарий с description
+ * - KEY=example
+ */
 export function generateEnvExample(meta: EnvMeta): string {
   const lines: string[] = [];
 
@@ -19,18 +59,72 @@ export function generateEnvExample(meta: EnvMeta): string {
   return lines.join("\n").trim() + "\n";
 }
 
+/**
+ * Генерит ENV.md как ровную таблицу:
+ * - вычисляет ширины колонок по максимальной длине
+ * - паддит значения пробелами
+ * - ставит выравнивание :---: чтобы центрировалось в Markdown
+ */
 export function generateEnvDocs(meta: EnvMeta): string {
+  const headers = ["Key", "Required", "Example", "Description"] as const;
+
   const rows = Object.entries(meta).map(([key, m]) => {
     const req = m.required === false ? "no" : "yes";
-    return `| ${key} | ${req} | ${m.example ?? ""} | ${m.description ?? ""} |`;
+    return {
+      Key: key,
+      Required: req,
+      Example: m.example ?? "",
+      Description: m.description ?? "",
+    };
   });
+
+  const widths = {
+    Key: headers[0].length,
+    Required: headers[1].length,
+    Example: headers[2].length,
+    Description: headers[3].length,
+  };
+
+  for (const r of rows) {
+    widths.Key = Math.max(widths.Key, strLen(r.Key));
+    widths.Required = Math.max(widths.Required, strLen(r.Required));
+    widths.Example = Math.max(widths.Example, strLen(r.Example));
+    widths.Description = Math.max(widths.Description, strLen(r.Description));
+  }
+
+  widths.Key += 2;
+  widths.Required += 2;
+  widths.Example += 2;
+  widths.Description += 2;
+
+  const headerLine =
+    `| ${padCenter(headers[0], widths.Key)} ` +
+    `| ${padCenter(headers[1], widths.Required)} ` +
+    `| ${padCenter(headers[2], widths.Example)} ` +
+    `| ${padCenter(headers[3], widths.Description)} |`;
+
+  const dividerLine =
+    `| ${makeDivider(widths.Key, "center")} ` +
+    `| ${makeDivider(widths.Required, "center")} ` +
+    `| ${makeDivider(widths.Example, "center")} ` +
+    `| ${makeDivider(widths.Description, "center")} |`;
+
+  const bodyLines = rows.map((r) => {
+    return (
+      `| ${padCenter(r.Key, widths.Key)} ` +
+      `| ${padCenter(r.Required, widths.Required)} ` +
+      `| ${padCenter(r.Example, widths.Example)} ` +
+      `| ${padCenter(r.Description, widths.Description)} |`
+    );
+  });
+
 
   return [
     `# Environment variables`,
     ``,
-    `| Key | Required | Example | Description |`,
-    `|---|---:|---|---|`,
-    ...rows,
+    headerLine,
+    dividerLine,
+    ...bodyLines,
     ``,
   ].join("\n");
 }
