@@ -1,13 +1,14 @@
-name: CI
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+- uses: actions/setup-node@v4
+  with:
+    node-version: 20
+    cache: npm
+
+- name: Upgrade npm
+  run: npm i -g npm@latest
+
+- name: Install dependencies (retry on optional deps glitch)
+  run: |
+    npm ci || (rm -rf node_modules package-lock.json && npm i)
+
+- run: npm test
+- run: npm run build
