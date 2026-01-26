@@ -1,6 +1,6 @@
 {
   "name": "zod-envkit",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Validate environment variables with Zod and generate .env.example",
   "license": "MIT",
   "author": "",

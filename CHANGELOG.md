@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/nxtxe/zod-envkit/compare/v1.0.4...v1.0.5) (2026-01-26)
+
+
+### Bug Fixes
+
+* release 1.0.5 ([4d48479](https://github.com/nxtxe/zod-envkit/commit/4d48479b62819d4c17cc05eb14c64f387806cbec))
+
 ## [1.0.4](https://github.com/nxtxe/zod-envkit/compare/v1.0.3...v1.0.4) (2026-01-26)
 
 
