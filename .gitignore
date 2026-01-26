@@ -1,5 +1,6 @@
 # dependencies
 node_modules/
+package-lock.json
 
 # build output
 dist/
@@ -8,6 +9,7 @@ dist/
 .env
 .env.*
 !.env.example
+
 
 # logs
 npm-debug.log*

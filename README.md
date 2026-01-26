@@ -5,6 +5,7 @@
   </p>
   <br />
   <p>
+    <a href="https://github.com/nxtxe/zod-envkit"><img src="https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white"></a>
     <a href="https://www.npmjs.com/package/zod-envkit">
       <img src="https://img.shields.io/npm/v/zod-envkit.svg?maxAge=100" alt="npm version" />
     </a>

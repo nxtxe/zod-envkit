@@ -8,11 +8,13 @@ env.meta.json
 # local env
 .env
 .env.*
+ENV.md
 
 # git / github
 .git/
 .github/
 .gitignore
+
 
 # tooling
 tsconfig.json
