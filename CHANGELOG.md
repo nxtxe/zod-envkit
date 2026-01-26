@@ -5,17 +5,25 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [1.0.2] – 2026-01-26
-
+## [1.0.4] – 2026-01-26
 ### Added
-- `zod-envkit show` command to display environment status in a readable table (with secret masking)
-- `zod-envkit check` command to validate required variables with CI-friendly exit codes
+- `zod-envkit show` command to display env status in a readable table (with secret masking)
+- `zod-envkit check` command to validate required variables (CI-friendly exit codes)
 
 ### Changed
 - CLI now also searches for `env.meta.json` in `./examples/` by default
-- CLI output and documentation updated accordingly
 
-[1.0.2]: https://www.npmjs.com/package/zod-envkit/v/1.0.2
+[1.0.4]: https://www.npmjs.com/package/zod-envkit/v/1.0.4
+
+---
+
+## [1.0.3] – 2026-01-26
+- Git tag only (not published to npm)
+
+---
+
+## [1.0.2] – 2026-01-26
+- Git tag only (not published to npm)
 
 ---
 
