@@ -26,7 +26,6 @@ jobs:
           version: 9
           run_install: false
 
-      # 2️⃣ Node + cache pnpm
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
