@@ -9,7 +9,6 @@ export type EnvMeta = Record<
   }
 >;
 
-// сейчас делаем простую длину (без учета wide/unicode) — для env ключей/примеров ок
 function strLen(s: string): number {
   return (s ?? "").length;
 }

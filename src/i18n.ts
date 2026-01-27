@@ -1,6 +1,5 @@
 import { messages, type Lang } from "./messages.js";
 
-// ✅ добавь export
 export type { Lang };
 
 export function resolveLang(cliLang?: string): Lang {

@@ -1,0 +1,22 @@
+{
+  "name": "telegram-test-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "env:gen": "zod-envkit generate",
+    "env:check": "zod-envkit check",
+    "env:show": "zod-envkit show"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.13.3",
+    "dotenv": "^17.2.3",
+    "telegraf": "^4.16.3",
+    "zod": "^4.3.6",
+    "zod-envkit": "^1.0.5"
+  }
+}
