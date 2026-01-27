@@ -1,13 +1,28 @@
 // src/generate.ts
 
-export type EnvMeta = Record<
-  string,
-  {
-    description?: string;
-    example?: string;
-    required?: boolean; // default: true
-  }
->;
+export type EnvMetaEntry = {
+  description?: string;
+  example?: string;
+  required?: boolean; // default: true
+
+  // v1.1.0 metadata
+  group?: string;       // e.g. "Database"
+  default?: string;     // e.g. "info"
+  deprecated?: boolean; // true => mark in docs
+  since?: string;       // e.g. "1.1.0"
+  link?: string;        // e.g. "https://..."
+};
+
+export type EnvMeta = Record<string, EnvMetaEntry>;
+
+export type SortMode = "alpha" | "required-first" | "none";
+export type DocsFormat = "md" | "json" | "yaml";
+
+export type GenerateDocsOptions = {
+  format?: DocsFormat; // default: "md"
+  sort?: SortMode;     // default: "none"
+  group?: boolean;     // default: true for md, ignored for json/yaml
+};
 
 function strLen(s: string): number {
   return (s ?? "").length;
@@ -24,15 +39,49 @@ function padCenter(text: string, width: number): string {
 }
 
 function makeDivider(width: number, align: "left" | "center" | "right"): string {
-  // Markdown alignment:
-  // left   : --- 
-  // center : :---:
-  // right  : ---:
   if (width < 3) width = 3;
-
   if (align === "center") return ":" + "-".repeat(width - 2) + ":";
   if (align === "right") return "-".repeat(width - 1) + ":";
   return "-".repeat(width);
+}
+
+export function sortMetaEntries(meta: EnvMeta, sort: SortMode = "none"): Array<[string, EnvMetaEntry]> {
+  const entries = Object.entries(meta);
+
+  if (sort === "none") return entries;
+
+  if (sort === "alpha") {
+    return entries.sort(([a], [b]) => a.localeCompare(b));
+  }
+
+  // required-first
+  return entries.sort(([a, av], [b, bv]) => {
+    const ar = av.required === false ? 1 : 0;
+    const br = bv.required === false ? 1 : 0;
+    if (ar !== br) return ar - br; // required (0) first
+    return a.localeCompare(b);
+  });
+}
+
+function groupEntries(entries: Array<[string, EnvMetaEntry]>): Array<[string, Array<[string, EnvMetaEntry]>]> {
+  const map = new Map<string, Array<[string, EnvMetaEntry]>>();
+
+  for (const [k, v] of entries) {
+    const g = (v.group?.trim() || "General");
+    const arr = map.get(g) ?? [];
+    arr.push([k, v]);
+    map.set(g, arr);
+  }
+
+  // stable-ish order: General first, then alpha
+  const groups = Array.from(map.entries());
+  groups.sort(([ga], [gb]) => {
+    if (ga === "General") return -1;
+    if (gb === "General") return 1;
+    return ga.localeCompare(gb);
+  });
+
+  return groups;
 }
 
 /**
@@ -52,72 +101,147 @@ export function generateEnvExample(meta: EnvMeta): string {
   return lines.join("\n").trimEnd() + "\n";
 }
 
-/**
- * Generate ENV.md as a nicely aligned Markdown table:
- * - calculates column widths from content
- * - centers cells (including keys) like CLI table
- * - uses :---: alignment markers for centered markdown columns
- */
-export function generateEnvDocs(meta: EnvMeta): string {
-  const headers = ["Key", "Required", "Example", "Description"] as const;
+type DocsRow = {
+  Key: string;
+  Required: string;
+  Example: string;
+  Default: string;
+  Deprecated: string;
+  Since: string;
+  Link: string;
+  Description: string;
+};
 
-  const rows = Object.entries(meta).map(([key, m]) => {
+function buildRows(entries: Array<[string, EnvMetaEntry]>): DocsRow[] {
+  return entries.map(([key, m]) => {
     const req = m.required === false ? "no" : "yes";
+    const dep = m.deprecated ? "⚠️" : "";
+    const link = m.link ? m.link : "";
     return {
       Key: key,
       Required: req,
       Example: m.example ?? "",
+      Default: m.default ?? "",
+      Deprecated: dep,
+      Since: m.since ?? "",
+      Link: link,
       Description: m.description ?? "",
     };
   });
+}
 
-  const widths = {
-    Key: headers[0].length,
-    Required: headers[1].length,
-    Example: headers[2].length,
-    Description: headers[3].length,
-  };
+function renderMarkdownTable(rows: DocsRow[], headers: Array<keyof DocsRow>): string {
+  const widths: Record<string, number> = {};
+  for (const h of headers) widths[h] = String(h).length;
 
   for (const r of rows) {
-    widths.Key = Math.max(widths.Key, strLen(r.Key));
-    widths.Required = Math.max(widths.Required, strLen(r.Required));
-    widths.Example = Math.max(widths.Example, strLen(r.Example));
-    widths.Description = Math.max(widths.Description, strLen(r.Description));
+    for (const h of headers) widths[h] = Math.max(widths[h], strLen(String(r[h] ?? "")));
   }
 
-  // немного воздуха, чтобы центрирование выглядело красиво
-  widths.Key += 2;
-  widths.Required += 2;
-  widths.Example += 2;
-  widths.Description += 2;
+  // extra padding for nice centering
+  for (const h of headers) widths[h] += 2;
 
   const headerLine =
-    `| ${padCenter(headers[0], widths.Key)} ` +
-    `| ${padCenter(headers[1], widths.Required)} ` +
-    `| ${padCenter(headers[2], widths.Example)} ` +
-    `| ${padCenter(headers[3], widths.Description)} |`;
+    "|" + headers.map((h) => ` ${padCenter(String(h), widths[h])} `).join("|") + "|";
 
   const dividerLine =
-    `| ${makeDivider(widths.Key, "center")} ` +
-    `| ${makeDivider(widths.Required, "center")} ` +
-    `| ${makeDivider(widths.Example, "center")} ` +
-    `| ${makeDivider(widths.Description, "center")} |`;
+    "|" + headers.map((h) => ` ${makeDivider(widths[h], "center")} `).join("|") + "|";
 
-  const bodyLines = rows.map((r) => {
-    return (
-      `| ${padCenter(r.Key, widths.Key)} ` +
-      `| ${padCenter(r.Required, widths.Required)} ` +
-      `| ${padCenter(r.Example, widths.Example)} ` +
-      `| ${padCenter(r.Description, widths.Description)} |`
-    );
-  });
+  const body = rows.map((r) =>
+    "|" + headers.map((h) => ` ${padCenter(String(r[h] ?? ""), widths[h])} `).join("|") + "|"
+  );
 
-  return [
-    `# Environment variables`,
-    ``,
-    headerLine,
-    dividerLine,
-    ...bodyLines,
-    ``,
-  ].join("\n");
+  return [headerLine, dividerLine, ...body].join("\n");
+}
+
+function toJson(meta: EnvMeta, sort: SortMode): string {
+  // json: preserve order if none, otherwise sorted order
+  const entries = sortMetaEntries(meta, sort);
+  const obj: EnvMeta = {};
+  for (const [k, v] of entries) obj[k] = v;
+  return JSON.stringify(obj, null, 2) + "\n";
+}
+
+function escapeYamlString(s: string): string {
+  // minimal safe yaml string
+  const v = s ?? "";
+  if (v === "" || /[:#\-\n\r\t]/.test(v) || /^\s|\s$/.test(v)) {
+    return JSON.stringify(v); // quote via JSON rules
+  }
+  return v;
+}
+
+function toYaml(meta: EnvMeta, sort: SortMode): string {
+  const entries = sortMetaEntries(meta, sort);
+
+  const lines: string[] = [];
+  for (const [key, m] of entries) {
+    lines.push(`${escapeYamlString(key)}:`);
+    const props: Array<[string, unknown]> = [
+      ["description", m.description],
+      ["example", m.example],
+      ["required", m.required],
+      ["group", m.group],
+      ["default", m.default],
+      ["deprecated", m.deprecated],
+      ["since", m.since],
+      ["link", m.link],
+    ];
+
+    for (const [p, val] of props) {
+      if (val === undefined) continue;
+      if (typeof val === "boolean") lines.push(`  ${p}: ${val ? "true" : "false"}`);
+      else lines.push(`  ${p}: ${escapeYamlString(String(val))}`);
+    }
+  }
+  return lines.join("\n") + "\n";
+}
+
+function toMarkdown(meta: EnvMeta, sort: SortMode, group: boolean): string {
+  const entries = sortMetaEntries(meta, sort);
+
+  const headers: Array<keyof DocsRow> = [
+    "Key",
+    "Required",
+    "Example",
+    "Default",
+    "Deprecated",
+    "Since",
+    "Link",
+    "Description",
+  ];
+
+  const blocks: string[] = [];
+  blocks.push(`# Environment variables`);
+  blocks.push("");
+
+  if (group) {
+    const groups = groupEntries(entries);
+    for (const [g, gEntries] of groups) {
+      blocks.push(`## ${g}`);
+      blocks.push("");
+      const rows = buildRows(gEntries);
+      blocks.push(renderMarkdownTable(rows, headers));
+      blocks.push("");
+    }
+  } else {
+    const rows = buildRows(entries);
+    blocks.push(renderMarkdownTable(rows, headers));
+    blocks.push("");
+  }
+
+  return blocks.join("\n");
+}
+
+/**
+ * Generate ENV docs in md/json/yaml
+ */
+export function generateEnvDocs(meta: EnvMeta, opts: GenerateDocsOptions = {}): string {
+  const format = opts.format ?? "md";
+  const sort = opts.sort ?? "none";
+  const group = opts.group ?? true;
+
+  if (format === "json") return toJson(meta, sort);
+  if (format === "yaml") return toYaml(meta, sort);
+  return toMarkdown(meta, sort, group);
 }

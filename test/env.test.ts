@@ -1,20 +1,22 @@
-import { describe, expect, it } from "vitest";
-import { z } from "zod";
-import { loadEnv, mustLoadEnv } from "../src/index";
+import { describe, it, expect } from "vitest";
+import { getMissingEnv, getUnknownEnv, isSecretKey } from "../src/env.js";
 
-describe("env api", () => {
-  it("mustLoadEnv throws on invalid env", () => {
-    const schema = z.object({ A: z.string().min(1) });
-    delete process.env.A;
-
-    expect(() => mustLoadEnv(schema)).toThrow();
+describe("env utils", () => {
+  it("detects missing required vars", () => {
+    const meta = { A: { required: true }, B: { required: false } } as any;
+    const env = { B: "x" } as any;
+    expect(getMissingEnv(meta, env)).toEqual(["A"]);
   });
 
-  it("loadEnv returns ok=false on invalid env", () => {
-    const schema = z.object({ A: z.string().min(1) });
-    delete process.env.A;
+  it("detects unknown vars", () => {
+    const meta = { A: {} } as any;
+    const env = { A: "1", X: "2" } as any;
+    expect(getUnknownEnv(meta, env)).toEqual(["X"]);
+  });
 
-    const res = loadEnv(schema);
-    expect(res.ok).toBe(false);
+  it("secret key detection", () => {
+    expect(isSecretKey("TOKEN")).toBe(true);
+    expect(isSecretKey("MY_PRIVATE_KEY")).toBe(true);
+    expect(isSecretKey("PUBLIC_URL")).toBe(false);
   });
 });

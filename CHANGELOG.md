@@ -39,6 +39,65 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.0] – 2026-01-27
+
+### Added
+
+* New `zod-envkit init` command to bootstrap configuration:
+
+  * generate `env.meta.json` from `.env.example`
+  * generate `.env.example` from existing `env.meta.json`
+* Support for multiple dotenv files via `--dotenv` (e.g. `.env,.env.local,.env.production`) with override order
+* Extended documentation generation formats:
+
+  * `--format md` (default)
+  * `--format json`
+  * `--format yaml`
+* Sorting options for docs and CLI output via `--sort`:
+
+  * `alpha`
+  * `required-first`
+  * `none`
+* Strict validation mode for CI via `check --strict` (fails on unknown env vars)
+* Configurable secret masking in `show`:
+
+  * `--mask-mode partial | full | none`
+  * `--no-mask` alias
+* Grouped environment variables support via `meta.group`
+* Extended env metadata support:
+
+  * `default`
+  * `deprecated`
+  * `since`
+  * `link`
+* New public core utilities:
+
+  * `getMissingEnv`
+  * `checkEnv`
+  * `isSecretKey`
+
+### Changed
+
+* CLI architecture refactored into modular structure (`src/cli/*`) with no behavior changes
+* Documentation generator now supports:
+
+  * grouped sections
+  * width-aware, centered tables
+  * extended metadata columns
+* `loadDotEnv` now supports ordered multi-file loading instead of single `.env`
+* Public API further decoupled from CLI internals
+* CLI default behavior preserved (`zod-envkit` → `generate`)
+
+### Fixed
+
+* Inconsistent env resolution across commands when using multiple dotenv files
+* Edge cases in env validation when extra variables are present
+* Potential duplication and ordering issues in generated documentation
+
+[1.1.0]: https://www.npmjs.com/package/zod-envkit/v/1.1.0
+
+---
+
 ## [1.0.5] – 2026-01-26
 
 ### Added

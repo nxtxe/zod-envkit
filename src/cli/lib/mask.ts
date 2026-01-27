@@ -1,21 +1,15 @@
 // src/cli/lib/mask.ts
-const SECRET_PATTERNS: ReadonlyArray<(k: string) => boolean> = [
-  (k) => k.includes("TOKEN"),
-  (k) => k.includes("SECRET"),
-  (k) => k.includes("PASSWORD"),
-  (k) => k.includes("PRIVATE"),
-  (k) => k.includes("API_KEY"),
-  (k) => k.endsWith("_KEY"),
-];
+import { isSecretKey } from "../../env.js";
 
-export function isSecretKey(key: string): boolean {
-  const k = key.toUpperCase();
-  return SECRET_PATTERNS.some((fn) => fn(k));
-}
+export type MaskMode = "partial" | "full" | "none";
 
-export function maskValue(key: string, value: string): string {
+export function maskValue(key: string, value: string, mode: MaskMode): string {
+  if (mode === "none") return value;
   if (!isSecretKey(key)) return value;
 
+  if (mode === "full") return "*".repeat(Math.max(1, value.length));
+
+  // partial
   if (value.length <= 4) return "*".repeat(value.length);
   return value.slice(0, 2) + "*".repeat(Math.max(1, value.length - 4)) + value.slice(-2);
 }

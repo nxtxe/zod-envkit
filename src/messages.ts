@@ -8,7 +8,9 @@ export const messages: Record<Lang, Record<string, string>> = {
     GENERATED: "Generated: {example}, {docs}",
     ENV_OK: "Environment looks good.",
     MISSING_ENV: "Missing required environment variables:",
-    META_PARSE_FAILED: "Failed to read/parse env meta file:"
+    META_PARSE_FAILED: "Failed to read/parse env meta file:",
+    UNKNOWN_ENV: "Unknown environment variables:",
+    INIT_INPUT_EMPTY: "Input env file is empty or not found:"
   },
 
   ru: {
@@ -18,6 +20,8 @@ export const messages: Record<Lang, Record<string, string>> = {
     GENERATED: "Сгенерировано: {example}, {docs}",
     ENV_OK: "Переменные окружения в порядке.",
     MISSING_ENV: "Отсутствуют обязательные переменные окружения:",
-    META_PARSE_FAILED: "Не удалось прочитать/распарсить env meta файл:"
+    META_PARSE_FAILED: "Не удалось прочитать/распарсить env meta файл:",
+    UNKNOWN_ENV: "Обнаружены неизвестные переменные окружения:",
+    INIT_INPUT_EMPTY: "Файл окружения пуст или не найден:"
   },
 };

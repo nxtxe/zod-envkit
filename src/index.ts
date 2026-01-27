@@ -1,4 +1,6 @@
 import { z } from "zod";
+export * from "./generate.js";
+export * from "./env.js";
 
 export type LoadEnvOptions = {
   /**

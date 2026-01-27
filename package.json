@@ -30,9 +30,7 @@
       "require": "./dist/index.cjs"
     }
   },
-  "bin": {
-    "zod-envkit": "dist/cli/index.js"
-  },
+  "bin": { "zod-envkit": "dist/cli/index.js" },
   "files": [
     "dist",
     "README.md",
@@ -41,7 +39,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/cli/index.ts --format esm,cjs --dts --outDir dist",
+    "build": "rm -rf dist && tsup src/index.ts src/cli/index.ts --format esm,cjs --dts --outDir dist",
     "dev": "tsup src/index.ts src/cli/index.ts --watch --dts --outDir dist",
     "test": "vitest run",
     "release": "semantic-release"

@@ -16,24 +16,25 @@
     </a>
   </p>
 
- <p>
-  <a href="./README.md">English</a> |
-  <a href="./README.RU.md">Русский</a>
-</p>
-
+  <p>
+    <a href="./README.md">English</a> |
+    <a href="./README.RU.md">Русский</a>
+  </p>
 </div>
 
 Type-safe environment variable validation and documentation using **Zod**.
 
-**zod-envkit** is a small library + CLI that helps you treat environment variables as an  
+**zod-envkit** is a small library + CLI that treats environment variables as an  
 **explicit runtime contract**, not an implicit guessing game.
 
 - validate `process.env` at startup
 - get fully typed environment variables
 - generate `.env.example`
-- generate readable documentation (`ENV.md`)
-- inspect and verify env state via CLI
-- fail fast in CI/CD before deploy
+- generate documentation (`ENV.md`, `ENV.json`, `ENV.yaml`)
+- inspect env state via CLI (with secret masking)
+- validate env strictly in CI/CD
+- bootstrap configuration via `zod-envkit init`
+- load multiple `.env*` files with priority
 
 No cloud. No magic. Just code.
 
@@ -89,7 +90,7 @@ const EnvSchema = z.object({
 });
 ```
 
-### Option 1 — safe mode (no throw)
+### Safe mode (no throw)
 
 ```ts
 const result = loadEnv(EnvSchema);
@@ -102,7 +103,7 @@ if (!result.ok) {
 export const env = result.env;
 ```
 
-### Option 2 — fail-fast (recommended)
+### Fail-fast mode (recommended)
 
 ```ts
 export const env = mustLoadEnv(EnvSchema);
@@ -113,13 +114,13 @@ Now:
 * `env.PORT` is a **number**
 * `env.DATABASE_URL` is a **string**
 * TypeScript knows everything at compile time
-* your app fails fast if env is invalid
+* the app fails fast if env is invalid
 
 ---
 
 ## CLI usage
 
-The CLI works from a simple metadata file: `env.meta.json`.
+The CLI works from a metadata file: `env.meta.json`.
 
 By default, it is searched in:
 
@@ -128,7 +129,7 @@ By default, it is searched in:
 
 ---
 
-### Example `env.meta.json`
+## Example `env.meta.json`
 
 ```json
 {
@@ -154,7 +155,7 @@ By default, it is searched in:
 
 ## CLI commands
 
-### Generate `.env.example` and `ENV.md`
+### Generate `.env.example` and documentation
 
 (Default behavior)
 
@@ -168,53 +169,71 @@ or explicitly:
 npx zod-envkit generate
 ```
 
+Generate docs in different formats:
+
+```bash
+npx zod-envkit generate --format json
+npx zod-envkit generate --format yaml
+```
+
+Control sorting:
+
+```bash
+npx zod-envkit generate --sort alpha
+npx zod-envkit generate --sort required-first
+```
+
 ---
 
 ### Show current environment status
 
-Loads `.env`, masks secrets, and displays a readable table.
+Loads dotenv files, masks secrets, and displays a readable table.
 
 ```bash
 npx zod-envkit show
 ```
 
-Shows:
+Advanced options:
 
-* which variables are required
-* which are present
-* masked values for secrets (`TOKEN`, `SECRET`, `*_KEY`, etc.)
+```bash
+npx zod-envkit show --mask-mode full
+npx zod-envkit show --no-mask
+npx zod-envkit show --dotenv ".env,.env.local,.env.production"
+```
 
 ---
 
-### Validate required variables (CI-friendly)
+### Validate environment (CI-friendly)
 
 ```bash
 npx zod-envkit check
 ```
 
-* exits with code `1` if any required variable is missing
-* ideal for CI/CD pipelines and pre-deploy checks
-
-Example CI step:
+Strict mode (fail on unknown variables):
 
 ```bash
-npx zod-envkit check
+npx zod-envkit check --strict
 ```
+
+* exits with code `1` if required variables are missing
+* in `--strict` mode also fails on unknown variables
 
 ---
 
-### CLI options
+### Initialize configuration
+
+Bootstrap configuration from existing files.
+
+Generate `env.meta.json` from `.env.example`:
 
 ```bash
-zod-envkit --help
+npx zod-envkit init
 ```
 
-Common flags:
+Generate `.env.example` from existing metadata:
 
 ```bash
-zod-envkit show \
-  --config examples/env.meta.json \
-  --env-file .env
+npx zod-envkit init --from-meta
 ```
 
 ---
@@ -246,25 +265,6 @@ They are designed to be used **together**.
 * small and predictable API
 * library and CLI are independent but complementary
 * environment variables are a runtime contract
-
----
-
-## Roadmap
-
-* [ ] schema ↔ meta consistency checks
-* [ ] grouped sections in generated docs
-* [ ] prettier, more human-friendly error output
-* [ ] JSON schema export
-* [ ] stricter validation modes for production
-
----
-
-## Who is this for?
-
-* backend and fullstack projects
-* Node.js and Bun services
-* CI/CD pipelines
-* teams that want env errors to fail fast, not late
 
 ---
 
