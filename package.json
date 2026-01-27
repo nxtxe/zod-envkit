@@ -31,17 +31,18 @@
     }
   },
   "bin": {
-    "zod-envkit": "dist/cli.js"
+    "zod-envkit": "dist/cli/index.js"
   },
   "files": [
     "dist",
     "README.md",
+    "README.RU.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/cli.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts src/cli.ts --watch --dts",
+    "build": "tsup src/index.ts src/cli/index.ts --format esm,cjs --dts --outDir dist",
+    "dev": "tsup src/index.ts src/cli/index.ts --watch --dts --outDir dist",
     "test": "vitest run",
     "release": "semantic-release"
   },
