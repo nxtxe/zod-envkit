@@ -44,7 +44,10 @@
     "build": "rm -rf dist && tsup src/index.ts src/cli/index.ts --format esm,cjs --dts --outDir dist",
     "dev": "tsup src/index.ts src/cli/index.ts --watch --dts --outDir dist",
     "test": "vitest run",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "docs:api": "typedoc",
+    "docs:build": "pnpm docs:api && vitepress build docs",
+    "docs:dev": "vitepress dev docs"
   },
   "dependencies": {
     "commander": "^13.1.0",
@@ -62,7 +65,10 @@
     "eslint": "^9.39.2",
     "semantic-release": "^22.0.12",
     "tsup": "^8.5.1",
+    "typedoc": "^0.28.16",
+    "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.9.3",
+    "vitepress": "^1.6.4",
     "vitest": "^3.2.4"
   },
   "publishConfig": {
