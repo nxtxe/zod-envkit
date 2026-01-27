@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/nxtxe/zod-envkit/compare/v1.0.5...v1.1.0) (2026-01-27)
+
+
+### Features
+
+* release v1.1.0 ([b6f764e](https://github.com/nxtxe/zod-envkit/commit/b6f764eaacf94eec48e893481f4401c998032db3))
+
 ## [1.0.5](https://github.com/nxtxe/zod-envkit/compare/v1.0.4...v1.0.5) (2026-01-26)
 
 
