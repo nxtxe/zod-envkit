@@ -1,20 +1,25 @@
 # source files (we ship compiled code)
 src/
 test/
+tests/
 
-# config / meta
+# docs & site
+docs/
+README.RU.md
+CHANGELOG.md
+
+# config / meta (user-specific)
 env.meta.json
+ENV.md
 
 # local env
 .env
 .env.*
-ENV.md
 
 # git / github
 .git/
 .github/
 .gitignore
-
 
 # tooling
 tsconfig.json
@@ -22,6 +27,7 @@ eslint.config.*
 .eslintrc*
 .prettierrc*
 .prettierignore
+vitest.config.*
 
 # logs
 npm-debug.log*
@@ -39,3 +45,4 @@ coverage/
 # misc
 *.tsbuildinfo
 local
+publish.md
