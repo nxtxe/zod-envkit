@@ -2,13 +2,9 @@
 
 ***
 
-[zod-envkit](../README.md) / mustLoadEnv
-
-# Function: mustLoadEnv()
-
 > **mustLoadEnv**\<`T`\>(`schema`): `output`\<`T`\>
 
-Defined in: [index.ts:31](https://github.com/nxtxe/zod-envkit/blob/b6f764eaacf94eec48e893481f4401c998032db3/src/index.ts#L31)
+Defined in: [index.ts:31](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/index.ts#L31)
 
 Convenience wrapper around loadEnv(schema, { throwOnError: true })
 Returns typed env or throws ZodError

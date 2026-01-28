@@ -5,7 +5,7 @@ export default defineConfig({
   description: "Type-safe environment variable validation and documentation",
   base: "/zod-envkit/",
 
-  head: [["link", { rel: "icon", href: "/zod-envkit.svg" }]],
+  head: [["link", { rel: "icon", href: "/zod-envkit/zod-envkit.svg" }]],
 
   themeConfig: {
     logo: "/zod-envkit.svg",
@@ -14,7 +14,7 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
       { text: "CLI", link: "/guide/cli" },
-      { text: "API", link: "/api/README" }
+      { text: "API", link: "/api/" },
     ],
 
     sidebar: {
@@ -31,8 +31,12 @@ export default defineConfig({
       ],
       "/api/": [
         {
-          text: "API Reference",
-          items: [{ text: "Overview", link: "/api/README" }],
+          text: "API",
+          items: [
+            { text: "Overview", link: "/api/" },
+            { text: "Contract", link: "/api/contract" },
+            { text: "Generated", link: "/api/generated/" },
+          ],
         },
       ],
     },

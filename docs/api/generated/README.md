@@ -2,8 +2,6 @@
 
 ***
 
-# zod-envkit
-
 ## Type Aliases
 
 - [DocsFormat](type-aliases/DocsFormat.md)

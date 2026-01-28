@@ -1,9 +1,9 @@
 # Public API contract (1.x)
 
-## What is public API
+## Public API (stable)
 
-### Library
-The following exports are stable in `1.x`:
+### Library exports
+Stable in `1.x`:
 - loadEnv
 - mustLoadEnv
 - formatZodError
@@ -13,6 +13,7 @@ The following exports are stable in `1.x`:
 - isSecretKey
 - generateEnvExample
 - generateEnvDocs
+- sortMetaEntries
 
 ### CLI
 Commands and flags are part of the public API:
@@ -30,5 +31,5 @@ Breaking changes include:
 
 Non-breaking:
 - adding new optional exports
-- adding new CLI flags
+- adding new flags
 - improving error messages or formatting (without changing meaning)

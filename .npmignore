@@ -1,27 +1,20 @@
-# source files (we ship compiled code)
+# =====================
+# Source files (we ship compiled code)
+# =====================
 src/
 test/
 tests/
 
-# docs & site
+# =====================
+# Docs & site
+# =====================
 docs/
 README.RU.md
 CHANGELOG.md
 
-# config / meta (user-specific)
-env.meta.json
-ENV.md
-
-# local env
-.env
-.env.*
-
-# git / github
-.git/
-.github/
-.gitignore
-
-# tooling
+# =====================
+# Config / tooling (not needed at runtime)
+# =====================
 tsconfig.json
 eslint.config.*
 .eslintrc*
@@ -29,20 +22,45 @@ eslint.config.*
 .prettierignore
 vitest.config.*
 
-# logs
+# =====================
+# Git / CI
+# =====================
+.git/
+.github/
+.gitignore
+
+# =====================
+# User-specific / local
+# =====================
+env.meta.json
+ENV.md
+.env
+.env.*
+
+# =====================
+# Logs
+# =====================
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
 pnpm-debug.log*
 
-# OS / editor
+# =====================
+# OS / Editor
+# =====================
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/
 
-# coverage
+# =====================
+# Coverage
+# =====================
 coverage/
 
-# misc
+# =====================
+# Misc
+# =====================
 *.tsbuildinfo
 local
 publish.md

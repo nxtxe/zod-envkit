@@ -1,34 +1,50 @@
-# dependencies
+# =====================
+# Dependencies
+# =====================
 node_modules/
 package-lock.json
 pnpm-lock.yaml
 
-# build output
+# =====================
+# Build output
+# =====================
 dist/
 
-# env files
+# =====================
+# Environment files
+# =====================
 .env
 .env.*
 !.env.example
 
-# logs
+# =====================
+# Logs
+# =====================
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# OS
+# =====================
+# OS / Editor
+# =====================
 .DS_Store
 Thumbs.db
-
-# editor / IDE
-.vscode/
 .idea/
+.vscode/
 
-# coverage
+# =====================
+# Coverage
+# =====================
 coverage/
 
-# misc
+# =====================
+# Tooling / cache
+# =====================
 *.tsbuildinfo
 local
+
+# =====================
+# Misc
+# =====================
 publish.md
