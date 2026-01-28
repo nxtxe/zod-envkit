@@ -6,13 +6,13 @@ This guide shows how to validate environment variables at runtime using zod-envk
 
 ```bash
 npm add zod-envkit
-
+```
 ```bash
 pnpm add zod-envkit
-
+```
 ```bash
 yarn add zod-envkit
-
+```
 Create a single file responsible for loading and validating environment variables.
 
 ```ts

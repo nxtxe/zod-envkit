@@ -32,7 +32,7 @@ export default defineConfig({
       "/api/": [
         {
           text: "API Reference",
-          items: [{ text: "Overview", link: "/api/" }],
+          items: [{ text: "Overview", link: "/api/README" }],
         },
       ],
     },

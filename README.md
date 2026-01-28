@@ -24,7 +24,7 @@
 
 Type-safe environment variable validation and documentation using **Zod**.
 
-**zod-envkit** is a small library + CLI that treats environment variables as an  
+**zod-envkit** is a small, explicit library + CLI that treats environment variables as an  
 **explicit runtime contract**, not an implicit guessing game.
 
 - validate `process.env` at startup
@@ -42,19 +42,40 @@ No cloud. No magic. Just code.
 
 ## Why
 
-Environment variables are critical, but usually poorly handled.
+Environment variables are critical, but are usually handled poorly.
 
 Typical problems:
+
 - `process.env` is just `string | undefined`
 - missing or invalid variables fail **at runtime**
-- `.env.example` and docs get outdated
+- `.env.example` and docs drift out of sync
 - CI/CD breaks late and unpredictably
 
 **zod-envkit** solves this by making env:
+
 - validated early
 - typed
 - documented
 - checkable in CI
+
+---
+
+## When to use
+
+Use **zod-envkit** if:
+
+- you want env errors to fail **at startup**, not in production
+- you use TypeScript and care about correct types
+- you want `.env.example` and docs from a single source of truth
+- you want CI to catch missing / unknown variables
+
+## When NOT to use
+
+Skip **zod-envkit** if:
+
+- your project is extremely small and informal
+- you don’t control environment variables at all
+- you expect automatic schema introspection or “magic” behavior
 
 ---
 
@@ -235,6 +256,45 @@ Generate `.env.example` from existing metadata:
 ```bash
 npx zod-envkit init --from-meta
 ```
+
+---
+
+## Stability & Versioning
+
+`zod-envkit` follows **Semantic Versioning**.
+
+### Stable public API (1.x)
+
+**Library:**
+
+* `loadEnv`
+* `mustLoadEnv`
+* `formatZodError`
+* `checkEnv`
+* `getMissingEnv`
+* `getUnknownEnv`
+* `isSecretKey`
+* `generateEnvExample`
+* `generateEnvDocs`
+
+**CLI:**
+
+* `generate`, `show`, `check`, `init`
+* documented flags and exit codes
+
+### What is considered breaking
+
+* changing function signatures or return types
+* removing or renaming public exports
+* removing or renaming CLI commands or flags
+* changing exit code semantics
+* changing default CLI behavior
+
+Non-breaking:
+
+* adding new optional features
+* adding new flags
+* improving error messages or formatting
 
 ---
 

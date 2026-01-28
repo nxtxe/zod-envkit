@@ -4,7 +4,7 @@
   "description": "Validate environment variables with Zod and generate .env.example",
   "license": "MIT",
   "author": "",
-  "homepage": "https://github.com/nxtxe/zod-envkit#readme",
+  "homepage": "https://nxtxe.github.io/zod-envkit/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nxtxe/zod-envkit.git"

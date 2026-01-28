@@ -1,0 +1,389 @@
+Ок, понял. Сейчас у тебя уже почти “продукт”, осталось сделать **стабильность/контракт** и **доки как продукт** так, чтобы дальше ты просто поддерживал и улучшал без хаоса.
+
+Ниже даю **готовые вставки/файлы**, которые можно прям копипастить. Я разделю по файлам `////////`.
+
+---
+
+````md
+//////// README.md (вставь секции; лучше после Features/Quickstart) ////////
+
+## Stability & Versioning
+
+`zod-envkit` follows **Semantic Versioning**.
+
+### Public API (stable in 1.x)
+
+**Library (imported from `zod-envkit`):**
+- `loadEnv(schema, options?)`
+- `mustLoadEnv(schema)`
+- `formatZodError(error)`
+- `checkEnv(meta, env?)`
+- `getMissingEnv(meta, env?)`
+- `getUnknownEnv(meta, env?)`
+- `isSecretKey(key)`
+- `generateEnvExample(meta)`
+- `generateEnvDocs(meta, options?)`
+- `sortMetaEntries(meta, mode?)`
+
+**CLI (commands + flags are part of the public API):**
+- `zod-envkit generate` (`--format`, `--sort`, `--config`, `--out-*`)
+- `zod-envkit show` (`--dotenv`, `--mask-mode`, `--no-mask`, `--config`)
+- `zod-envkit check` (`--dotenv`, `--strict`, `--config`)
+- `zod-envkit init` (bootstrap meta/example)
+
+### What is considered BREAKING
+
+A change is breaking if it:
+- changes function signatures or return types of the public exports
+- removes/renames a public export
+- removes/renames a CLI command or flag
+- changes default CLI behavior in a way that changes output/exit codes
+- changes exit codes (`0` success / `1` failure is guaranteed)
+
+Non-breaking examples:
+- adding new exports (opt-in)
+- adding new CLI flags (opt-in)
+- improving error messages or docs output formatting (without changing meaning)
+- performance improvements
+
+### Deprecation policy
+
+We prefer **soft migrations**:
+- introduce new API
+- mark old API with `@deprecated`
+- keep it for at least one minor version before removal (major only)
+
+---
+
+## When to use
+
+Use **zod-envkit** if you want env to be an explicit runtime contract:
+
+- you validate `process.env` at startup (fail fast)
+- you want strongly typed env values (numbers/booleans coerced)
+- you want `.env.example` and docs generated from a single source
+- you want CI checks to fail before deploy
+
+## When NOT to use
+
+Skip **zod-envkit** if:
+- you don’t control environment variables at all (e.g. fully managed platforms with opaque config)
+- your project is tiny and a single `.env` is enough
+- you need automatic schema introspection to generate docs (zod-envkit intentionally avoids “magic”)
+
+---
+
+## Real-world scenarios
+
+### 1) API server startup (recommended)
+
+```ts
+import "dotenv/config";
+import { z } from "zod";
+import { mustLoadEnv } from "zod-envkit";
+
+const EnvSchema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]),
+  PORT: z.coerce.number().int().min(1).max(65535),
+  DATABASE_URL: z.string().url(),
+});
+
+export const env = mustLoadEnv(EnvSchema);
+````
+
+### 2) Worker / Cron job
+
+Same pattern: validate once at process start, then run the job with typed env.
+
+### 3) CI/CD validation (pre-deploy)
+
+```bash
+npx zod-envkit check --strict
+```
+
+* fails if required vars are missing
+* in `--strict` also fails on unknown vars (prevents typos / config drift)
+
+````
+
+---
+
+```md
+//////// docs/guide/library.md (заменить целиком) ////////
+
+# Library
+
+zod-envkit provides a small runtime API for validating `process.env` using Zod and supporting env contracts in CI/CLI.
+
+## loadEnv
+
+Safely parse env without throwing.
+
+```ts
+const result = loadEnv(schema);
+
+if (!result.ok) {
+  console.error(formatZodError(result.error));
+  process.exit(1);
+}
+
+const env = result.env;
+````
+
+## mustLoadEnv
+
+Fail-fast env validation (recommended for startup).
+
+```ts
+const env = mustLoadEnv(schema);
+```
+
+Throws `ZodError` on invalid env.
+
+## formatZodError
+
+Human-readable Zod errors (one issue per line).
+
+```ts
+console.error(formatZodError(err));
+```
+
+## Meta utilities
+
+These utilities power the CLI, but are also useful in apps and CI.
+
+* `getMissingEnv(meta, env?)`
+* `getUnknownEnv(meta, env?)`
+* `checkEnv(meta, env?)`
+
+Example:
+
+```ts
+import { checkEnv } from "zod-envkit";
+
+const result = checkEnv(meta, process.env);
+
+if (!result.ok) {
+  console.error(result.message);
+  process.exit(1);
+}
+```
+
+## Secrets
+
+`isSecretKey(key)` is used for masking by convention (TOKEN/SECRET/PASSWORD/*_KEY/PRIVATE).
+You can reuse it in your own tooling to prevent accidental logging.
+
+````
+
+---
+
+```md
+//////// docs/guide/cli.md (заменить целиком, без “обещаний будущего”) ////////
+
+# CLI
+
+The CLI is powered by a metadata file: `env.meta.json`.
+
+By default it is searched in:
+- `./env.meta.json`
+- `./examples/env.meta.json`
+
+Run help:
+
+```bash
+npx zod-envkit --help
+````
+
+## generate
+
+Generate `.env.example` and documentation from `env.meta.json`.
+
+```bash
+npx zod-envkit generate
+```
+
+Formats:
+
+```bash
+npx zod-envkit generate --format md
+npx zod-envkit generate --format json
+npx zod-envkit generate --format yaml
+```
+
+Sorting:
+
+```bash
+npx zod-envkit generate --sort alpha
+npx zod-envkit generate --sort required-first
+npx zod-envkit generate --sort none
+```
+
+## show
+
+Show env status in a readable table (dotenv supported, secrets masked by default).
+
+```bash
+npx zod-envkit show
+```
+
+Dotenv chain:
+
+```bash
+npx zod-envkit show --dotenv ".env,.env.local,.env.production"
+```
+
+Masking:
+
+```bash
+npx zod-envkit show --mask-mode partial
+npx zod-envkit show --mask-mode full
+npx zod-envkit show --no-mask
+```
+
+## check
+
+Validate env (CI-friendly exit codes).
+
+```bash
+npx zod-envkit check
+```
+
+Strict mode also fails on unknown variables (not listed in meta):
+
+```bash
+npx zod-envkit check --strict
+```
+
+Dotenv chain:
+
+```bash
+npx zod-envkit check --dotenv ".env,.env.local"
+```
+
+## init
+
+Bootstrap configuration.
+
+Generate `env.meta.json` from `.env.example`:
+
+```bash
+npx zod-envkit init
+```
+
+Generate `.env.example` from existing meta:
+
+```bash
+npx zod-envkit init --from-meta
+```
+
+````
+
+---
+
+```md
+//////// docs/guide/meta.md (заменить целиком) ////////
+
+# env.meta.json
+
+`env.meta.json` is a simple, explicit contract used by the CLI to:
+- generate `.env.example`
+- generate docs (`ENV.md` / `ENV.json` / `ENV.yaml`)
+- validate required variables in CI
+
+## Example
+
+```json
+{
+  "DATABASE_URL": {
+    "description": "Postgres connection string",
+    "example": "postgres://user:pass@localhost:5432/db",
+    "required": true,
+    "group": "Database"
+  },
+  "JWT_SECRET": {
+    "description": "JWT signing key",
+    "example": "change-me",
+    "required": true,
+    "group": "Auth",
+    "since": "1.1.0",
+    "link": "https://example.com/docs/auth#jwt"
+  }
+}
+````
+
+## Fields
+
+* `description?: string` — human-readable meaning
+* `example?: string` — example value used in `.env.example` and docs
+* `required?: boolean` — defaults to `true`
+* `group?: string` — section name in docs
+* `default?: string` — default value (documentation)
+* `deprecated?: boolean | string` — mark variable deprecated
+* `since?: string` — version when added
+* `link?: string` — docs URL
+
+## Notes
+
+* Keep secrets out of examples.
+* Use `group` to keep docs readable as the config grows.
+
+````
+
+---
+
+```ts
+//////// src/index.ts (добавь JSDoc @since; пример готовых блоков) ////////
+
+/**
+ * Safely validate environment variables using Zod.
+ *
+ * Returns `{ ok: true, env }` on success, otherwise `{ ok: false, error }`.
+ *
+ * @since 1.0.0
+ */
+export function loadEnv(...) { ... }
+
+/**
+ * Fail-fast wrapper around `loadEnv`.
+ * Returns typed env or throws `ZodError`.
+ *
+ * @since 1.0.5
+ */
+export function mustLoadEnv(...) { ... }
+
+/**
+ * Format ZodError into human-readable multi-line text (one issue per line).
+ *
+ * @since 1.0.0
+ */
+export function formatZodError(...) { ... }
+
+/**
+ * Returns true if the key name looks like a secret (TOKEN/SECRET/PASSWORD/*_KEY/PRIVATE).
+ *
+ * @since 1.1.0
+ */
+export function isSecretKey(...) { ... }
+
+/**
+ * Get missing required keys from meta.
+ *
+ * @since 1.1.0
+ */
+export function getMissingEnv(...) { ... }
+
+/**
+ * Get unknown keys from env that are not defined in meta.
+ *
+ * @since 1.1.0
+ */
+export function getUnknownEnv(...) { ... }
+
+/**
+ * Validate env against meta (required + optional strict unknown checks).
+ *
+ * @since 1.1.0
+ */
+export function checkEnv(...) { ... }
+````
