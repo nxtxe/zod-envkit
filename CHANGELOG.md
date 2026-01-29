@@ -1,47 +1,6 @@
-# [1.1.0](https://github.com/nxtxe/zod-envkit/compare/v1.0.5...v1.1.0) (2026-01-27)
-
-
-### Features
-
-* release v1.1.0 ([b6f764e](https://github.com/nxtxe/zod-envkit/commit/b6f764eaacf94eec48e893481f4401c998032db3))
-
-## [1.0.5](https://github.com/nxtxe/zod-envkit/compare/v1.0.4...v1.0.5) (2026-01-26)
-
-
-### Bug Fixes
-
-* release 1.0.5 ([4d48479](https://github.com/nxtxe/zod-envkit/commit/4d48479b62819d4c17cc05eb14c64f387806cbec))
-
-## [1.0.4](https://github.com/nxtxe/zod-envkit/compare/v1.0.3...v1.0.4) (2026-01-26)
-
-
-### Bug Fixes
-
-* **ci:** retry install to avoid rollup optional deps issue ([356e2c2](https://github.com/nxtxe/zod-envkit/commit/356e2c2b8980484767be29062d5f8eb4cdb4fde4))
-* **ci:** retry install to avoid rollup optional deps issue ([7063e29](https://github.com/nxtxe/zod-envkit/commit/7063e29bb5cc3c7a8151a2afade035300ac5cff0))
-* **cli:** stabilize release and execution behavior ([13f9b4f](https://github.com/nxtxe/zod-envkit/commit/13f9b4fe9f8893ec0d0b5b0f2373ef24cad76108))
-* **release:** publish fix ([6811915](https://github.com/nxtxe/zod-envkit/commit/681191593e681d48b2e6490fcdd49f2b06a6bda5))
-* **release:** publish repair ([a7f6557](https://github.com/nxtxe/zod-envkit/commit/a7f655758b3c214bb977f1e34cbb10246b39234a))
-* **release:** publish retry ([1c55df0](https://github.com/nxtxe/zod-envkit/commit/1c55df00cf48623178d0a7cc81dfc68fc7b8dac0))
-* **release:** retry with granular npm token ([c851824](https://github.com/nxtxe/zod-envkit/commit/c851824ba1777d31e14f7ea5306dc92adcab4de7))
-* trigger patch release ([2c978e5](https://github.com/nxtxe/zod-envkit/commit/2c978e5b93b159117ca52eeed84e07063e9ecfea))
-
-## [1.0.4](https://github.com/nxtxe/zod-envkit/compare/v1.0.3...v1.0.4) (2026-01-26)
-
-
-### Bug Fixes
-
-* **ci:** retry install to avoid rollup optional deps issue ([356e2c2](https://github.com/nxtxe/zod-envkit/commit/356e2c2b8980484767be29062d5f8eb4cdb4fde4))
-* **ci:** retry install to avoid rollup optional deps issue ([7063e29](https://github.com/nxtxe/zod-envkit/commit/7063e29bb5cc3c7a8151a2afade035300ac5cff0))
-* **cli:** stabilize release and execution behavior ([13f9b4f](https://github.com/nxtxe/zod-envkit/commit/13f9b4fe9f8893ec0d0b5b0f2373ef24cad76108))
-* **release:** publish fix ([6811915](https://github.com/nxtxe/zod-envkit/commit/681191593e681d48b2e6490fcdd49f2b06a6bda5))
-* **release:** publish repair ([a7f6557](https://github.com/nxtxe/zod-envkit/commit/a7f655758b3c214bb977f1e34cbb10246b39234a))
-* **release:** publish retry ([1c55df0](https://github.com/nxtxe/zod-envkit/commit/1c55df00cf48623178d0a7cc81dfc68fc7b8dac0))
-* **release:** retry with granular npm token ([c851824](https://github.com/nxtxe/zod-envkit/commit/c851824ba1777d31e14f7ea5306dc92adcab4de7))
-
 # Changelog
 
-All notable changes to this project will be documented in this file.  
+All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/).
 
 ---
@@ -54,24 +13,29 @@ This project follows [Semantic Versioning](https://semver.org/).
 
   * generate `env.meta.json` from `.env.example`
   * generate `.env.example` from existing `env.meta.json`
-* Support for multiple dotenv files via `--dotenv` (e.g. `.env,.env.local,.env.production`) with override order
-* Extended documentation generation formats:
+* Support for loading multiple dotenv files via `--dotenv`
 
-  * `--format md` (default)
-  * `--format json`
-  * `--format yaml`
+  * example: `.env,.env.local,.env.production`
+  * files are loaded in order with override semantics
+* Documentation generation in multiple formats:
+
+  * `md` (default)
+  * `json`
+  * `yaml`
 * Sorting options for docs and CLI output via `--sort`:
 
   * `alpha`
   * `required-first`
   * `none`
-* Strict validation mode for CI via `check --strict` (fails on unknown env vars)
-* Configurable secret masking in `show`:
+* Strict CI validation via `zod-envkit check --strict`
+
+  * fails on missing **and** unknown environment variables
+* Configurable secret masking in `zod-envkit show`:
 
   * `--mask-mode partial | full | none`
   * `--no-mask` alias
-* Grouped environment variables support via `meta.group`
-* Extended env metadata support:
+* Grouping support for environment variables via `meta.group`
+* Extended env metadata fields:
 
   * `default`
   * `deprecated`
@@ -80,26 +44,31 @@ This project follows [Semantic Versioning](https://semver.org/).
 * New public core utilities:
 
   * `getMissingEnv`
+  * `getUnknownEnv`
   * `checkEnv`
   * `isSecretKey`
 
 ### Changed
 
-* CLI architecture refactored into modular structure (`src/cli/*`) with no behavior changes
-* Documentation generator now supports:
+* CLI architecture refactored into a modular structure (`src/cli/*`)
+
+  * no breaking behavior changes
+* Documentation generator improved:
 
   * grouped sections
-  * width-aware, centered tables
+  * width-aware, centered markdown tables
   * extended metadata columns
-* `loadDotEnv` now supports ordered multi-file loading instead of single `.env`
-* Public API further decoupled from CLI internals
-* CLI default behavior preserved (`zod-envkit` → `generate`)
+* Public API explicitly documented and treated as a stable contract
+* CLI default behavior preserved:
+
+  * running `zod-envkit` without subcommand defaults to `generate`
 
 ### Fixed
 
-* Inconsistent env resolution across commands when using multiple dotenv files
-* Edge cases in env validation when extra variables are present
-* Potential duplication and ordering issues in generated documentation
+* Inconsistent env resolution across CLI commands when using multiple dotenv files
+* Edge cases in env validation with extra or empty variables
+* Ordering and duplication issues in generated documentation
+* Minor UX issues in CLI output and error handling
 
 [1.1.0]: https://www.npmjs.com/package/zod-envkit/v/1.1.0
 
@@ -108,26 +77,31 @@ This project follows [Semantic Versioning](https://semver.org/).
 ## [1.0.5] – 2026-01-26
 
 ### Added
-- `mustLoadEnv` helper for fail-fast env loading (throws on invalid env)
-- Default CLI behavior: running `zod-envkit` without subcommand now behaves like `zod-envkit generate`
-- Better secret masking in `zod-envkit show` (TOKEN / SECRET / PASSWORD / *_KEY / PRIVATE)
+
+* `mustLoadEnv` helper for fail-fast env loading
+* Default CLI behavior: `zod-envkit` → `zod-envkit generate`
+* Improved secret masking in `zod-envkit show`
 
 ### Changed
-- Public API (`loadEnv`, `mustLoadEnv`, `formatZodError`) stabilized and separated from CLI/generators
-- CLI error handling improved:
-  - no stack traces for user errors
-  - consistent human-readable messages
-  - strict exit codes (`0` success, `1` error)
-- `ENV.md` generation now produces fully centered, width-aware Markdown tables
-- CLI now reliably resolves `env.meta.json` from:
-  - project root
-  - `./examples/`
-  - explicit `-c/--config` path
+
+* Public API stabilized and separated from CLI internals
+* CLI error handling improved:
+
+  * no stack traces for user errors
+  * consistent human-readable messages
+  * strict exit codes
+* `ENV.md` generation now produces centered, width-aware tables
+* CLI now reliably resolves `env.meta.json` from:
+
+  * project root
+  * `./examples/`
+  * explicit `-c/--config`
 
 ### Fixed
-- TypeScript type narrowing issues in CLI (`fs.readFileSync` with undefined paths)
-- Potential double execution when running CLI without subcommands
-- Inconsistent env loading behavior across CLI commands
+
+* TypeScript narrowing issues in CLI
+* Potential double execution when running CLI without subcommands
+* Inconsistent env loading behavior
 
 [1.0.5]: https://www.npmjs.com/package/zod-envkit/v/1.0.5
 
@@ -136,31 +110,34 @@ This project follows [Semantic Versioning](https://semver.org/).
 ## [1.0.4] – 2026-01-26
 
 ### Added
-- `zod-envkit show` command to display env status in a readable table (with secret masking)
-- `zod-envkit check` command to validate required variables (CI-friendly exit codes)
+
+* `zod-envkit show` command
+* `zod-envkit check` command (CI-friendly)
 
 ### Changed
-- CLI now also searches for `env.meta.json` in `./examples/` by default
+
+* CLI now also searches for `env.meta.json` in `./examples/`
 
 [1.0.4]: https://www.npmjs.com/package/zod-envkit/v/1.0.4
 
 ---
 
 ## [1.0.3] – 2026-01-26
-- Git tag only (not published to npm)
 
----
+* Git tag only (not published)
 
 ## [1.0.2] – 2026-01-26
-- Git tag only (not published to npm)
+
+* Git tag only (not published)
 
 ---
 
 ## [1.0.1] – 2026-01-26
 
 ### Changed
-- Packaging improvements for npm (ship only compiled output and docs)
-- Documentation updates
+
+* npm packaging improvements (ship only compiled output and docs)
+* Documentation updates
 
 [1.0.1]: https://www.npmjs.com/package/zod-envkit/v/1.0.1
 
@@ -169,22 +146,24 @@ This project follows [Semantic Versioning](https://semver.org/).
 ## [1.0.0] – 2026-01-26
 
 ### Added
-- Initial release of **zod-envkit**
-- Type-safe environment variable validation using Zod
-- `loadEnv` helper for safe runtime parsing of `process.env`
-- `formatZodError` for human-readable error output
-- CLI tool to generate:
-  - `.env.example`
-  - `ENV.md` documentation
-- Support for ESM and CommonJS builds
-- TypeScript declaration files (`.d.ts`) included
-- Basic test suite using Vitest
-- MIT license
 
-### Design Decisions
-- Explicit configuration over magic
-- No automatic schema introspection for documentation generation
-- Environment variables treated as an explicit runtime contract
-- Small, framework-agnostic core
+* Initial release of **zod-envkit**
+* Type-safe env validation with Zod
+* `loadEnv` and `formatZodError`
+* CLI to generate:
+
+  * `.env.example`
+  * `ENV.md`
+* ESM and CommonJS builds
+* TypeScript declarations
+* Basic test suite (Vitest)
+* MIT license
+
+### Design decisions
+
+* Explicit configuration over magic
+* No schema introspection for docs
+* Environment variables as a runtime contract
+* Small, framework-agnostic core
 
 [1.0.0]: https://www.npmjs.com/package/zod-envkit/v/1.0.0
