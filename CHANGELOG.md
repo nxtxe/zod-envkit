@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/nxtxe/zod-envkit/compare/v1.1.1...v1.1.2) (2026-01-29)
+
+
+### Bug Fixes
+
+* stabilize strict env validation and CI ([3055f18](https://github.com/nxtxe/zod-envkit/commit/3055f1859479212fbdc105cb0f183c6018df2376))
+* tests ([a691dab](https://github.com/nxtxe/zod-envkit/commit/a691dab0f207685bd96688e36aaabcdb5784f956))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
