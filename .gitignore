@@ -42,7 +42,7 @@ coverage/
 # Tooling / cache
 # =====================
 *.tsbuildinfo
-local
+local.md
 
 # =====================
 # Misc

@@ -44,6 +44,7 @@
     "build": "rm -rf dist && tsup src/index.ts src/cli/index.ts --format esm,cjs --dts --outDir dist",
     "dev": "tsup src/index.ts src/cli/index.ts --watch --dts --outDir dist",
     "test": "vitest run",
+    "test:ci": "pnpm build && pnpm test",
     "release": "semantic-release",
     "docs:api": "typedoc",
     "docs:build": "pnpm docs:api && vitepress build docs",

@@ -4,7 +4,7 @@
 
 > **SortMode** = `"alpha"` \| `"required-first"` \| `"none"`
 
-Defined in: [generate.ts:82](https://github.com/nxtxe/zod-envkit/blob/91c6bf2a79a3cf9935ee9696b4fc1871424b95ca/src/generate.ts#L82)
+Defined in: [generate.ts:82](https://github.com/nxtxe/zod-envkit/blob/137bf7d90d4933c7973970d7b5ac8687b11d6835/src/generate.ts#L82)
 
 Sorting mode for generated docs.
 

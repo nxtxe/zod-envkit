@@ -62,5 +62,7 @@ coverage/
 # Misc
 # =====================
 *.tsbuildinfo
-local
+local.md
 publish.md
+tests/
+vitest.config.*
