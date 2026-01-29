@@ -4,8 +4,7 @@ const REPO = "zod-envkit";
 const BASE = `/${REPO}/`;
 
 const commonTheme = {
-  // важно: тоже через base
-  logo: `${BASE}zod-envkit.svg`,
+  logo: "/zod-envkit.svg",
   siteTitle: false as false,
 
   socialLinks: [
