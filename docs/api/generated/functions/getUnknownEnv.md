@@ -4,7 +4,7 @@
 
 > **getUnknownEnv**(`meta`, `env`): `string`[]
 
-Defined in: [env.ts:50](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/env.ts#L50)
+Defined in: [env.ts:50](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/env.ts#L50)
 
 Return keys present in `env` that are not defined in `meta`.
 

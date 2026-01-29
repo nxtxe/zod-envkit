@@ -36,8 +36,18 @@ zod-envkit helps you treat environment variables as an **explicit runtime contra
 ## Quickstart
 
 ```bash
-pnpm add zod-envkit
+npm install zod-envkit
 ````
+
+```bash
+yarn add zod-envkit
+```
+
+```bash
+pnpm add zod-envkit
+```
+
+## Example
 
 ```ts
 import "dotenv/config";

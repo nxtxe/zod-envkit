@@ -4,7 +4,7 @@
 
 > **loadEnv**\<`T`\>(`schema`, `opts?`): [`LoadEnvFail`](../type-aliases/LoadEnvFail.md) \| [`LoadEnvOk`](../type-aliases/LoadEnvOk.md)\<`T`\>
 
-Defined in: [index.ts:71](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/index.ts#L71)
+Defined in: [index.ts:71](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/index.ts#L71)
 
 Validate `process.env` using a Zod schema.
 
