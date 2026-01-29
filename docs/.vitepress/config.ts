@@ -4,7 +4,8 @@ const REPO = "zod-envkit";
 const BASE = `/${REPO}/`;
 
 const commonTheme = {
-  logo: "/zod-envkit.svg",
+  // важно: тоже через base
+  logo: `${BASE}zod-envkit.svg`,
   siteTitle: false as false,
 
   socialLinks: [
@@ -16,7 +17,7 @@ const commonTheme = {
     message: "Released under the MIT License.",
     copyright: "© nxtxe",
   },
-} 
+};
 
 export default defineConfig({
   title: "zod-envkit",
@@ -24,8 +25,15 @@ export default defineConfig({
   base: BASE,
 
   head: [
-  ["link", { rel: "icon", href: `${BASE}zod-envkitmini.svg?v=2` }],
-]
+    [
+      "link",
+      {
+        rel: "icon",
+        href: `${BASE}zod-envkitmini.svg?v=2`,
+        type: "image/svg+xml",
+      },
+    ],
+  ],
 
   locales: {
     root: {
