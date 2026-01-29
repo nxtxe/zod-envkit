@@ -4,7 +4,7 @@
 
 > **DocsFormat** = `"md"` \| `"json"` \| `"yaml"`
 
-Defined in: [generate.ts:90](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/generate.ts#L90)
+Defined in: [generate.ts:90](https://github.com/nxtxe/zod-envkit/blob/91c6bf2a79a3cf9935ee9696b4fc1871424b95ca/src/generate.ts#L90)
 
 Output format for generated docs.
 

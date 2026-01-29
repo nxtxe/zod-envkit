@@ -4,7 +4,7 @@
 
 > **EnvCheckResult** = `object`
 
-Defined in: [env.ts:13](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/env.ts#L13)
+Defined in: [env.ts:13](https://github.com/nxtxe/zod-envkit/blob/91c6bf2a79a3cf9935ee9696b4fc1871424b95ca/src/env.ts#L13)
 
 Result of validating an env object against [EnvMeta](EnvMeta.md).
 
@@ -21,7 +21,7 @@ Result of validating an env object against [EnvMeta](EnvMeta.md).
 
 > **missing**: `string`[]
 
-Defined in: [env.ts:15](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/env.ts#L15)
+Defined in: [env.ts:15](https://github.com/nxtxe/zod-envkit/blob/91c6bf2a79a3cf9935ee9696b4fc1871424b95ca/src/env.ts#L15)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [env.ts:15](https://github.com/nxtxe/zod-envkit/blob/46042981f146f02
 
 > **ok**: `boolean`
 
-Defined in: [env.ts:14](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/env.ts#L14)
+Defined in: [env.ts:14](https://github.com/nxtxe/zod-envkit/blob/91c6bf2a79a3cf9935ee9696b4fc1871424b95ca/src/env.ts#L14)
 
 ***
 
@@ -37,4 +37,4 @@ Defined in: [env.ts:14](https://github.com/nxtxe/zod-envkit/blob/46042981f146f02
 
 > **unknown**: `string`[]
 
-Defined in: [env.ts:16](https://github.com/nxtxe/zod-envkit/blob/46042981f146f021919da8a4a713b2d251c542d9/src/env.ts#L16)
+Defined in: [env.ts:16](https://github.com/nxtxe/zod-envkit/blob/91c6bf2a79a3cf9935ee9696b4fc1871424b95ca/src/env.ts#L16)

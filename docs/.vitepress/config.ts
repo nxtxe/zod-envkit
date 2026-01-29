@@ -23,7 +23,7 @@ export default defineConfig({
   description: "Type-safe environment variable validation and documentation",
   base: BASE,
 
-  head: [["link", { rel: "icon", href: `${BASE}zod-envkitmini.svg` }]],
+  head: [["link", { rel: "icon", href: `/zod-envkitmini.svg` }]],
 
   locales: {
     root: {
