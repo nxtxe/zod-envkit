@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/nxtxe/zod-envkit/compare/v1.1.0...v1.1.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* **cli:** stabilize options validation and docs links ([640b12b](https://github.com/nxtxe/zod-envkit/commit/640b12bf95304da40c998374ba7ed08b7400e88d))
+* stabilize public API, CLI behavior, and documentation ([4604298](https://github.com/nxtxe/zod-envkit/commit/46042981f146f021919da8a4a713b2d251c542d9))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
