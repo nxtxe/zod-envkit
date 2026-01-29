@@ -4,11 +4,13 @@
 
 > **generateEnvExample**(`meta`): `string`
 
-Defined in: [generate.ts:92](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/generate.ts#L92)
+Defined in: [generate.ts:221](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/generate.ts#L221)
 
-Generate .env.example:
-- comment with description (if present)
-- KEY=example
+Generate `.env.example` from [EnvMeta](../type-aliases/EnvMeta.md).
+
+Rules:
+- outputs `# description` comment if present
+- outputs `KEY=example`
 
 ## Parameters
 
@@ -19,3 +21,7 @@ Generate .env.example:
 ## Returns
 
 `string`
+
+## Since
+
+1.0.0

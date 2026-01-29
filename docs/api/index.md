@@ -1,4 +1,4 @@
 # Generated API Reference
 
-- [Functions](/api/generated/functions/)
-- [Type aliases](/api/generated/type-aliases/)
+- [Functions](/api/functions)
+- [Type aliases](/api/type-aliases)

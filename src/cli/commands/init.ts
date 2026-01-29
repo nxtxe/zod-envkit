@@ -44,23 +44,24 @@ export function registerInit(program: Command, getLang: () => Lang) {
     .action((opts) => {
       const lang = getLang();
 
-      if (opts.fromMeta) {
+      const input = String(opts.input ?? ".env.example");
+      const output = String(opts.output ?? "env.meta.json");
+
+      if (Boolean(opts.fromMeta)) {
         // meta -> .env.example
-        const { meta } = loadMeta(lang, String(opts.input || "env.meta.json"));
-        fs.writeFileSync(String(opts.output || ".env.example"), generateEnvExample(meta), "utf8");
+        const { meta } = loadMeta(lang, input);
+        fs.writeFileSync(output, generateEnvExample(meta), "utf8");
         process.exit(0);
       }
 
       // .env.example -> meta
-      const env = readEnvFile(String(opts.input));
+      const env = readEnvFile(input);
       if (Object.keys(env).length === 0) {
-        fail(lang, "META_PARSE_FAILED", [
-          `- ${t(lang, "INIT_INPUT_EMPTY")} ${String(opts.input)}`
-        ]);
+        fail(lang, "INIT_INPUT_EMPTY", [`- ${input}`]);
       }
 
       const meta = metaFromEnv(env, opts.group ? String(opts.group) : undefined);
-      fs.writeFileSync(String(opts.output), JSON.stringify(meta, null, 2) + "\n", "utf8");
+      fs.writeFileSync(output, JSON.stringify(meta, null, 2) + "\n", "utf8");
       process.exit(0);
     });
 }

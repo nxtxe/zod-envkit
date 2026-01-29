@@ -4,9 +4,14 @@
 
 > **generateEnvDocs**(`meta`, `opts`): `string`
 
-Defined in: [generate.ts:239](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/generate.ts#L239)
+Defined in: [generate.ts:397](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/generate.ts#L397)
 
-Generate ENV docs in md/json/yaml
+Generate env documentation from [EnvMeta](../type-aliases/EnvMeta.md).
+
+Supported formats:
+- `md` (default)
+- `json`
+- `yaml`
 
 ## Parameters
 
@@ -21,3 +26,7 @@ Generate ENV docs in md/json/yaml
 ## Returns
 
 `string`
+
+## Since
+
+1.0.0

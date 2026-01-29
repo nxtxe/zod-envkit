@@ -4,7 +4,11 @@
 
 > **getUnknownEnv**(`meta`, `env`): `string`[]
 
-Defined in: [env.ts:21](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/env.ts#L21)
+Defined in: [env.ts:50](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/env.ts#L50)
+
+Return keys present in `env` that are not defined in `meta`.
+
+Note: the result is returned in stable alphabetical order.
 
 ## Parameters
 
@@ -19,3 +23,7 @@ Defined in: [env.ts:21](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195
 ## Returns
 
 `string`[]
+
+## Since
+
+1.1.0

@@ -16,7 +16,7 @@ export function registerCheck(program: Command, getLang: () => Lang) {
     .action((opts) => {
       const lang = getLang();
 
-      loadDotEnv(opts.dotenv);
+      loadDotEnv(String(opts.dotenv ?? ".env"));
       const { meta } = loadMeta(lang, opts.config);
 
       const missing = getMissingEnv(meta, process.env);
@@ -27,7 +27,7 @@ export function registerCheck(program: Command, getLang: () => Lang) {
         process.exit(1);
       }
 
-      if (opts.strict) {
+      if (Boolean(opts.strict)) {
         const unknown = getUnknownEnv(meta, process.env);
         if (unknown.length) {
           console.error(`❌ ${t(lang, "UNKNOWN_ENV")}`);

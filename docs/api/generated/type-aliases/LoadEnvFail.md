@@ -4,7 +4,13 @@
 
 > **LoadEnvFail** = `object`
 
-Defined in: [index.ts:13](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/index.ts#L13)
+Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/index.ts#L48)
+
+Failed result of [loadEnv](../functions/loadEnv.md).
+
+## Since
+
+1.0.0
 
 ## Properties
 
@@ -12,7 +18,7 @@ Defined in: [index.ts:13](https://github.com/nxtxe/zod-envkit/blob/024fd901cb251
 
 > **error**: `z.ZodError`
 
-Defined in: [index.ts:13](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/index.ts#L13)
+Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/index.ts#L48)
 
 ***
 
@@ -20,4 +26,4 @@ Defined in: [index.ts:13](https://github.com/nxtxe/zod-envkit/blob/024fd901cb251
 
 > **ok**: `false`
 
-Defined in: [index.ts:13](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/index.ts#L13)
+Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/index.ts#L48)

@@ -4,7 +4,13 @@
 
 > **sortMetaEntries**(`meta`, `sort`): \[`string`, [`EnvMetaEntry`](../type-aliases/EnvMetaEntry.md)\][]
 
-Defined in: [generate.ts:48](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/generate.ts#L48)
+Defined in: [generate.ts:164](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/generate.ts#L164)
+
+Sort meta entries.
+
+- `none`: keep insertion order
+- `alpha`: by key (A-Z)
+- `required-first`: required first, then A-Z
 
 ## Parameters
 
@@ -19,3 +25,7 @@ Defined in: [generate.ts:48](https://github.com/nxtxe/zod-envkit/blob/024fd901cb
 ## Returns
 
 \[`string`, [`EnvMetaEntry`](../type-aliases/EnvMetaEntry.md)\][]
+
+## Since
+
+1.1.0

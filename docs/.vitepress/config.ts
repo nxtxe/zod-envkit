@@ -35,10 +35,12 @@ export default defineConfig({
           items: [
             { text: "Overview", link: "/api/" },
             { text: "Contract", link: "/api/contract" },
-            { text: "Generated", link: "/api/generated/" },
+            { text: "Functions", link: "/api/functions" },
+            { text: "Type aliases", link: "/api/type-aliases" },
           ],
         },
       ],
+
     },
 
     socialLinks: [

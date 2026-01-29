@@ -1,16 +1,28 @@
 // src/cli/commands/generate.ts
 import fs from "node:fs";
-import path from "node:path";
 import type { Command } from "commander";
 import type { Lang } from "../../i18n.js";
 import { t } from "../../i18n.js";
 import { loadMeta } from "../lib/meta.js";
-import { generateEnvDocs, generateEnvExample, type DocsFormat, type SortMode } from "../../generate.js";
+import {
+  generateEnvDocs,
+  generateEnvExample,
+  type DocsFormat,
+  type SortMode,
+} from "../../generate.js";
 
 function defaultDocsOut(format: DocsFormat): string {
   if (format === "json") return "ENV.json";
   if (format === "yaml") return "ENV.yaml";
   return "ENV.md";
+}
+
+function isDocsFormat(v: string): v is DocsFormat {
+  return v === "md" || v === "json" || v === "yaml";
+}
+
+function isSortMode(v: string): v is SortMode {
+  return v === "alpha" || v === "required-first" || v === "none";
 }
 
 export function registerGenerate(program: Command, getLang: () => Lang) {
@@ -27,16 +39,32 @@ export function registerGenerate(program: Command, getLang: () => Lang) {
       const lang = getLang();
       const { meta } = loadMeta(lang, opts.config);
 
-      const format = String(opts.format) as DocsFormat;
-      const sort = String(opts.sort) as SortMode;
-      const outDocs = opts.outDocs ? String(opts.outDocs) : defaultDocsOut(format);
+      const formatRaw = String(opts.format ?? "md");
+      if (!isDocsFormat(formatRaw)) {
+        console.error(`❌ ${t(lang, "INVALID_FORMAT")}: ${formatRaw}`);
+        console.error(`- md | json | yaml`);
+        process.exit(1);
+      }
 
-      fs.writeFileSync(opts.outExample, generateEnvExample(meta), "utf8");
-      fs.writeFileSync(outDocs, generateEnvDocs(meta, { format, sort, group: Boolean(opts.group) }), "utf8");
+      const sortRaw = String(opts.sort ?? "none");
+      if (!isSortMode(sortRaw)) {
+        console.error(`❌ ${t(lang, "INVALID_SORT")}: ${sortRaw}`);
+        console.error(`- alpha | required-first | none`);
+        process.exit(1);
+      }
 
-      console.log(
-        t(lang, "GENERATED", { example: opts.outExample, docs: outDocs })
+      const outExample = String(opts.outExample ?? ".env.example");
+      const outDocs = opts.outDocs ? String(opts.outDocs) : defaultDocsOut(formatRaw);
+
+      fs.writeFileSync(outExample, generateEnvExample(meta), "utf8");
+
+      fs.writeFileSync(
+        outDocs,
+        generateEnvDocs(meta, { format: formatRaw, sort: sortRaw, group: Boolean(opts.group) }),
+        "utf8"
       );
+
+      console.log(t(lang, "GENERATED", { example: outExample, docs: outDocs }));
       process.exit(0);
     });
 }

@@ -1,33 +1,136 @@
 // src/generate.ts
 
+/**
+ * Metadata entry for a single environment variable.
+ *
+ * This file is part of the stable public API: it powers the CLI generators,
+ * and is intended to be reusable by consumers.
+ *
+ * @public
+ * @since 1.0.0
+ */
 export type EnvMetaEntry = {
+  /**
+   * Human-readable description.
+   */
   description?: string;
-  example?: string;
-  required?: boolean; // default: true
 
-  // v1.1.0 metadata
-  group?: string;       // e.g. "Database"
-  default?: string;     // e.g. "info"
-  deprecated?: boolean; // true => mark in docs
-  since?: string;       // e.g. "1.1.0"
-  link?: string;        // e.g. "https://..."
+  /**
+   * Example value used for `.env.example` and documentation.
+   *
+   * Tip: do NOT put real secrets here.
+   */
+  example?: string;
+
+  /**
+   * Whether the variable is required.
+   *
+   * @defaultValue true
+   */
+  required?: boolean;
+
+  /**
+   * Optional group/section for docs (primarily for Markdown format).
+   *
+   * @since 1.1.0
+   */
+  group?: string;
+
+  /**
+   * Default value (documentation only).
+   *
+   * @since 1.1.0
+   */
+  default?: string;
+
+  /**
+   * Mark variable as deprecated in docs.
+   *
+   * @since 1.1.0
+   */
+  deprecated?: boolean;
+
+  /**
+   * Version when the variable was introduced (documentation only).
+   *
+   * @since 1.1.0
+   */
+  since?: string;
+
+  /**
+   * Optional link to further documentation.
+   *
+   * @since 1.1.0
+   */
+  link?: string;
 };
 
+/**
+ * Environment meta map (`KEY` -> metadata).
+ *
+ * @public
+ * @since 1.0.0
+ */
 export type EnvMeta = Record<string, EnvMetaEntry>;
 
+/**
+ * Sorting mode for generated docs.
+ *
+ * @public
+ * @since 1.1.0
+ */
 export type SortMode = "alpha" | "required-first" | "none";
+
+/**
+ * Output format for generated docs.
+ *
+ * @public
+ * @since 1.1.0
+ */
 export type DocsFormat = "md" | "json" | "yaml";
 
+/**
+ * Options for {@link generateEnvDocs}.
+ *
+ * @public
+ * @since 1.1.0
+ */
 export type GenerateDocsOptions = {
-  format?: DocsFormat; // default: "md"
-  sort?: SortMode;     // default: "none"
-  group?: boolean;     // default: true for md, ignored for json/yaml
+  /**
+   * Output format.
+   *
+   * @defaultValue "md"
+   */
+  format?: DocsFormat;
+
+  /**
+   * Sort mode.
+   *
+   * @defaultValue "none"
+   */
+  sort?: SortMode;
+
+  /**
+   * Group Markdown output by `meta[*].group`.
+   *
+   * - default: `true`
+   * - ignored for `json` / `yaml`
+   *
+   * @defaultValue true
+   */
+  group?: boolean;
 };
 
+/**
+ * @internal
+ */
 function strLen(s: string): number {
   return (s ?? "").length;
 }
 
+/**
+ * @internal
+ */
 function padCenter(text: string, width: number): string {
   const t = text ?? "";
   const diff = width - strLen(t);
@@ -38,6 +141,9 @@ function padCenter(text: string, width: number): string {
   return " ".repeat(left) + t + " ".repeat(right);
 }
 
+/**
+ * @internal
+ */
 function makeDivider(width: number, align: "left" | "center" | "right"): string {
   if (width < 3) width = 3;
   if (align === "center") return ":" + "-".repeat(width - 2) + ":";
@@ -45,7 +151,20 @@ function makeDivider(width: number, align: "left" | "center" | "right"): string 
   return "-".repeat(width);
 }
 
-export function sortMetaEntries(meta: EnvMeta, sort: SortMode = "none"): Array<[string, EnvMetaEntry]> {
+/**
+ * Sort meta entries.
+ *
+ * - `none`: keep insertion order
+ * - `alpha`: by key (A-Z)
+ * - `required-first`: required first, then A-Z
+ *
+ * @public
+ * @since 1.1.0
+ */
+export function sortMetaEntries(
+  meta: EnvMeta,
+  sort: SortMode = "none"
+): Array<[string, EnvMetaEntry]> {
   const entries = Object.entries(meta);
 
   if (sort === "none") return entries;
@@ -63,11 +182,16 @@ export function sortMetaEntries(meta: EnvMeta, sort: SortMode = "none"): Array<[
   });
 }
 
-function groupEntries(entries: Array<[string, EnvMetaEntry]>): Array<[string, Array<[string, EnvMetaEntry]>]> {
+/**
+ * @internal
+ */
+function groupEntries(
+  entries: Array<[string, EnvMetaEntry]>
+): Array<[string, Array<[string, EnvMetaEntry]>]> {
   const map = new Map<string, Array<[string, EnvMetaEntry]>>();
 
   for (const [k, v] of entries) {
-    const g = (v.group?.trim() || "General");
+    const g = v.group?.trim() || "General";
     const arr = map.get(g) ?? [];
     arr.push([k, v]);
     map.set(g, arr);
@@ -85,9 +209,14 @@ function groupEntries(entries: Array<[string, EnvMetaEntry]>): Array<[string, Ar
 }
 
 /**
- * Generate .env.example:
- * - comment with description (if present)
- * - KEY=example
+ * Generate `.env.example` from {@link EnvMeta}.
+ *
+ * Rules:
+ * - outputs `# description` comment if present
+ * - outputs `KEY=example`
+ *
+ * @public
+ * @since 1.0.0
  */
 export function generateEnvExample(meta: EnvMeta): string {
   const lines: string[] = [];
@@ -101,6 +230,9 @@ export function generateEnvExample(meta: EnvMeta): string {
   return lines.join("\n").trimEnd() + "\n";
 }
 
+/**
+ * @internal
+ */
 type DocsRow = {
   Key: string;
   Required: string;
@@ -112,6 +244,9 @@ type DocsRow = {
   Description: string;
 };
 
+/**
+ * @internal
+ */
 function buildRows(entries: Array<[string, EnvMetaEntry]>): DocsRow[] {
   return entries.map(([key, m]) => {
     const req = m.required === false ? "no" : "yes";
@@ -130,6 +265,9 @@ function buildRows(entries: Array<[string, EnvMetaEntry]>): DocsRow[] {
   });
 }
 
+/**
+ * @internal
+ */
 function renderMarkdownTable(rows: DocsRow[], headers: Array<keyof DocsRow>): string {
   const widths: Record<string, number> = {};
   for (const h of headers) widths[h] = String(h).length;
@@ -154,6 +292,9 @@ function renderMarkdownTable(rows: DocsRow[], headers: Array<keyof DocsRow>): st
   return [headerLine, dividerLine, ...body].join("\n");
 }
 
+/**
+ * @internal
+ */
 function toJson(meta: EnvMeta, sort: SortMode): string {
   // json: preserve order if none, otherwise sorted order
   const entries = sortMetaEntries(meta, sort);
@@ -162,21 +303,27 @@ function toJson(meta: EnvMeta, sort: SortMode): string {
   return JSON.stringify(obj, null, 2) + "\n";
 }
 
+/**
+ * @internal
+ */
 function escapeYamlString(s: string): string {
-  // minimal safe yaml string
   const v = s ?? "";
   if (v === "" || /[:#\-\n\r\t]/.test(v) || /^\s|\s$/.test(v)) {
-    return JSON.stringify(v); // quote via JSON rules
+    return JSON.stringify(v);
   }
   return v;
 }
 
+/**
+ * @internal
+ */
 function toYaml(meta: EnvMeta, sort: SortMode): string {
   const entries = sortMetaEntries(meta, sort);
 
   const lines: string[] = [];
   for (const [key, m] of entries) {
     lines.push(`${escapeYamlString(key)}:`);
+
     const props: Array<[string, unknown]> = [
       ["description", m.description],
       ["example", m.example],
@@ -197,6 +344,9 @@ function toYaml(meta: EnvMeta, sort: SortMode): string {
   return lines.join("\n") + "\n";
 }
 
+/**
+ * @internal
+ */
 function toMarkdown(meta: EnvMeta, sort: SortMode, group: boolean): string {
   const entries = sortMetaEntries(meta, sort);
 
@@ -234,7 +384,15 @@ function toMarkdown(meta: EnvMeta, sort: SortMode, group: boolean): string {
 }
 
 /**
- * Generate ENV docs in md/json/yaml
+ * Generate env documentation from {@link EnvMeta}.
+ *
+ * Supported formats:
+ * - `md` (default)
+ * - `json`
+ * - `yaml`
+ *
+ * @public
+ * @since 1.0.0
  */
 export function generateEnvDocs(meta: EnvMeta, opts: GenerateDocsOptions = {}): string {
   const format = opts.format ?? "md";

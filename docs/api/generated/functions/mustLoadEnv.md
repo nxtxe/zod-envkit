@@ -4,10 +4,11 @@
 
 > **mustLoadEnv**\<`T`\>(`schema`): `output`\<`T`\>
 
-Defined in: [index.ts:31](https://github.com/nxtxe/zod-envkit/blob/024fd901cb25195cefd48cd90d79da1a452d32d5/src/index.ts#L31)
+Defined in: [index.ts:98](https://github.com/nxtxe/zod-envkit/blob/e4062c1b035945e95890920af80f16276513426d/src/index.ts#L98)
 
-Convenience wrapper around loadEnv(schema, { throwOnError: true })
-Returns typed env or throws ZodError
+Fail-fast wrapper around [loadEnv](loadEnv.md).
+
+Equivalent to: `loadEnv(schema, { throwOnError: true })` but returns typed env directly.
 
 ## Type Parameters
 
@@ -24,3 +25,17 @@ Returns typed env or throws ZodError
 ## Returns
 
 `output`\<`T`\>
+
+## Example
+
+```ts
+export const env = mustLoadEnv(EnvSchema);
+```
+
+## Throws
+
+ZodError
+
+## Since
+
+1.0.5

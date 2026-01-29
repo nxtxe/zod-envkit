@@ -1,7 +1,18 @@
-import { messages, type Lang } from "./messages.js";
+import { messages } from "./messages.js";
 
-export type { Lang };
+export type Lang = "en" | "ru";
+export type MessageKey = keyof typeof messages["en"];
 
+/**
+ * Resolve CLI language.
+ *
+ * Priority:
+ * 1. --lang flag
+ * 2. LANG env (ru*)
+ * 3. default: en
+ *
+ * @since 1.0.0
+ */
 export function resolveLang(cliLang?: string): Lang {
   if (cliLang === "ru" || cliLang === "en") return cliLang;
 
@@ -11,9 +22,16 @@ export function resolveLang(cliLang?: string): Lang {
   return "en";
 }
 
+/**
+ * Translate message key using selected language.
+ *
+ * Supports simple template variables: `{var}`
+ *
+ * @since 1.0.0
+ */
 export function t(
   lang: Lang,
-  key: keyof typeof messages["en"],
+  key: MessageKey,
   vars?: Record<string, string>
 ): string {
   let text = messages[lang][key] ?? messages.en[key];
