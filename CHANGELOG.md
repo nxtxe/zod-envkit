@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/nxtxe/zod-envkit/compare/v1.2.0...v1.2.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* strengthen CLI + env contract guarantees ([d516fbb](https://github.com/nxtxe/zod-envkit/commit/d516fbb4c8248745f7d74c1f07defaf4529c33ec))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
