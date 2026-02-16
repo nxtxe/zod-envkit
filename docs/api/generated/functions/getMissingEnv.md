@@ -4,7 +4,7 @@
 
 > **getMissingEnv**(`meta`, `env`): `string`[]
 
-Defined in: [env.ts:25](https://github.com/nxtxe/zod-envkit/blob/6c41bff89886d09e0c1d98bc8e291ebaae776eca/src/env.ts#L25)
+Defined in: [env.ts:25](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e0caf6dc091774017654bdfb18f9/src/env.ts#L25)
 
 Return required keys from `meta` that are missing (or empty) in `env`.
 
@@ -24,4 +24,4 @@ Return required keys from `meta` that are missing (or empty) in `env`.
 
 ## Since
 
-1.1.0
+1.2.0

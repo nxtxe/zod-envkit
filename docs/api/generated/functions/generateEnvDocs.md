@@ -4,7 +4,7 @@
 
 > **generateEnvDocs**(`meta`, `opts`): `string`
 
-Defined in: [generate.ts:397](https://github.com/nxtxe/zod-envkit/blob/6c41bff89886d09e0c1d98bc8e291ebaae776eca/src/generate.ts#L397)
+Defined in: [generate.ts:397](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e0caf6dc091774017654bdfb18f9/src/generate.ts#L397)
 
 Generate env documentation from [EnvMeta](../type-aliases/EnvMeta.md).
 

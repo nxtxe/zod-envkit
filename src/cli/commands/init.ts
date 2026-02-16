@@ -60,7 +60,8 @@ export function registerInit(program: Command, getLang: () => Lang) {
       // .env.example -> meta
       const env = readEnvFile(input);
       if (Object.keys(env).length === 0) {
-        fail(lang, "META_PARSE_FAILED", [`- ${t(lang, "INIT_INPUT_EMPTY")} ${input}`]);
+        // keep a dedicated, user-friendly message for empty/missing .env.example
+        fail(lang, "INIT_INPUT_EMPTY", [`- ${input}`]);
       }
 
       const meta = metaFromEnv(env, opts.group ? String(opts.group) : undefined);

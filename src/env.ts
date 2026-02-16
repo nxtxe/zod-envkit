@@ -8,7 +8,7 @@ import type { EnvMeta } from "./generate.js";
  * - `unknown`: keys present in env but not described in meta
  *
  * @public
- * @since 1.1.0
+ * @since 1.2.0
  */
 export type EnvCheckResult = {
   ok: boolean;
@@ -20,7 +20,7 @@ export type EnvCheckResult = {
  * Return required keys from `meta` that are missing (or empty) in `env`.
  *
  * @public
- * @since 1.1.0
+ * @since 1.2.0
  */
 export function getMissingEnv(
   meta: EnvMeta,
@@ -45,7 +45,7 @@ export function getMissingEnv(
  * Note: the result is returned in stable alphabetical order.
  *
  * @public
- * @since 1.1.0
+ * @since 1.2.0
  */
 export function getUnknownEnv(
   meta: EnvMeta,
@@ -62,9 +62,7 @@ export function getUnknownEnv(
   return unknown;
 }
 
-/**
- * @internal
- */
+/** @internal */
 const SECRET_PATTERNS: ReadonlyArray<(k: string) => boolean> = [
   (k) => k.includes("TOKEN"),
   (k) => k.includes("SECRET"),
@@ -80,7 +78,7 @@ const SECRET_PATTERNS: ReadonlyArray<(k: string) => boolean> = [
  * Used by the CLI to mask values (TOKEN/SECRET/PASSWORD/*_KEY/PRIVATE).
  *
  * @public
- * @since 1.1.0
+ * @since 1.2.0
  */
 export function isSecretKey(key: string): boolean {
   const k = key.toUpperCase();
@@ -94,12 +92,14 @@ export function isSecretKey(key: string): boolean {
  *
  * Note: `ok` here means:
  * - no missing required vars
- * - no unknown vars (because this function is strict by definition)
+ * - no unknown vars
+ *
+ * The CLI may choose to ignore `unknown` unless `--strict` is enabled.
  *
  * If you want "missing only" checks, use {@link getMissingEnv}.
  *
  * @public
- * @since 1.1.0
+ * @since 1.2.0
  */
 export function checkEnv(
   meta: EnvMeta,

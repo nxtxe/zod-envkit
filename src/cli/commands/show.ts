@@ -30,7 +30,7 @@ export function registerShow(program: Command, getLang: () => Lang) {
       const lang = getLang();
 
       loadDotEnv(String(opts.dotenv ?? ".env"));
-      const { meta } = loadMeta(lang, opts.config);
+      const { meta } = loadMeta(lang, String(opts.config ?? "env.meta.json"));
 
       // commander: --no-mask => opts.mask === false
       const fallbackMode: MaskMode = opts.mask === false ? "none" : "partial";

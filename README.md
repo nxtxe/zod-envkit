@@ -255,56 +255,64 @@ npx zod-envkit init --from-meta
 
 ## Stability & Versioning
 
-## What's new in 1.2.0
-
-Version **1.2.0** focuses on reliability, contract enforcement, and production readiness.
-
-### Highlights
-
-- strengthened CLI stability and exit code guarantees
-- improved strict mode behavior (`check --strict`)
-- hardened secret masking in `show`
-- deterministic dotenv priority handling
-- expanded contract tests (CLI, exports, robustness)
-- CI pipeline enforces build + tests + docs before release
-
-This release marks the transition from “utility library” to a
-**stable environment contract tool suitable for CI/CD pipelines**.
-
 `zod-envkit` follows **Semantic Versioning**.
 
-### Stable public API (1.x)
+### Public API stability (1.x)
 
-**Library:**
+Everything listed below is treated as **stable public API** for the whole 1.x line.
 
-* `loadEnv`
-* `mustLoadEnv`
-* `formatZodError`
-* `checkEnv`
-* `getMissingEnv`
-* `getUnknownEnv`
-* `isSecretKey`
-* `generateEnvExample`
-* `generateEnvDocs`
+**Library exports (entrypoint `zod-envkit`):**
 
-**CLI:**
+- `loadEnv`
+- `mustLoadEnv`
+- `formatZodError`
+- `checkEnv`
+- `getMissingEnv`
+- `getUnknownEnv`
+- `isSecretKey`
+- `generateEnvExample`
+- `generateEnvDocs`
+- `sortMetaEntries`
+- related public types: `EnvMeta`, `EnvMetaEntry`, `EnvCheckResult`, `GenerateDocsOptions`, `DocsFormat`, `SortMode`
 
-* `generate`, `show`, `check`, `init`
-* documented flags and exit codes
+**CLI contract:**
 
-### What is considered breaking
+- commands: `generate`, `show`, `check`, `init`
+- documented flags and defaults
+- exit code behavior (success = `0`, user error = `1`)
 
-* changing function signatures or return types
-* removing or renaming public exports
-* removing or renaming CLI commands or flags
-* changing exit code semantics
-* changing default CLI behavior
+### Breaking change policy
 
-Non-breaking:
+A **breaking** change (major) includes:
 
-* adding new optional features
-* adding new flags
-* improving error messages or formatting
+- changing signatures or return shapes of the stable exports
+- removing/renaming public exports
+- removing/renaming CLI commands or flags
+- changing CLI default behavior (e.g. what `zod-envkit` does with no args)
+- changing exit code semantics
+- changing output format contracts in a way that breaks existing tooling
+
+A **non-breaking** change (minor/patch) includes:
+
+- adding new exports (backwards compatible)
+- adding new CLI flags (backwards compatible)
+- adding new optional fields to `env.meta.json`
+- improving error messages or docs output while keeping it valid
+
+### What’s new in 1.2.0
+
+Version **1.2.0** focuses on reliability, contract enforcement, and CI readiness.
+
+Highlights:
+
+- hardened strict mode behavior (`check --strict`) for CI usage
+- deterministic dotenv priority handling
+- improved secret masking guarantees in `show`
+- expanded preprod test suite (smoke, contract, CLI E2E, robustness)
+- CI pipeline enforces: build → tests → docs build
+
+This is the point where `zod-envkit` stops being “just a helper” and becomes a
+**stable environment contract tool for CI/CD pipelines**.
 
 ---
 
@@ -312,17 +320,17 @@ Non-breaking:
 
 `dotenv`:
 
-* ❌ no validation
-* ❌ no types
-* ❌ no documentation
-* ❌ no CI checks
+- ❌ no validation
+- ❌ no types
+- ❌ no documentation
+- ❌ no CI checks
 
 `zod-envkit`:
 
-* ✅ validation
-* ✅ TypeScript inference
-* ✅ documentation
-* ✅ CLI tooling
+- ✅ validation
+- ✅ TypeScript inference
+- ✅ documentation
+- ✅ CLI tooling
 
 They are designed to be used **together**.
 
@@ -330,11 +338,11 @@ They are designed to be used **together**.
 
 ## Design principles
 
-* explicit configuration over magic
-* no framework coupling
-* small and predictable API
-* library and CLI are independent but complementary
-* environment variables are a runtime contract
+- explicit configuration over magic
+- no framework coupling
+- small and predictable API
+- library and CLI are independent but complementary
+- environment variables are a runtime contract
 
 ---
 

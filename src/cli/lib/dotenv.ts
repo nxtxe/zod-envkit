@@ -3,6 +3,12 @@ import fs from "node:fs";
 import path from "node:path";
 import dotenv from "dotenv";
 
+/**
+ * Result of loading one or multiple dotenv files.
+ *
+ * @public
+ * @since 1.2.0
+ */
 export type DotenvLoadResult = {
   loaded: string[];
   skipped: string[];
@@ -13,17 +19,27 @@ export type DotenvLoadResult = {
   env: Record<string, string>;
 };
 
+/**
+ * @internal
+ */
 function resolvePath(p: string): string {
   return path.resolve(process.cwd(), p);
 }
 
 /**
- * Loads one or multiple dotenv files in order.
+ * Load one or multiple dotenv files in order.
+ *
  * Later files override earlier ones.
  *
- * Also:
- * - returns merged dotenv-only env object
- * - still writes keys into process.env for existing behavior
+ * Behavior:
+ * - merges dotenv-only variables into a separate object (for strict checks)
+ * - writes parsed keys into `process.env` (override in order)
+ *
+ * This function does not throw if files are missing.
+ * Missing files are reported in the `skipped` array.
+ *
+ * @public
+ * @since 1.2.0
  */
 export function loadDotEnv(files: string | undefined): DotenvLoadResult {
   const list = (files?.split(",").map((s) => s.trim()).filter(Boolean) ?? [".env"]);

@@ -4,8 +4,17 @@ import type { Lang } from "../../i18n.js";
 import { t } from "../../i18n.js";
 import { loadDotEnv } from "../lib/dotenv.js";
 import { loadMeta } from "../lib/meta.js";
+import { fail } from "../lib/fail.js";
 import { getMissingEnv, getUnknownEnv } from "../../env.js";
 
+/**
+ * Register `zod-envkit check`.
+ *
+ * CONTRACT (stable in 1.x):
+ * - exit 0 when env is OK
+ * - exit 1 on user errors (missing/unknown/invalid config)
+ * - in --strict mode unknown vars are checked against dotenv-only keys
+ */
 export function registerCheck(program: Command, getLang: () => Lang) {
   program
     .command("check")
@@ -19,22 +28,17 @@ export function registerCheck(program: Command, getLang: () => Lang) {
       const loaded = loadDotEnv(opts.dotenv);
       const { meta } = loadMeta(lang, opts.config);
 
-      // Missing should be checked against actual runtime env (dotenv merged into process.env)
+      // Missing is checked against actual runtime env (dotenv merged into process.env)
       const missing = getMissingEnv(meta, process.env);
-
       if (missing.length) {
-        console.error(`❌ ${t(lang, "MISSING_ENV")}`);
-        for (const k of missing) console.error(`- ${k}`);
-        process.exit(1);
+        fail(lang, "MISSING_ENV", missing.map((k) => `- ${k}`));
       }
 
       if (opts.strict) {
-        // Strict should check unknown only in dotenv-provided keys (avoid OS/CI noise)
-        const unknown = getUnknownEnv(meta, loaded.env as any);
+        // Strict checks unknown only in dotenv-provided keys (avoid OS/CI noise)
+        const unknown = getUnknownEnv(meta, loaded.env as unknown as NodeJS.ProcessEnv);
         if (unknown.length) {
-          console.error(`❌ ${t(lang, "UNKNOWN_ENV")}`);
-          for (const k of unknown) console.error(`- ${k}`);
-          process.exit(1);
+          fail(lang, "UNKNOWN_ENV", unknown.map((k) => `- ${k}`));
         }
       }
 
