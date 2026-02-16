@@ -2,9 +2,9 @@
 
 ***
 
-> **checkEnv**(`meta`, `env`): [`EnvCheckResult`](../type-aliases/EnvCheckResult.md)
+> **checkEnv**(`meta`, `env?`): [`EnvCheckResult`](../type-aliases/EnvCheckResult.md)
 
-Defined in: [env.ts:104](https://github.com/nxtxe/zod-envkit/blob/d516fbb4c8248745f7d74c1f07defaf4529c33ec/src/env.ts#L104)
+Defined in: [env.ts:104](https://github.com/nxtxe/zod-envkit/blob/19d243b411f03c2044fae7f59e0c66676d1d1e90/src/env.ts#L104)
 
 Validate `env` against `meta`.
 
@@ -24,7 +24,7 @@ If you want "missing only" checks, use [getMissingEnv](getMissingEnv.md).
 
 [`EnvMeta`](../type-aliases/EnvMeta.md)
 
-### env
+### env?
 
 `ProcessEnv` = `process.env`
 
