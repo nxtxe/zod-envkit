@@ -60,8 +60,7 @@
   "dependencies": {
     "commander": "^13.1.0",
     "dotenv": "^17.2.3",
-    "zod": "^4.3.6",
-    "zod-envkit": "link:"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
