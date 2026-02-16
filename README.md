@@ -83,16 +83,10 @@ Skip **zod-envkit** if:
 
 ```bash
 npm install zod-envkit
-````
-
-```bash
 yarn add zod-envkit
-```
-
-```bash
 pnpm add zod-envkit
+bun add zod-envkit
 ```
-
 ---
 
 ## Library usage (runtime validation)
@@ -260,6 +254,22 @@ npx zod-envkit init --from-meta
 ---
 
 ## Stability & Versioning
+
+## What's new in 1.2.0
+
+Version **1.2.0** focuses on reliability, contract enforcement, and production readiness.
+
+### Highlights
+
+- strengthened CLI stability and exit code guarantees
+- improved strict mode behavior (`check --strict`)
+- hardened secret masking in `show`
+- deterministic dotenv priority handling
+- expanded contract tests (CLI, exports, robustness)
+- CI pipeline enforces build + tests + docs before release
+
+This release marks the transition from “utility library” to a
+**stable environment contract tool suitable for CI/CD pipelines**.
 
 `zod-envkit` follows **Semantic Versioning**.
 

@@ -1,40 +1,57 @@
-# [1.2.0](https://github.com/nxtxe/zod-envkit/compare/v1.1.2...v1.2.0) (2026-02-16)
-
-
-### Features
-
-* stabilize preprod test suite, CLI E2E coverage, and CI pipeline ([463ea6e](https://github.com/nxtxe/zod-envkit/commit/463ea6e4676662dbbbe82bc79e0d85b079b524f8))
-
-## [1.1.2](https://github.com/nxtxe/zod-envkit/compare/v1.1.1...v1.1.2) (2026-01-29)
-
-
-### Bug Fixes
-
-* stabilize strict env validation and CI ([3055f18](https://github.com/nxtxe/zod-envkit/commit/3055f1859479212fbdc105cb0f183c6018df2376))
-* tests ([a691dab](https://github.com/nxtxe/zod-envkit/commit/a691dab0f207685bd96688e36aaabcdb5784f956))
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/).
 
-## [1.1.2](https://github.com/nxtxe/zod-envkit/compare/v1.1.1...v1.1.2) (2026-01-29)
+---
 
-### Bug Fixes
+## [1.2.0] – 2026-02-16
 
-* **cli:** fix strict mode to validate only dotenv-loaded variables
-* **cli:** stabilize option validation and documentation links
-* **ci:** ensure CLI smoke tests and docs build in CI
-* internal cleanup to align behavior with documented API contract
+### Added
 
+* Preprod test suite (smoke, contract, CLI E2E, robustness)
+* Strict CLI isolation for CI (no host env leakage)
+* Robust helpers for CLI E2E testing
+* Internal contract tests for public exports and exit codes
 
-## [1.1.1](https://github.com/nxtxe/zod-envkit/compare/v1.1.0...v1.1.1) (2026-01-29)
+### Changed
 
+* `init --from-meta` now generates `.env.example` from `env.meta.json`
+* Test architecture restructured under `tests/test/preprod`
+* CI workflow aligned with pnpm-only setup
+* Improved stability of strict mode behavior
 
-### Bug Fixes
+### Stability
 
-* **cli:** stabilize options validation and docs links ([640b12b](https://github.com/nxtxe/zod-envkit/commit/640b12bf95304da40c998374ba7ed08b7400e88d))
-* stabilize public API, CLI behavior, and documentation ([4604298](https://github.com/nxtxe/zod-envkit/commit/46042981f146f021919da8a4a713b2d251c542d9))
+* Public API (`loadEnv`, `mustLoadEnv`, CLI flags) treated as stable contract
+* CLI exit codes verified by contract tests
+* Documentation build enforced in CI
+
+[1.2.0]: https://www.npmjs.com/package/zod-envkit/v/1.2.0
+
+---
+
+## [1.1.2] – 2026-01-29
+
+### Fixed
+
+* Strict mode now validates only dotenv-loaded variables (prevents host env leakage)
+* Options validation and docs links stabilized
+* CI updated to include CLI smoke tests and docs build
+* Internal cleanup to align behavior with documented API contract
+
+[1.1.2]: https://www.npmjs.com/package/zod-envkit/v/1.1.2
+
+---
+
+## [1.1.1] – 2026-01-29
+
+### Fixed
+
+* Options validation and docs links stabilized
+* Public API, CLI behavior, and documentation hardened
+
+[1.1.1]: https://www.npmjs.com/package/zod-envkit/v/1.1.1
 
 ---
 
@@ -43,39 +60,31 @@ This project follows [Semantic Versioning](https://semver.org/).
 ### Added
 
 * New `zod-envkit init` command to bootstrap configuration:
-
   * generate `env.meta.json` from `.env.example`
   * generate `.env.example` from existing `env.meta.json`
 * Support for loading multiple dotenv files via `--dotenv`
-
   * example: `.env,.env.local,.env.production`
   * files are loaded in order with override semantics
 * Documentation generation in multiple formats:
-
   * `md` (default)
   * `json`
   * `yaml`
 * Sorting options for docs and CLI output via `--sort`:
-
   * `alpha`
   * `required-first`
   * `none`
 * Strict CI validation via `zod-envkit check --strict`
-
   * fails on missing **and** unknown environment variables
 * Configurable secret masking in `zod-envkit show`:
-
   * `--mask-mode partial | full | none`
   * `--no-mask` alias
 * Grouping support for environment variables via `meta.group`
 * Extended env metadata fields:
-
   * `default`
   * `deprecated`
   * `since`
   * `link`
 * New public core utilities:
-
   * `getMissingEnv`
   * `getUnknownEnv`
   * `checkEnv`
@@ -84,16 +93,13 @@ This project follows [Semantic Versioning](https://semver.org/).
 ### Changed
 
 * CLI architecture refactored into a modular structure (`src/cli/*`)
-
   * no breaking behavior changes
 * Documentation generator improved:
-
   * grouped sections
   * width-aware, centered markdown tables
   * extended metadata columns
 * Public API explicitly documented and treated as a stable contract
 * CLI default behavior preserved:
-
   * running `zod-envkit` without subcommand defaults to `generate`
 
 ### Fixed
@@ -119,13 +125,11 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 * Public API stabilized and separated from CLI internals
 * CLI error handling improved:
-
   * no stack traces for user errors
   * consistent human-readable messages
   * strict exit codes
 * `ENV.md` generation now produces centered, width-aware tables
 * CLI now reliably resolves `env.meta.json` from:
-
   * project root
   * `./examples/`
   * explicit `-c/--config`
@@ -184,7 +188,6 @@ This project follows [Semantic Versioning](https://semver.org/).
 * Type-safe env validation with Zod
 * `loadEnv` and `formatZodError`
 * CLI to generate:
-
   * `.env.example`
   * `ENV.md`
 * ESM and CommonJS builds

@@ -37,15 +37,11 @@ zod-envkit помогает вам относиться к переменным 
 
 ```bash
 npm install zod-envkit
-````
-
-```bash
 yarn add zod-envkit
+pnpm add zod-envkit
+bun add zod-envkit
 ```
 
-```bash
-pnpm add zod-envkit
-```
 ## Пример
 
 ```ts
