@@ -5,13 +5,10 @@
 ## Установка
 
 ```bash
-npm add zod-envkit
-```
-```bash
-pnpm add zod-envkit
-```
-```bash
+npm install zod-envkit
 yarn add zod-envkit
+pnpm add zod-envkit
+bun add zod-envkit
 ```
 
 Создайте один файл, ответственный за загрузку и валидацию переменных окружения.

@@ -66,3 +66,6 @@ local.md
 publish.md
 tests/
 vitest.config.*
+
+# npm / pnpm pack artifacts
+*.tgz

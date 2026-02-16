@@ -37,14 +37,9 @@ zod-envkit helps you treat environment variables as an **explicit runtime contra
 
 ```bash
 npm install zod-envkit
-````
-
-```bash
 yarn add zod-envkit
-```
-
-```bash
 pnpm add zod-envkit
+bun add zod-envkit
 ```
 
 ## Example

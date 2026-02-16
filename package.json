@@ -38,17 +38,29 @@
     "README.md",
     "README.RU.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "package.json"
   ],
   "scripts": {
     "build": "rm -rf dist && tsup src/index.ts src/cli/index.ts --format esm,cjs --dts --outDir dist",
     "dev": "tsup src/index.ts src/cli/index.ts --watch --dts --outDir dist",
-    "test": "vitest run",
-    "test:ci": "pnpm build && pnpm test",
-    "release": "semantic-release",
-    "docs:api": "typedoc",
+
+    "test": "pnpm test:preprod",
+    "test:preprod": "pnpm build && vitest run tests/test/preprod",
+    "test:preprod:robust": "pnpm build && PREPROD_ITER=30 vitest run tests/test/preprod/30-robustness",
+    "test:before-release": "pnpm build && pnpm test:preprod && pnpm test:preprod:robust",
+
+    "ci:smoke": "pnpm build && node dist/cli/index.js --help",
+    "ci:docs": "pnpm docs:build",
+    "ci:all": "pnpm ci:smoke && pnpm test && pnpm ci:docs",
+
+    "prepublishOnly": "pnpm build && pnpm test",
+
+    "docs:api": "typedoc --tsconfig tsconfig.docs.json --entryPoints src/index.ts",
     "docs:build": "pnpm docs:api && vitepress build docs",
-    "docs:dev": "vitepress dev docs"
+    "docs:dev": "vitepress dev docs",
+
+    "release": "semantic-release"
   },
   "dependencies": {
     "commander": "^13.1.0",
@@ -64,7 +76,9 @@
     "@semantic-release/release-notes-generator": "^12.1.0",
     "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
+    "execa": "^9.6.1",
     "semantic-release": "^22.0.12",
+    "tmp-promise": "^3.0.3",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.16",
     "typedoc-plugin-markdown": "^4.9.0",

@@ -37,17 +37,20 @@ export function registerInit(program: Command, getLang: () => Lang) {
   program
     .command("init")
     .description("Initialize env.meta.json from .env.example (or generate .env.example from meta)")
-    .option("--input <file>", "Input file (default: .env.example)", ".env.example")
-    .option("--output <file>", "Output file (default: env.meta.json)", "env.meta.json")
+    .option("--input <file>", "Input file (.env.example or env.meta.json)")
+    .option("--output <file>", "Output file (env.meta.json or .env.example)")
     .option("--from-meta", "Generate .env.example from env.meta.json instead")
     .option("--group <name>", "Default group for all vars (when generating meta)")
     .action((opts) => {
       const lang = getLang();
 
-      const input = String(opts.input ?? ".env.example");
-      const output = String(opts.output ?? "env.meta.json");
+      const fromMeta = Boolean(opts.fromMeta);
 
-      if (Boolean(opts.fromMeta)) {
+      // dynamic defaults (important for tests + intuitive UX)
+      const input = String(opts.input ?? (fromMeta ? "env.meta.json" : ".env.example"));
+      const output = String(opts.output ?? (fromMeta ? ".env.example" : "env.meta.json"));
+
+      if (fromMeta) {
         // meta -> .env.example
         const { meta } = loadMeta(lang, input);
         fs.writeFileSync(output, generateEnvExample(meta), "utf8");
@@ -57,7 +60,7 @@ export function registerInit(program: Command, getLang: () => Lang) {
       // .env.example -> meta
       const env = readEnvFile(input);
       if (Object.keys(env).length === 0) {
-        fail(lang, "INIT_INPUT_EMPTY", [`- ${input}`]);
+        fail(lang, "META_PARSE_FAILED", [`- ${t(lang, "INIT_INPUT_EMPTY")} ${input}`]);
       }
 
       const meta = metaFromEnv(env, opts.group ? String(opts.group) : undefined);

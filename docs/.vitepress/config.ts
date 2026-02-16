@@ -32,6 +32,62 @@ export default defineConfig({
         type: "image/svg+xml",
       },
     ],
+
+    [
+      "link",
+      {
+        rel: "alternate icon",
+        href: `${BASE}zod-envkitmini.svg?v=2`,
+      },
+    ],
+
+    [
+      "link",
+      {
+        rel: "apple-touch-icon",
+        href: `${BASE}zod-envkitmini.svg?v=2`,
+      },
+    ],
+
+    [
+      "link",
+      {
+        rel: "manifest",
+        href: `${BASE}site.webmanifest`,
+      },
+    ],
+
+    [
+      "meta",
+      {
+        name: "theme-color",
+        content: "#ffffff",
+      },
+    ],
+
+    [
+      "meta",
+      {
+        name: "apple-mobile-web-app-capable",
+        content: "yes",
+      },
+    ],
+
+    [
+      "meta",
+      {
+        name: "apple-mobile-web-app-status-bar-style",
+        content: "default",
+      },
+    ],
+
+    [
+      "meta",
+      {
+        name: "apple-mobile-web-app-title",
+        content: "zod-envkit",
+      },
+    ],
   ],
 
   locales: {

@@ -1,0 +1,23 @@
+{
+  "name": "zod-envkit",
+  "short_name": "zod-envkit",
+  "description": "Type-safe environment variable validation and documentation",
+
+  "start_url": "/zod-envkit/",
+  "scope": "/zod-envkit/",
+
+  "display": "standalone",
+  "orientation": "portrait",
+
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+
+  "icons": [
+    {
+      "src": "/zod-envkit/zod-envkitmini.svg?v=2",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

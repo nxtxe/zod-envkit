@@ -48,3 +48,7 @@ local.md
 # Misc
 # =====================
 publish.md
+
+
+# npm / pnpm pack artifacts
+*.tgz
