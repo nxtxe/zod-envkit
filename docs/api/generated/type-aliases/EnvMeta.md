@@ -4,7 +4,7 @@
 
 > **EnvMeta** = `Record`\<`string`, [`EnvMetaEntry`](EnvMetaEntry.md)\>
 
-Defined in: [generate.ts:74](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e0caf6dc091774017654bdfb18f9/src/generate.ts#L74)
+Defined in: [generate.ts:74](https://github.com/nxtxe/zod-envkit/blob/d516fbb4c8248745f7d74c1f07defaf4529c33ec/src/generate.ts#L74)
 
 Environment meta map (`KEY` -> metadata).
 

@@ -4,7 +4,7 @@
 
 > **LoadEnvFail** = `object`
 
-Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e0caf6dc091774017654bdfb18f9/src/index.ts#L48)
+Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/d516fbb4c8248745f7d74c1f07defaf4529c33ec/src/index.ts#L48)
 
 Failed result of [loadEnv](../functions/loadEnv.md).
 
@@ -18,7 +18,7 @@ Failed result of [loadEnv](../functions/loadEnv.md).
 
 > **error**: `z.ZodError`
 
-Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e0caf6dc091774017654bdfb18f9/src/index.ts#L48)
+Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/d516fbb4c8248745f7d74c1f07defaf4529c33ec/src/index.ts#L48)
 
 ***
 
@@ -26,4 +26,4 @@ Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e
 
 > **ok**: `false`
 
-Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/73ec75f40db0e0caf6dc091774017654bdfb18f9/src/index.ts#L48)
+Defined in: [index.ts:48](https://github.com/nxtxe/zod-envkit/blob/d516fbb4c8248745f7d74c1f07defaf4529c33ec/src/index.ts#L48)
