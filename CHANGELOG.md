@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/nxtxe/zod-envkit/compare/v1.2.1...v1.2.2) (2026-02-16)
+
+
+### Bug Fixes
+
+* regenerate lockfile (remove stale link: specifier) ([19d243b](https://github.com/nxtxe/zod-envkit/commit/19d243b411f03c2044fae7f59e0c66676d1d1e90))
+* remove self link dependency from optionalDependencies ([3fd0568](https://github.com/nxtxe/zod-envkit/commit/3fd0568f327d112f496e357962810efdb06deaee))
+
 ## [1.2.1](https://github.com/nxtxe/zod-envkit/compare/v1.2.0...v1.2.1) (2026-02-16)
 
 
