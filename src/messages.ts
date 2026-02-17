@@ -14,6 +14,8 @@ export const messages: Record<Lang, Record<string, string>> = {
     META_TRIED: "Tried:",
     META_TIP: "Tip:",
     META_PARSE_FAILED: "Failed to read/parse env meta file:",
+    META_FALLBACK_EXAMPLE: "env.meta.json not found, falling back to .env.example (minimal meta).",
+    META_FALLBACK_TIP: "Tip: create env.meta.json for richer docs, grouping, and stable CLI behavior.",
 
     GENERATED: "Generated: {example}, {docs}",
 
@@ -33,6 +35,8 @@ export const messages: Record<Lang, Record<string, string>> = {
     META_TRIED: "Пробовали:",
     META_TIP: "Подсказка:",
     META_PARSE_FAILED: "Не удалось прочитать или распарсить env meta файл:",
+    META_FALLBACK_EXAMPLE: "env.meta.json не найден, используем .env.example как минимальную мету.",
+    META_FALLBACK_TIP: "Подсказка: лучше создать env.meta.json — будет богаче документация и стабильнее CLI-контракт.",
 
     GENERATED: "Сгенерировано: {example}, {docs}",
 

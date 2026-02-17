@@ -23,7 +23,7 @@ export function registerShow(program: Command, getLang: () => Lang) {
     .description("Show current env status (loads dotenv, masks secrets)")
     .option("-c, --config <file>", "Path to env meta json", "env.meta.json")
     .option("--dotenv <list>", "Comma-separated dotenv files (default: .env)", ".env")
-    .option("--mask-mode <mode>", "Mask mode (partial | full | none)", "partial")
+    .option("--mask-mode <mode>", "Mask mode (partial | full | none)")
     .option("--no-mask", "Alias for --mask-mode none")
     .option("--sort <mode>", "Sort mode (alpha | required-first | none)", "none")
     .action((opts) => {
@@ -32,10 +32,20 @@ export function registerShow(program: Command, getLang: () => Lang) {
       loadDotEnv(String(opts.dotenv ?? ".env"));
       const { meta } = loadMeta(lang, String(opts.config ?? "env.meta.json"));
 
-      // commander: --no-mask => opts.mask === false
-      const fallbackMode: MaskMode = opts.mask === false ? "none" : "partial";
+      // Mask mode resolution priority:
+      // 1) --no-mask        => none (always overrides)
+      // 2) --mask-mode <m>  => use provided value
+      // 3) default          => partial
+      let modeRaw: string;
 
-      const modeRaw = String(opts.maskMode ?? fallbackMode);
+      if (opts.mask === false) {
+        modeRaw = "none";
+      } else if (opts.maskMode) {
+        modeRaw = String(opts.maskMode);
+      } else {
+        modeRaw = "partial";
+      }
+
       if (!isMaskMode(modeRaw)) {
         console.error(`❌ ${t(lang, "INVALID_MASK_MODE")}: ${modeRaw}`);
         console.error(`- partial | full | none`);

@@ -108,16 +108,23 @@ export function mustLoadEnv<T extends z.ZodTypeAny>(schema: T): z.infer<T> {
 /**
  * Format `ZodError` into a human-friendly multi-line message (one issue per line).
  *
- * @example
- * ```ts
- * console.error("Invalid environment:\n" + formatZodError(err));
- * ```
+ * Output format (stable in 1.x):
+ * - path: message
  *
  * @public
  * @since 1.0.0
  */
 export function formatZodError(err: z.ZodError): string {
   return err.issues
-    .map((i) => `- ${i.path.join(".") || "(root)"}: ${i.message}`)
+    .slice()
+    .sort((a, b) => {
+      const pa = a.path.length ? a.path.join(".") : "";
+      const pb = b.path.length ? b.path.join(".") : "";
+      return pa.localeCompare(pb);
+    })
+    .map((issue) => {
+      const path = issue.path.length ? issue.path.join(".") : "(root)";
+      return `- ${path}: ${issue.message.trim()}`;
+    })
     .join("\n");
 }

@@ -4,9 +4,12 @@
 
 > **formatZodError**(`err`): `string`
 
-Defined in: [index.ts:119](https://github.com/nxtxe/zod-envkit/blob/19d243b411f03c2044fae7f59e0c66676d1d1e90/src/index.ts#L119)
+Defined in: [index.ts:117](https://github.com/nxtxe/zod-envkit/blob/37da686bfc668f8b65b4092da6e81127d9812571/src/index.ts#L117)
 
 Format `ZodError` into a human-friendly multi-line message (one issue per line).
+
+Output format (stable in 1.x):
+- path: message
 
 ## Parameters
 
@@ -17,12 +20,6 @@ Format `ZodError` into a human-friendly multi-line message (one issue per line).
 ## Returns
 
 `string`
-
-## Example
-
-```ts
-console.error("Invalid environment:\n" + formatZodError(err));
-```
 
 ## Since
 

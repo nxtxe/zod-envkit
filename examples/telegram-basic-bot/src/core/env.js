@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 const { z } = require("zod");
 const { mustLoadEnv } = require("zod-envkit");
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const EnvSchema = z.object({
   BOT_TOKEN: z.string().min(20, "BOT_TOKEN looks too short"),

@@ -29,8 +29,7 @@ describe("CLI E2E / show security", () => {
 
       const nm = await runZodEnvkit({ cwd: dir, args: ["show", "--no-mask"], reject: false });
       expect(nm.exitCode).toBe(0);
-      // В текущей версии --no-mask НЕ раскрывает полностью
-      expect(nm.all).not.toContain(secret);
+      expect(nm.all).toContain(secret);
 
       // Но показывает частично (начало/конец)
       expect(nm.all).toContain("su");

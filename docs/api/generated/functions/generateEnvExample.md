@@ -4,7 +4,7 @@
 
 > **generateEnvExample**(`meta`): `string`
 
-Defined in: [generate.ts:221](https://github.com/nxtxe/zod-envkit/blob/19d243b411f03c2044fae7f59e0c66676d1d1e90/src/generate.ts#L221)
+Defined in: [generate.ts:221](https://github.com/nxtxe/zod-envkit/blob/37da686bfc668f8b65b4092da6e81127d9812571/src/generate.ts#L221)
 
 Generate `.env.example` from [EnvMeta](../type-aliases/EnvMeta.md).
 

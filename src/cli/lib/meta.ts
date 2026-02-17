@@ -1,6 +1,7 @@
 // src/cli/lib/meta.ts
 import fs from "node:fs";
 import path from "node:path";
+import dotenv from "dotenv";
 import { t, type Lang } from "../../i18n.js";
 import { fail } from "./fail.js";
 import type { EnvMeta } from "../../generate.js";
@@ -31,15 +32,43 @@ export function resolveMetaPath(configFile: string): { candidates: string[]; fou
 }
 
 /**
- * Load and parse `env.meta.json`.
+ * Build minimal {@link EnvMeta} from `.env.example`.
+ *
+ * All variables:
+ * - required = true
+ * - description = ""
+ * - example = value from file
+ *
+ * @internal
+ */
+function buildMetaFromEnvExample(examplePath: string): EnvMeta {
+  const raw = fs.readFileSync(examplePath, "utf8");
+  const parsed = dotenv.parse(raw);
+
+  const meta: EnvMeta = {};
+  const keys = Object.keys(parsed).sort((a, b) => a.localeCompare(b));
+
+  for (const key of keys) {
+    meta[key] = {
+      example: parsed[key] ?? "",
+      required: true,
+      description: "",
+    };
+  }
+
+  return meta;
+}
+
+/**
+ * Load env metadata.
  *
  * CONTRACT (stable in 1.x):
  * - Resolves path using {@link resolveMetaPath}
- * - On missing file → calls {@link fail} with META_NOT_FOUND
+ * - If meta exists → loads and parses it
+ * - If meta not found but `.env.example` exists → builds minimal meta from it
  * - On invalid JSON → calls {@link fail} with META_PARSE_FAILED
+ * - If neither meta nor example exists → calls {@link fail} with META_NOT_FOUND
  * - Never throws raw errors
- *
- * Returns parsed meta and the resolved config path.
  *
  * @internal
  * @since 1.1.0
@@ -47,22 +76,31 @@ export function resolveMetaPath(configFile: string): { candidates: string[]; fou
 export function loadMeta(lang: Lang, configFile: string): { meta: EnvMeta; configPath: string } {
   const { candidates, found } = resolveMetaPath(configFile);
 
-  if (!found) {
-    fail(lang, "META_NOT_FOUND", [
-      t(lang, "META_TRIED"),
-      ...candidates.map((p) => `- ${p}`),
-      "",
-      t(lang, "META_TIP"),
-      "  npx zod-envkit show -c examples/env.meta.json",
-    ]);
+  if (found) {
+    try {
+      const raw = fs.readFileSync(found, "utf8");
+      return { meta: JSON.parse(raw) as EnvMeta, configPath: found };
+    } catch {
+      fail(lang, "META_PARSE_FAILED", [`- ${found}`]);
+    }
   }
 
-  const configPath = found;
+  // fallback: .env.example
+  const examplePath = path.resolve(process.cwd(), ".env.example");
+  if (fs.existsSync(examplePath)) {
+    // предупреждение — ОК, но это не ошибка (exit 0)
+    console.warn(`⚠️ ${t(lang, "META_FALLBACK_EXAMPLE")}`);
+    console.warn(`   ${t(lang, "META_FALLBACK_TIP")}`);
+    console.warn("");
 
-  try {
-    const raw = fs.readFileSync(configPath, "utf8");
-    return { meta: JSON.parse(raw) as EnvMeta, configPath };
-  } catch {
-    fail(lang, "META_PARSE_FAILED", [`- ${configPath}`]);
+    return { meta: buildMetaFromEnvExample(examplePath), configPath: examplePath };
   }
+
+  fail(lang, "META_NOT_FOUND", [
+    t(lang, "META_TRIED"),
+    ...candidates.map((p) => `- ${p}`),
+    "",
+    t(lang, "META_TIP"),
+    "  npx zod-envkit show -c examples/env.meta.json",
+  ]);
 }
