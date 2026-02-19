@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/nxtxe/zod-envkit/compare/v1.2.2...v1.2.3) (2026-02-19)
+
+
+### Bug Fixes
+
+* reliability polish (meta fallback, strict isolation, deterministic errors) ([a439230](https://github.com/nxtxe/zod-envkit/commit/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57))
+
 ## [1.2.2](https://github.com/nxtxe/zod-envkit/compare/v1.2.1...v1.2.2) (2026-02-16)
 
 
