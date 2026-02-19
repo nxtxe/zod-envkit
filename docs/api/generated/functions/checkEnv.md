@@ -4,7 +4,7 @@
 
 > **checkEnv**(`meta`, `env?`): [`EnvCheckResult`](../type-aliases/EnvCheckResult.md)
 
-Defined in: [env.ts:104](https://github.com/nxtxe/zod-envkit/blob/37da686bfc668f8b65b4092da6e81127d9812571/src/env.ts#L104)
+Defined in: [env.ts:104](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/env.ts#L104)
 
 Validate `env` against `meta`.
 

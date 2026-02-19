@@ -4,6 +4,14 @@ export type Lang = "en" | "ru";
 export type MessageKey = keyof typeof messages["en"];
 
 /**
+ * @internal
+ * Escape a string for use inside a RegExp source.
+ */
+function escapeRegExp(source: string): string {
+  return source.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
  * Resolve CLI language.
  *
  * Priority:
@@ -25,7 +33,7 @@ export function resolveLang(cliLang?: string): Lang {
 /**
  * Translate message key using selected language.
  *
- * Supports simple template variables: `{var}`
+ * Supports simple template variables: `{var}` (all occurrences).
  *
  * @since 1.0.0
  */
@@ -38,7 +46,8 @@ export function t(
 
   if (vars) {
     for (const [k, v] of Object.entries(vars)) {
-      text = text.replace(`{${k}}`, v);
+      const pattern = new RegExp(`\\{${escapeRegExp(k)}\\}`, "g");
+      text = text.replace(pattern, v);
     }
   }
 

@@ -42,7 +42,13 @@ function resolvePath(p: string): string {
  * @since 1.2.0
  */
 export function loadDotEnv(files: string | undefined): DotenvLoadResult {
-  const list = (files?.split(",").map((s) => s.trim()).filter(Boolean) ?? [".env"]);
+  let list = files?.split(",").map((s) => s.trim()).filter(Boolean) ?? [".env"];
+
+  // If the resulting list is empty (e.g. value was an empty string or only commas),
+  // fall back to the default `.env` for a more intuitive UX.
+  if (list.length === 0) {
+    list = [".env"];
+  }
 
   const loaded: string[] = [];
   const skipped: string[] = [];
