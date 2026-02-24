@@ -9,6 +9,8 @@ import type { EnvMeta } from "../../generate.js";
 /**
  * Resolve possible locations of `env.meta.json`.
  *
+ * Stable in 1.2.
+ *
  * Search order:
  * 1. <cwd>/<configFile>
  * 2. <cwd>/examples/<configFile>

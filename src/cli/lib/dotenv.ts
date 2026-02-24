@@ -1,4 +1,5 @@
 // src/cli/lib/dotenv.ts
+/** Dotenv loading for CLI. Stable in 1.2. */
 import fs from "node:fs";
 import path from "node:path";
 import dotenv from "dotenv";

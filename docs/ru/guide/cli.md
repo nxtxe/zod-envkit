@@ -93,6 +93,23 @@ npx zod-envkit check --strict
 npx zod-envkit check --dotenv ".env,.env.local"
 ```
 
+### Согласованность Schema ↔ Meta
+
+Если у вас есть и Zod-схема (например в `src/env.ts`), и `env.meta.json`, можно проверять их соответствие:
+
+```bash
+npx zod-envkit check --schema dist/env.js
+```
+
+* **--schema &lt;файл&gt;** — путь к JS-файлу, экспортирующему Zod object (`z.object(...)`). CLI сравнивает ключи схемы с ключами в `env.meta.json`: переменные только в схеме или только в мете выводятся в отчёт.
+* **--schema-mode warn | strict** — `warn` (только сообщение, exit 0) или `strict` (сообщение и exit 1). По умолчанию: `strict`.
+
+Пример: падать в CI при расхождении схемы и меты:
+
+```bash
+npx zod-envkit check --schema dist/env.js --schema-mode strict
+```
+
 ## init
 
 Инициализация конфигурации из существующих файлов.

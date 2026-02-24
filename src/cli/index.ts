@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/** CLI entry. Stable in 1.2. */
 import { Command } from "commander";
 import { resolveLang } from "../i18n.js";
 import { injectDefaultCommandIfMissing } from "./lib/argv.js";

@@ -55,5 +55,22 @@ describe("SMOKE / library", () => {
         expect(() => mustLoadEnv(Schema)).toThrow();
       }
     );
-  })
-})
+  });
+
+  it("formatZodError: one line per issue, path then message, sorted by path", async () => {
+    const schema = z.object({
+      A: z.string().min(1),
+      B: z.coerce.number(),
+    });
+    const r = await withEnv({ A: "", B: "not-a-number" }, () => loadEnv(schema));
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      const out = formatZodError(r.error);
+      expect(out).toMatch(/^- .+: .+/m);
+      const lines = out.split("\n").filter(Boolean);
+      expect(lines.length).toBeGreaterThanOrEqual(1);
+      const paths = lines.map((line) => line.replace(/^- (.+): .+/, "$1"));
+      expect([...paths].sort()).toEqual(paths);
+    }
+  });
+});

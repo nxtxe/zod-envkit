@@ -6,6 +6,8 @@ import type { Lang } from "./i18n.js";
  * ⚠️ This file is part of the public CLI contract.
  * Adding keys is allowed, renaming/removing is breaking.
  *
+ * Stable in 1.2.
+ *
  * @since 1.0.0
  */
 export const messages: Record<Lang, Record<string, string>> = {
@@ -28,6 +30,13 @@ export const messages: Record<Lang, Record<string, string>> = {
     INVALID_SORT: "Invalid sort mode",
 
     INIT_INPUT_EMPTY: "Input env file is empty or not found:",
+
+    SCHEMA_LOAD_FAILED: "Failed to load schema file:",
+    SCHEMA_NOT_OBJECT: "Schema file must export a Zod object (z.object(...)).",
+    SCHEMA_VARS_NOT_IN_META: "Schema variables not listed in env.meta.json:",
+    META_VARS_NOT_IN_SCHEMA: "env.meta.json variables not in schema:",
+    SCHEMA_HINT_ADD_TO_META: "Hint: add these keys to env.meta.json for docs and CLI.",
+    META_HINT_SYNC_SCHEMA: "Hint: add these to your Zod schema or remove from env.meta.json.",
   },
 
   ru: {
@@ -49,5 +58,12 @@ export const messages: Record<Lang, Record<string, string>> = {
     INVALID_SORT: "Неверный режим сортировки",
 
     INIT_INPUT_EMPTY: "Файл окружения пуст или не найден:",
+
+    SCHEMA_LOAD_FAILED: "Не удалось загрузить файл схемы:",
+    SCHEMA_NOT_OBJECT: "Файл схемы должен экспортировать Zod object (z.object(...)).",
+    SCHEMA_VARS_NOT_IN_META: "Переменные схемы отсутствуют в env.meta.json:",
+    META_VARS_NOT_IN_SCHEMA: "Переменные env.meta.json отсутствуют в схеме:",
+    SCHEMA_HINT_ADD_TO_META: "Подсказка: добавьте эти ключи в env.meta.json для доков и CLI.",
+    META_HINT_SYNC_SCHEMA: "Подсказка: добавьте их в Zod-схему или удалите из env.meta.json.",
   },
 };

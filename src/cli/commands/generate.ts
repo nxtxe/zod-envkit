@@ -1,4 +1,5 @@
 // src/cli/commands/generate.ts
+/** CLI generate command. Stable in 1.2. */
 import fs from "node:fs";
 import type { Command } from "commander";
 import type { Lang } from "../../i18n.js";

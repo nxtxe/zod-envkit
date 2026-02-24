@@ -1,4 +1,5 @@
 // src/cli/commands/show.ts
+/** CLI show command. Stable in 1.2. */
 import type { Command } from "commander";
 import type { Lang } from "../../i18n.js";
 import { t } from "../../i18n.js";

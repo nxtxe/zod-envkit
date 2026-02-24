@@ -4,6 +4,7 @@ import type { Lang } from "../../i18n.js";
 import { t } from "../../i18n.js";
 import { loadDotEnv } from "../lib/dotenv.js";
 import { loadMeta } from "../lib/meta.js";
+import { loadSchemaFile } from "../lib/schema.js";
 import { fail } from "../lib/fail.js";
 import { getMissingEnv, getUnknownEnv } from "../../env.js";
 
@@ -14,6 +15,7 @@ import { getMissingEnv, getUnknownEnv } from "../../env.js";
  * - exit 0 when env is OK
  * - exit 1 on user errors (missing/unknown/invalid config)
  * - in --strict mode unknown vars are checked against dotenv-only keys
+ * - with --schema: compare schema keys vs meta keys; --schema-mode warn|strict
  */
 export function registerCheck(program: Command, getLang: () => Lang) {
   program
@@ -22,23 +24,66 @@ export function registerCheck(program: Command, getLang: () => Lang) {
     .option("-c, --config <file>", "Path to env meta json", "env.meta.json")
     .option("--dotenv <list>", "Comma-separated dotenv files (default: .env)", ".env")
     .option("--strict", "Fail if unknown env vars are present (dotenv-only)")
-    .action((opts) => {
+    .option(
+      "--schema <file>",
+      "Path to JS file exporting Zod object; run schema↔meta consistency check"
+    )
+    .option(
+      "--schema-mode <mode>",
+      "Schema↔meta consistency: warn (report, exit 0) or strict (report, exit 1)",
+      "strict"
+    )
+    .action(async (opts) => {
       const lang = getLang();
 
       const loaded = loadDotEnv(opts.dotenv);
       const { meta } = loadMeta(lang, opts.config);
 
-      // Missing is checked against actual runtime env (dotenv merged into process.env)
       const missing = getMissingEnv(meta, process.env);
       if (missing.length) {
         fail(lang, "MISSING_ENV", missing.map((k) => `- ${k}`));
       }
 
       if (opts.strict) {
-        // Strict checks unknown only in dotenv-provided keys (avoid OS/CI noise)
         const unknown = getUnknownEnv(meta, loaded.env as unknown as NodeJS.ProcessEnv);
         if (unknown.length) {
           fail(lang, "UNKNOWN_ENV", unknown.map((k) => `- ${k}`));
+        }
+      }
+
+      if (opts.schema) {
+        const schemaMode = String(opts.schemaMode ?? "strict").toLowerCase();
+        if (schemaMode !== "warn" && schemaMode !== "strict") {
+          fail(lang, "INVALID_FORMAT", ["--schema-mode must be warn or strict"]);
+        }
+
+        const { keys: schemaKeys } = await loadSchemaFile(opts.schema, lang);
+        const metaKeys = new Set(Object.keys(meta));
+
+        const inSchemaNotMeta = schemaKeys.filter((k) => !metaKeys.has(k));
+        const inMetaNotSchema = [...metaKeys].filter((k) => !schemaKeys.includes(k));
+
+        const hasMismatch = inSchemaNotMeta.length > 0 || inMetaNotSchema.length > 0;
+
+        if (hasMismatch) {
+          const lines: string[] = [];
+          if (inSchemaNotMeta.length) {
+            lines.push(`❌ ${t(lang, "SCHEMA_VARS_NOT_IN_META")}`);
+            inSchemaNotMeta.forEach((k) => lines.push(`- ${k}`));
+            lines.push(`   ${t(lang, "SCHEMA_HINT_ADD_TO_META")}`);
+            lines.push("");
+          }
+          if (inMetaNotSchema.length) {
+            lines.push(`❌ ${t(lang, "META_VARS_NOT_IN_SCHEMA")}`);
+            inMetaNotSchema.sort((a, b) => a.localeCompare(b)).forEach((k) => lines.push(`- ${k}`));
+            lines.push(`   ${t(lang, "META_HINT_SYNC_SCHEMA")}`);
+          }
+          const out = lines.join("\n");
+          if (schemaMode === "strict") {
+            console.error(out);
+            process.exit(1);
+          }
+          console.warn(out);
         }
       }
 

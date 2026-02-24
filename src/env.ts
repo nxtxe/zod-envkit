@@ -2,6 +2,10 @@
 import type { EnvMeta } from "./generate.js";
 
 /**
+ * Env validation helpers. Stable in 1.2.
+ */
+
+/**
  * Result of validating an env object against {@link EnvMeta}.
  *
  * - `missing`: required keys that are missing or empty

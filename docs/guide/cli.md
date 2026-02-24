@@ -93,6 +93,23 @@ npx zod-envkit check --strict
 npx zod-envkit check --dotenv ".env,.env.local"
 ```
 
+### Schema ↔ Meta consistency
+
+When you maintain both a Zod schema (e.g. in `src/env.ts`) and `env.meta.json`, you can ensure they stay in sync:
+
+```bash
+npx zod-envkit check --schema dist/env.js
+```
+
+* **--schema &lt;file&gt;** — Path to a JS file that exports a Zod object (`z.object(...)`). The CLI compares its keys with `env.meta.json`: variables in the schema but not in meta, or in meta but not in the schema, are reported.
+* **--schema-mode warn | strict** — `warn` (report only, exit 0) or `strict` (report and exit 1). Default: `strict`.
+
+Example: fail the build if the schema and meta drift apart:
+
+```bash
+npx zod-envkit check --schema dist/env.js --schema-mode strict
+```
+
 ## init
 
 Bootstrap configuration from existing files.

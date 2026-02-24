@@ -35,12 +35,7 @@ zod-envkit helps you treat environment variables as an **explicit runtime contra
 
 ## Quickstart
 
-```bash
-npm install zod-envkit
-yarn add zod-envkit
-pnpm add zod-envkit
-bun add zod-envkit
-```
+<InstallBlock />
 
 ## Example
 

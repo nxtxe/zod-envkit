@@ -6,6 +6,8 @@
  * This file is part of the stable public API: it powers the CLI generators,
  * and is intended to be reusable by consumers.
  *
+ * Stable in 1.2.
+ *
  * @public
  * @since 1.0.0
  */
@@ -45,10 +47,11 @@ export type EnvMetaEntry = {
 
   /**
    * Mark variable as deprecated in docs.
+   * Use `true` for a generic warning (⚠️) or a string to show an explanation (e.g. "Use FOO instead").
    *
    * @since 1.1.0
    */
-  deprecated?: boolean;
+  deprecated?: boolean | string;
 
   /**
    * Version when the variable was introduced (documentation only).
@@ -250,7 +253,12 @@ type DocsRow = {
 function buildRows(entries: Array<[string, EnvMetaEntry]>): DocsRow[] {
   return entries.map(([key, m]) => {
     const req = m.required === false ? "no" : "yes";
-    const dep = m.deprecated ? "⚠️" : "";
+    const dep =
+      m.deprecated === true
+        ? "⚠️"
+        : typeof m.deprecated === "string"
+          ? `⚠️ ${m.deprecated}`
+          : "";
     const link = m.link ? m.link : "";
     return {
       Key: key,

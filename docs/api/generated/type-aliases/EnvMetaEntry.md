@@ -4,12 +4,14 @@
 
 > **EnvMetaEntry** = `object`
 
-Defined in: [generate.ts:12](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L12)
+Defined in: [generate.ts:14](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L14)
 
 Metadata entry for a single environment variable.
 
 This file is part of the stable public API: it powers the CLI generators,
 and is intended to be reusable by consumers.
+
+Stable in 1.2.
 
 ## Since
 
@@ -21,7 +23,7 @@ and is intended to be reusable by consumers.
 
 > `optional` **default**: `string`
 
-Defined in: [generate.ts:44](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L44)
+Defined in: [generate.ts:46](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L46)
 
 Default value (documentation only).
 
@@ -33,11 +35,12 @@ Default value (documentation only).
 
 ### deprecated?
 
-> `optional` **deprecated**: `boolean`
+> `optional` **deprecated**: `boolean` \| `string`
 
-Defined in: [generate.ts:51](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L51)
+Defined in: [generate.ts:54](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L54)
 
 Mark variable as deprecated in docs.
+Use `true` for a generic warning (⚠️) or a string to show an explanation (e.g. "Use FOO instead").
 
 #### Since
 
@@ -49,7 +52,7 @@ Mark variable as deprecated in docs.
 
 > `optional` **description**: `string`
 
-Defined in: [generate.ts:16](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L16)
+Defined in: [generate.ts:18](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L18)
 
 Human-readable description.
 
@@ -59,7 +62,7 @@ Human-readable description.
 
 > `optional` **example**: `string`
 
-Defined in: [generate.ts:23](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L23)
+Defined in: [generate.ts:25](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L25)
 
 Example value used for `.env.example` and documentation.
 
@@ -71,7 +74,7 @@ Tip: do NOT put real secrets here.
 
 > `optional` **group**: `string`
 
-Defined in: [generate.ts:37](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L37)
+Defined in: [generate.ts:39](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L39)
 
 Optional group/section for docs (primarily for Markdown format).
 
@@ -85,7 +88,7 @@ Optional group/section for docs (primarily for Markdown format).
 
 > `optional` **link**: `string`
 
-Defined in: [generate.ts:65](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L65)
+Defined in: [generate.ts:68](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L68)
 
 Optional link to further documentation.
 
@@ -99,7 +102,7 @@ Optional link to further documentation.
 
 > `optional` **required**: `boolean`
 
-Defined in: [generate.ts:30](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L30)
+Defined in: [generate.ts:32](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L32)
 
 Whether the variable is required.
 
@@ -115,7 +118,7 @@ true
 
 > `optional` **since**: `string`
 
-Defined in: [generate.ts:58](https://github.com/nxtxe/zod-envkit/blob/a439230ccd06f7c7dbd70963cdfe33ed9fae9c57/src/generate.ts#L58)
+Defined in: [generate.ts:61](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/generate.ts#L61)
 
 Version when the variable was introduced (documentation only).
 

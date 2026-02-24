@@ -6,10 +6,12 @@ The CLI uses `env.meta.json` as an explicit contract for:
 * generating documentation (`ENV.md`, `ENV.json`, `ENV.yaml`)
 * checking required variables in CI
 
-By default, the CLI searches:
+By default, the CLI searches (in order):
 
 * `./env.meta.json`
 * `./examples/env.meta.json`
+
+If you pass a custom config file (e.g. `-c my.env.json`), it also checks `./examples/<config>` and `./examples/env.meta.json`.
 
 ## Example
 
@@ -47,7 +49,7 @@ Each key is an environment variable name. Value is metadata:
 * `required?: boolean` — defaults to `true`
 * `group?: string` — section name in generated docs
 * `default?: string` — default value (if any)
-* `deprecated?: boolean | string` — mark as deprecated (use string to explain)
+* `deprecated?: boolean | string` — mark as deprecated; use `true` for a generic ⚠️ or a string (e.g. `"Use FOO instead"`) shown in generated docs
 * `since?: string` — version when introduced
 * `link?: string` — reference URL
 

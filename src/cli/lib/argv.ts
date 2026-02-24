@@ -6,6 +6,8 @@
  * This powers the behavior:
  *   `zod-envkit` → `zod-envkit generate`
  *
+ * Stable in 1.2.
+ *
  * @internal
  * @since 1.1.0
  */

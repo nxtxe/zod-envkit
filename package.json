@@ -53,8 +53,9 @@
     "ci:all": "pnpm ci:smoke && pnpm test && pnpm ci:docs",
     "prepublishOnly": "pnpm build && pnpm test",
     "docs:api": "typedoc --tsconfig tsconfig.docs.json --entryPoints src/index.ts",
-    "docs:build": "pnpm docs:api && vitepress build docs",
-    "docs:dev": "vitepress dev docs",
+    "docs:build": "pnpm docs:api && node scripts/copy-changelog-to-docs.cjs && vitepress build docs",
+    "docs:dev": "node scripts/copy-changelog-to-docs.cjs && vitepress dev docs",
+    "docs:links": "find docs -name '*.md' -not -path '*/.vitepress/*' -exec pnpm exec markdown-link-check -c docs/.markdown-link-check.json {} \\;",
     "release": "semantic-release"
   },
   "dependencies": {
@@ -72,6 +73,7 @@
     "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
     "execa": "^9.6.1",
+    "markdown-link-check": "3.10.0",
     "semantic-release": "^22.0.12",
     "tmp-promise": "^3.0.3",
     "tsup": "^8.5.1",

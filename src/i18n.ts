@@ -1,5 +1,6 @@
 import { messages } from "./messages.js";
 
+/** CLI i18n. Stable in 1.2. */
 export type Lang = "en" | "ru";
 export type MessageKey = keyof typeof messages["en"];
 

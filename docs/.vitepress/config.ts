@@ -101,6 +101,7 @@ export default defineConfig({
         nav: [
           { text: "Guide", link: "/guide/getting-started" },
           { text: "CLI", link: "/guide/cli" },
+          { text: "What's new", link: "/guide/changelog" },
           { text: "API", link: "/api/" },
         ],
 
@@ -113,6 +114,7 @@ export default defineConfig({
                 { text: "Library", link: "/guide/library" },
                 { text: "CLI", link: "/guide/cli" },
                 { text: "env.meta.json", link: "/guide/meta" },
+                { text: "What's new", link: "/guide/changelog" },
               ],
             },
           ],
@@ -143,7 +145,8 @@ export default defineConfig({
         nav: [
           { text: "Гайд", link: "/ru/guide/getting-started" },
           { text: "CLI", link: "/ru/guide/cli" },
-          { text: "API", link: "/api/" },
+          { text: "Что нового", link: "/ru/guide/changelog" },
+          { text: "API", link: "/ru/api/" },
         ],
 
         sidebar: {
@@ -155,6 +158,7 @@ export default defineConfig({
                 { text: "Библиотека", link: "/ru/guide/library" },
                 { text: "CLI", link: "/ru/guide/cli" },
                 { text: "env.meta.json", link: "/ru/guide/meta" },
+                { text: "Что нового", link: "/ru/guide/changelog" },
               ],
             },
           ],
@@ -163,7 +167,7 @@ export default defineConfig({
             {
               text: "API",
               items: [
-                { text: "Overview", link: "/api/" },
+                { text: "Справочник (English)", link: "/api/" },
                 { text: "Contract", link: "/api/contract" },
                 { text: "Functions", link: "/api/functions" },
                 { text: "Type aliases", link: "/api/type-aliases" },

@@ -4,12 +4,7 @@ This guide shows how to validate environment variables at runtime using zod-envk
 
 ## Install
 
-```bash
-npm install zod-envkit
-yarn add zod-envkit
-pnpm add zod-envkit
-bun add zod-envkit
-```
+<InstallBlock />
 
 Create a single file responsible for loading and validating environment variables.
 

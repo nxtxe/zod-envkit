@@ -32,6 +32,7 @@ vitest.config.*
 # =====================
 # User-specific / local
 # =====================
+.pnpm-store/
 env.meta.json
 ENV.md
 .env

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Public exports (stable in 1.x).
+ * Public exports (stable in 1.x). Stable in 1.2.
  *
  * Rule of thumb:
  * - Adding new exports is OK (minor).
@@ -124,7 +124,8 @@ export function formatZodError(err: z.ZodError): string {
     })
     .map((issue) => {
       const path = issue.path.length ? issue.path.join(".") : "(root)";
-      return `- ${path}: ${issue.message.trim()}`;
+      const msg = issue.message.trim() || "(validation failed)";
+      return `- ${path}: ${msg}`;
     })
     .join("\n");
 }

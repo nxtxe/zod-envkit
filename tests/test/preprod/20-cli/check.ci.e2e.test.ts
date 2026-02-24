@@ -4,9 +4,13 @@
 import { describe, it, expect } from "vitest";
 import { withDir } from "tmp-promise";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { runZodEnvkit } from "@test/helpers/cli";
 import { writeFile } from "@test/helpers/fs";
 import { makeMeta } from "@test/helpers/meta";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SCHEMA_FIXTURE = path.resolve(__dirname, "../../fixtures/schema.env.cjs");
 
 describe("CLI E2E / check", () => {
   it("check passes when env ok", async () => {
@@ -93,6 +97,26 @@ describe("CLI E2E / check", () => {
     }, { unsafeCleanup: true });
   });
 
+  it("check without --strict passes when unknown vars present in dotenv", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toMatch(/ok|в порядке/i);
+    }, { unsafeCleanup: true });
+  });
+
   it("dotenv priority: later files override earlier ones", async () => {
     await withDir(async ({ path: dir }) => {
       await writeFile(
@@ -124,6 +148,96 @@ describe("CLI E2E / check", () => {
       expect(s.exitCode).toBe(0);
       expect(s.all).toContain("4000");
       expect(s.all).not.toContain("3000");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --schema with matching meta passes", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([
+          { key: "PORT", required: true, example: "3000" },
+          { key: "NODE_ENV", required: true, example: "development" },
+        ])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nNODE_ENV=test\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toMatch(/ok|в порядке/i);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --schema with schema key not in meta fails in strict mode", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nNODE_ENV=test\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "strict"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/not listed in env\.meta|not in meta|SCHEMA_VARS_NOT_IN_META|отсутствуют/i);
+      expect(r.all).toContain("NODE_ENV");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --schema with meta key not in schema fails in strict mode", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([
+          { key: "PORT", required: true, example: "3000" },
+          { key: "NODE_ENV", required: true, example: "development" },
+          { key: "EXTRA_IN_META", required: false, example: "x" },
+        ])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nNODE_ENV=test\nEXTRA_IN_META=x\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "strict"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/not in schema|META_VARS_NOT_IN_SCHEMA|отсутствуют в схеме/i);
+      expect(r.all).toContain("EXTRA_IN_META");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --schema --schema-mode warn exits 0 but prints mismatch", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nNODE_ENV=test\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "warn"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toMatch(/NODE_ENV|not listed|not in meta/i);
+      expect(r.all).toMatch(/ok|в порядке/i);
     }, { unsafeCleanup: true });
   });
 });

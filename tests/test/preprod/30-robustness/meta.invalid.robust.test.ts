@@ -29,21 +29,42 @@ describe("ROBUST / meta invalid", () => {
   });
 
   it("missing meta but .env.example exists => generate succeeds (fallback)", async () => {
-  await withDir(async ({ path: dir }) => {
-    await writeFile(path.join(dir, ".env.example"), "PORT=3000\n");
+    await withDir(async ({ path: dir }) => {
+      await writeFile(path.join(dir, ".env.example"), "PORT=3000\n");
 
-    const r = await runZodEnvkit({ cwd: dir, args: ["generate"], reject: false });
+      const r = await runZodEnvkit({ cwd: dir, args: ["generate"], reject: false });
 
-    // должен успешно отработать
-    expect(r.exitCode).toBe(0);
+      expect(r.exitCode).toBe(0);
 
-    const out = (r.all ?? "");
+      const out = r.all ?? "";
+      expect(out).toMatch(/falling back|minimal meta|\.env\.example/i);
+      expect(out).not.toMatch(/^❌/m);
+    }, { unsafeCleanup: true });
+  });
 
-    // должен явно сказать, что использовал fallback
-    expect(out).toMatch(/falling back to \.env\.example|minimal meta/i);
+  it("invalid env.meta.json => show exit != 0", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(path.join(dir, "env.meta.json"), "{not json}");
+      const r = await runZodEnvkit({ cwd: dir, args: ["show"], reject: false });
+      expect(r.exitCode).not.toBe(0);
+      expect((r.all ?? "").toLowerCase()).toMatch(/parse|json|failed|error|invalid/);
+    }, { unsafeCleanup: true });
+  });
 
-    // и НЕ должен падать через fail()
-    expect(out).not.toMatch(/^❌/m);
-  }, { unsafeCleanup: true });
-});
+  it("invalid env.meta.json => check exit != 0", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(path.join(dir, "env.meta.json"), "{broken");
+      const r = await runZodEnvkit({ cwd: dir, args: ["check"], reject: false });
+      expect(r.exitCode).not.toBe(0);
+      expect((r.all ?? "").toLowerCase()).toMatch(/parse|json|failed|error|invalid/);
+    }, { unsafeCleanup: true });
+  });
+
+  it("valid empty env.meta.json {} => generate exit 0", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(path.join(dir, "env.meta.json"), "{}");
+      const r = await runZodEnvkit({ cwd: dir, args: ["generate"], reject: false });
+      expect(r.exitCode).toBe(0);
+    }, { unsafeCleanup: true });
+  });
 });

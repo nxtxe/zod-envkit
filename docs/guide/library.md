@@ -23,7 +23,7 @@ if (!result.ok) {
 }
 
 export const env = result.env;
-````
+```
 
 **Returns**
 

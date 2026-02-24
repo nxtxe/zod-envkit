@@ -6,10 +6,15 @@ dotenv.config({ quiet: true });
 
 const EnvSchema = z.object({
   BOT_TOKEN: z.string().min(20, "BOT_TOKEN looks too short"),
-  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
 });
 
+const env = mustLoadEnv(EnvSchema);
+
 module.exports = {
-  env: mustLoadEnv(EnvSchema),
+  env,
+  EnvSchema,
 };

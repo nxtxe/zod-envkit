@@ -1,4 +1,5 @@
 // src/cli/commands/init.ts
+/** CLI init command. Stable in 1.2. */
 import fs from "node:fs";
 import path from "node:path";
 import dotenv from "dotenv";

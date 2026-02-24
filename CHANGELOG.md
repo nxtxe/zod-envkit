@@ -20,10 +20,6 @@
 
 * strengthen CLI + env contract guarantees ([d516fbb](https://github.com/nxtxe/zod-envkit/commit/d516fbb4c8248745f7d74c1f07defaf4529c33ec))
 
-# Changelog
-
-All notable changes to this project will be documented in this file.
-This project follows [Semantic Versioning](https://semver.org/).
 
 ## [1.2.0] – 2026-02-16
 
@@ -223,3 +219,9 @@ This project follows [Semantic Versioning](https://semver.org/).
 * Small, framework-agnostic core
 
 [1.0.0]: https://www.npmjs.com/package/zod-envkit/v/1.0.0
+
+
+# Changelog
+
+All notable changes to this project will be documented in this file.
+This project follows [Semantic Versioning](https://semver.org/).

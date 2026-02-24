@@ -111,4 +111,40 @@ describe("CLI E2E / init", () => {
       expect(out).toMatch(/empty|not found|пуст/i);
     }, { unsafeCleanup: true });
   });
+
+  it("roundtrip meta → example → meta preserves keys", async () => {
+    await withDir(async ({ path: dir }) => {
+      const baseText = await fs.readFile(
+        path.resolve(__dirname, "../../fixtures/env.meta.base.json"),
+        "utf8"
+      );
+      await writeFile(path.join(dir, "env.meta.json"), baseText);
+
+      // meta → example
+      const r1 = await runZodEnvkit({
+        cwd: dir,
+        args: ["init", "--from-meta", "--output", ".env.example"],
+        reject: false,
+      });
+      expect(r1.exitCode).toBe(0);
+
+      // example → meta (overwrite env.meta.json with generated one)
+      const r2 = await runZodEnvkit({
+        cwd: dir,
+        args: ["init", "--output", "env.meta.json"],
+        reject: false,
+      });
+      expect(r2.exitCode).toBe(0);
+
+      const meta2Raw = await fs.readFile(path.join(dir, "env.meta.json"), "utf8");
+      const meta2 = JSON.parse(meta2Raw);
+      const base = JSON.parse(baseText);
+
+      expect(Object.keys(meta2).sort()).toEqual(Object.keys(base).sort());
+      for (const k of Object.keys(base)) {
+        expect(meta2[k]).toBeDefined();
+        expect(meta2[k].example).toBe(base[k].example);
+      }
+    }, { unsafeCleanup: true });
+  });
 });

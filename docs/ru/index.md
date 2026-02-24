@@ -35,12 +35,7 @@ zod-envkit помогает вам относиться к переменным 
 
 ## Быстрый старт
 
-```bash
-npm install zod-envkit
-yarn add zod-envkit
-pnpm add zod-envkit
-bun add zod-envkit
-```
+<InstallBlock />
 
 ## Пример
 

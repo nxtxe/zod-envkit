@@ -1,0 +1,9 @@
+{
+  "timeout": "5s",
+  "aliveStatusCodes": [200, 206, 403, 408],
+  "ignorePatterns": [
+    { "pattern": "^#" },
+    { "pattern": "^/" },
+    { "pattern": "^\\./" }
+  ]
+}
