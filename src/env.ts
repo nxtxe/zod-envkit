@@ -66,27 +66,37 @@ export function getUnknownEnv(
   return unknown;
 }
 
-/** @internal */
+/** @internal — patterns expect normalized key (use one list; key is uppercased so matching is case-insensitive) */
 const SECRET_PATTERNS: ReadonlyArray<(k: string) => boolean> = [
-  (k) => k.includes("TOKEN"),
   (k) => k.includes("SECRET"),
   (k) => k.includes("PASSWORD"),
+  (k) => k.includes("PASS"),
+  (k) => k.includes("PWD"),
   (k) => k.includes("PRIVATE"),
   (k) => k.includes("API_KEY"),
   (k) => k.endsWith("_KEY"),
+  (k) => k === "KEY",
+  (k) => k === "API",
+  (k) => k.includes("TOKEN"),
+  (k) => k.includes("JWT"),
+  (k) => k.includes("SESSION"),
+  (k) => k.includes("CREDENTIAL"),
+  (k) => k.includes("CREDS"),
+  (k) => k.includes("DATABASE_URL") || k === "DB_URL",
+  (k) => k.includes("CONNECTION_STRING"),
 ];
 
 /**
  * Detect whether an env key name looks like a secret.
  *
- * Used by the CLI to mask values (TOKEN/SECRET/PASSWORD/*_KEY/PRIVATE).
+ * Used by the CLI to mask values (e.g. SECRET, PASSWORD, TOKEN, *_KEY, connection strings).
+ * Matching is case-insensitive (key is normalized to uppercase).
  *
  * @public
  * @since 1.2.0
  */
 export function isSecretKey(key: string): boolean {
-  const k = key.toUpperCase();
-  return SECRET_PATTERNS.some((fn) => fn(k));
+  return SECRET_PATTERNS.some((fn) => fn(key.toUpperCase()));
 }
 
 /**

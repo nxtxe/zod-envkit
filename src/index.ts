@@ -55,6 +55,9 @@ export type LoadEnvFail = { ok: false; error: z.ZodError };
  *   - returns `{ ok: false, error }` by default
  *   - throws `ZodError` if `opts.throwOnError === true`
  *
+ * @remarks Load dotenv (e.g. `import "dotenv/config"`) before calling so `process.env` is populated.
+ * @see {@link mustLoadEnv} — fail-fast variant that returns env directly.
+ *
  * @example
  * ```ts
  * const result = loadEnv(EnvSchema);
@@ -85,6 +88,9 @@ export function loadEnv<T extends z.ZodTypeAny>(
  *
  * Equivalent to: `loadEnv(schema, { throwOnError: true })` but returns typed env directly.
  *
+ * @remarks Load dotenv (e.g. `import "dotenv/config"`) before calling so `process.env` is populated.
+ * @see {@link loadEnv} — returns a result object instead of throwing.
+ *
  * @example
  * ```ts
  * export const env = mustLoadEnv(EnvSchema);
@@ -108,8 +114,13 @@ export function mustLoadEnv<T extends z.ZodTypeAny>(schema: T): z.infer<T> {
 /**
  * Format `ZodError` into a human-friendly multi-line message (one issue per line).
  *
- * Output format (stable in 1.x):
- * - path: message
+ * Output format (stable in 1.x): `path: message`
+ *
+ * @example
+ * ```ts
+ * const result = loadEnv(EnvSchema);
+ * if (!result.ok) console.error(formatZodError(result.error));
+ * ```
  *
  * @public
  * @since 1.0.0

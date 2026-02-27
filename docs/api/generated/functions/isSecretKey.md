@@ -4,11 +4,12 @@
 
 > **isSecretKey**(`key`): `boolean`
 
-Defined in: [env.ts:87](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/env.ts#L87)
+Defined in: [env.ts:98](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/env.ts#L98)
 
 Detect whether an env key name looks like a secret.
 
-Used by the CLI to mask values (TOKEN/SECRET/PASSWORD/*_KEY/PRIVATE).
+Used by the CLI to mask values (e.g. SECRET, PASSWORD, TOKEN, *_KEY, connection strings).
+Matching is case-insensitive (key is normalized to uppercase).
 
 ## Parameters
 

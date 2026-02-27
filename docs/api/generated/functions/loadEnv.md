@@ -4,7 +4,7 @@
 
 > **loadEnv**\<`T`\>(`schema`, `opts?`): [`LoadEnvFail`](../type-aliases/LoadEnvFail.md) \| [`LoadEnvOk`](../type-aliases/LoadEnvOk.md)\<`T`\>
 
-Defined in: [index.ts:71](https://github.com/nxtxe/zod-envkit/blob/27a915fe7190596f2a29ee8a5373191ee171382a/src/index.ts#L71)
+Defined in: [index.ts:74](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/index.ts#L74)
 
 Validate `process.env` using a Zod schema.
 
@@ -32,6 +32,14 @@ Validate `process.env` using a Zod schema.
 ## Returns
 
 [`LoadEnvFail`](../type-aliases/LoadEnvFail.md) \| [`LoadEnvOk`](../type-aliases/LoadEnvOk.md)\<`T`\>
+
+## Remarks
+
+Load dotenv (e.g. `import "dotenv/config"`) before calling so `process.env` is populated.
+
+## See
+
+[mustLoadEnv](mustLoadEnv.md) — fail-fast variant that returns env directly.
 
 ## Example
 
