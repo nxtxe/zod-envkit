@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/nxtxe/zod-envkit/compare/v1.2.3...v1.3.0) (2026-03-04)
+
+
+### Features
+
+* polish examples and install docs for 1.3.0 ([182ed34](https://github.com/nxtxe/zod-envkit/commit/182ed349f60c2e7cacb002f12c3a3642001eb19e))
+
 ## [1.2.3](https://github.com/nxtxe/zod-envkit/compare/v1.2.2...v1.2.3) (2026-02-19)
 
 
