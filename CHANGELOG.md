@@ -1,3 +1,22 @@
+## [1.3.1](https://github.com/nxtxe/zod-envkit/compare/v1.3.0...v1.3.1) (2026-03-xx)
+
+
+### Bug Fixes
+
+* Improve `zod-envkit check` error output by grouping issues:
+  * clearly separate missing required variables and unknown variables (in strict mode)
+  * use a single `ENV_INVALID` header with structured sections instead of multiple disjoint messages
+* Add actionable hints for env meta issues:
+  * on `META_PARSE_FAILED`, show which file failed and suggest `npx zod-envkit generate -c env.meta.json`
+  * on `META_NOT_FOUND` (and no `.env.example`), suggest generating `env.meta.json` from CLI
+* Clarify strict mode behavior in unknown-variable messages:
+  * `UNKNOWN_ENV` now explicitly states that only dotenv-loaded keys are checked in `--strict` mode
+* Keep CLI contracts stable:
+  * exit codes unchanged
+  * `zod-envkit show` table format unchanged
+  * `formatZodError` output shape unchanged
+  * no JSON structures were modified
+
 # [1.3.0](https://github.com/nxtxe/zod-envkit/compare/v1.2.3...v1.3.0) (2026-03-04)
 
 

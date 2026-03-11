@@ -12,6 +12,7 @@ import type { Lang } from "./i18n.js";
  */
 export const messages: Record<Lang, Record<string, string>> = {
   en: {
+    ENV_INVALID: "Environment is invalid.",
     META_NOT_FOUND: "env meta file not found.",
     META_TRIED: "Tried:",
     META_TIP: "Tip:",
@@ -23,7 +24,7 @@ export const messages: Record<Lang, Record<string, string>> = {
 
     ENV_OK: "Environment looks good.",
     MISSING_ENV: "Missing required environment variables:",
-    UNKNOWN_ENV: "Unknown environment variables:",
+    UNKNOWN_ENV: "Unknown environment variables (strict mode; only dotenv-loaded keys):",
 
     INVALID_FORMAT: "Invalid docs format",
     INVALID_MASK_MODE: "Invalid mask mode",
@@ -40,6 +41,7 @@ export const messages: Record<Lang, Record<string, string>> = {
   },
 
   ru: {
+    ENV_INVALID: "Переменные окружения заданы некорректно.",
     META_NOT_FOUND: "Файл env.meta.json не найден.",
     META_TRIED: "Пробовали:",
     META_TIP: "Подсказка:",
@@ -51,7 +53,7 @@ export const messages: Record<Lang, Record<string, string>> = {
 
     ENV_OK: "Переменные окружения в порядке.",
     MISSING_ENV: "Отсутствуют обязательные переменные окружения:",
-    UNKNOWN_ENV: "Обнаружены неизвестные переменные окружения:",
+    UNKNOWN_ENV: "Обнаружены неизвестные переменные окружения (strict; только из dotenv-файлов):",
 
     INVALID_FORMAT: "Неверный формат документации",
     INVALID_MASK_MODE: "Неверный режим маскировки",

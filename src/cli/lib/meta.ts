@@ -83,7 +83,12 @@ export function loadMeta(lang: Lang, configFile: string): { meta: EnvMeta; confi
       const raw = fs.readFileSync(found, "utf8");
       return { meta: JSON.parse(raw) as EnvMeta, configPath: found };
     } catch {
-      fail(lang, "META_PARSE_FAILED", [`- ${found}`]);
+      fail(lang, "META_PARSE_FAILED", [
+        `- ${found}`,
+        "",
+        t(lang, "META_TIP"),
+        "  Run: npx zod-envkit generate -c env.meta.json",
+      ]);
     }
   }
 
@@ -103,6 +108,6 @@ export function loadMeta(lang: Lang, configFile: string): { meta: EnvMeta; confi
     ...candidates.map((p) => `- ${p}`),
     "",
     t(lang, "META_TIP"),
-    "  npx zod-envkit show -c examples/env.meta.json",
+    "  Run: npx zod-envkit generate -c env.meta.json",
   ]);
 }

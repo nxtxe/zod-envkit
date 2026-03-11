@@ -4,7 +4,7 @@
 
 > **isSecretKey**(`key`): `boolean`
 
-Defined in: [env.ts:98](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/env.ts#L98)
+Defined in: [env.ts:98](https://github.com/nxtxe/zod-envkit/blob/36fecf8e73cd15af5cfbbf0f36b45a49b4fc0096/src/env.ts#L98)
 
 Detect whether an env key name looks like a secret.
 

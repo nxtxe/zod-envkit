@@ -39,16 +39,26 @@ export function registerCheck(program: Command, getLang: () => Lang) {
       const loaded = loadDotEnv(opts.dotenv);
       const { meta } = loadMeta(lang, opts.config);
 
+      const sections: string[] = [];
+
       const missing = getMissingEnv(meta, process.env);
       if (missing.length) {
-        fail(lang, "MISSING_ENV", missing.map((k) => `- ${k}`));
+        sections.push(t(lang, "MISSING_ENV"));
+        missing.forEach((k) => sections.push(`- ${k}`));
+        sections.push("");
       }
 
       if (opts.strict) {
         const unknown = getUnknownEnv(meta, loaded.env as unknown as NodeJS.ProcessEnv);
         if (unknown.length) {
-          fail(lang, "UNKNOWN_ENV", unknown.map((k) => `- ${k}`));
+          sections.push(t(lang, "UNKNOWN_ENV"));
+          unknown.forEach((k) => sections.push(`- ${k}`));
+          sections.push("");
         }
+      }
+
+      if (sections.length) {
+        fail(lang, "ENV_INVALID", sections);
       }
 
       if (opts.schema) {

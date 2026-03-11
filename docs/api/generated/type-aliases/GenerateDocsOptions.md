@@ -4,7 +4,7 @@
 
 > **GenerateDocsOptions** = `object`
 
-Defined in: [generate.ts:101](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/generate.ts#L101)
+Defined in: [generate.ts:101](https://github.com/nxtxe/zod-envkit/blob/36fecf8e73cd15af5cfbbf0f36b45a49b4fc0096/src/generate.ts#L101)
 
 Options for [generateEnvDocs](../functions/generateEnvDocs.md).
 
@@ -18,7 +18,7 @@ Options for [generateEnvDocs](../functions/generateEnvDocs.md).
 
 > `optional` **format**: [`DocsFormat`](DocsFormat.md)
 
-Defined in: [generate.ts:107](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/generate.ts#L107)
+Defined in: [generate.ts:107](https://github.com/nxtxe/zod-envkit/blob/36fecf8e73cd15af5cfbbf0f36b45a49b4fc0096/src/generate.ts#L107)
 
 Output format.
 
@@ -34,7 +34,7 @@ Output format.
 
 > `optional` **group**: `boolean`
 
-Defined in: [generate.ts:124](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/generate.ts#L124)
+Defined in: [generate.ts:124](https://github.com/nxtxe/zod-envkit/blob/36fecf8e73cd15af5cfbbf0f36b45a49b4fc0096/src/generate.ts#L124)
 
 Group Markdown output by `meta[*].group`.
 
@@ -53,7 +53,7 @@ true
 
 > `optional` **sort**: [`SortMode`](SortMode.md)
 
-Defined in: [generate.ts:114](https://github.com/nxtxe/zod-envkit/blob/25e54f3e34d634bedce8655815613c84f68e9de5/src/generate.ts#L114)
+Defined in: [generate.ts:114](https://github.com/nxtxe/zod-envkit/blob/36fecf8e73cd15af5cfbbf0f36b45a49b4fc0096/src/generate.ts#L114)
 
 Sort mode.
 
