@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/nxtxe/zod-envkit/compare/v1.3.0...v1.3.1) (2026-03-19)
+
+
+### Bug Fixes
+
+* **cli:** improve env error grouping and hints ([d098a70](https://github.com/nxtxe/zod-envkit/commit/d098a70683f8028b7be275bd16a580f4fccb4938))
+
 ## [1.3.1](https://github.com/nxtxe/zod-envkit/compare/v1.3.0...v1.3.1) (2026-03-xx)
 
 
