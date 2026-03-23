@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/nxtxe/zod-envkit/compare/v1.3.1...v1.3.2) (2026-03-23)
+
+
+### Bug Fixes
+
+* handle meta fallback edge case ([f54596e](https://github.com/nxtxe/zod-envkit/commit/f54596e9835f47076c079029f2c926228329d990))
+
 ## [1.3.2](https://github.com/nxtxe/zod-envkit/compare/v1.3.1...v1.3.2) (2026-03-xx)
 
 
