@@ -53,7 +53,7 @@ export const env = mustLoadEnv(EnvSchema);
 ```
 
 <p style="margin-top: 2rem;">
-  <a class="VPButton brand" href="/ru/guide/getting-started">
+  <a class="VPButton brand" href="./guide/getting-started.html">
     Перейти к началу работы →
   </a>
 </p>
