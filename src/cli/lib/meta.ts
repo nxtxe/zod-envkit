@@ -95,12 +95,26 @@ export function loadMeta(lang: Lang, configFile: string): { meta: EnvMeta; confi
   // fallback: .env.example
   const examplePath = path.resolve(process.cwd(), ".env.example");
   if (fs.existsSync(examplePath)) {
-    // предупреждение — ОК, но это не ошибка (exit 0)
+    const meta = buildMetaFromEnvExample(examplePath);
+    const keys = Object.keys(meta);
+
+    // Edge hardening: avoid silently accepting an empty/comment-only .env.example
+    if (keys.length === 0) {
+      fail(lang, "META_EXAMPLE_EMPTY", [
+        `- ${examplePath}`,
+        "",
+        t(lang, "META_TIP"),
+        "  Add at least one KEY=value line to .env.example,",
+        "  or create env.meta.json and run: npx zod-envkit generate -c env.meta.json",
+      ]);
+    }
+
+    // warning — OK, but not an error (exit 0)
     console.warn(`⚠️ ${t(lang, "META_FALLBACK_EXAMPLE")}`);
     console.warn(`   ${t(lang, "META_FALLBACK_TIP")}`);
     console.warn("");
 
-    return { meta: buildMetaFromEnvExample(examplePath), configPath: examplePath };
+    return { meta, configPath: examplePath };
   }
 
   fail(lang, "META_NOT_FOUND", [

@@ -51,3 +51,9 @@ const EnvSchema = z.object({
 
 export const env = mustLoadEnv(EnvSchema);
 ```
+
+<p style="margin-top: 2rem;">
+  <a class="VPButton brand" href="/ru/guide/getting-started">
+    Перейти к началу работы →
+  </a>
+</p>

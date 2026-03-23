@@ -71,6 +71,31 @@ describe("CLI E2E / check", () => {
 
       expect(r.exitCode).toBe(1);
       expect(r.all).toMatch(/Unknown|неизвест/i);
+      expect(r.all).toMatch(/dotenv-loaded|dotenv|dotenv-файл/i);
+      expect(r.all).toContain("EXTRA");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --strict groups missing and unknown sections in one failure", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "EXTRA=1\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--strict", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/Environment is invalid|некорректно/i);
+      expect(r.all).toMatch(/Missing|required|Отсутствуют|обязател/i);
+      expect(r.all).toMatch(/Unknown|неизвест/i);
+      expect(r.all).toContain("PORT");
       expect(r.all).toContain("EXTRA");
     }, { unsafeCleanup: true });
   });

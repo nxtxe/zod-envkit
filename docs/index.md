@@ -18,8 +18,6 @@
 </div>
 
 
-# zod-envkit
-
 Type-safe environment variable validation and documentation using **Zod**.
 
 zod-envkit helps you treat environment variables as an **explicit runtime contract**, not an implicit guessing game.
@@ -51,3 +49,9 @@ const EnvSchema = z.object({
 
 export const env = mustLoadEnv(EnvSchema);
 ```
+
+<p style="margin-top: 2rem;">
+  <a class="VPButton brand" href="/guide/getting-started">
+    Get started →
+  </a>
+</p>

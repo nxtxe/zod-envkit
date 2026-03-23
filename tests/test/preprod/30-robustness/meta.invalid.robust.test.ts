@@ -13,6 +13,7 @@ describe("ROBUST / meta invalid", () => {
     await withDir(async ({ path: dir }) => {
       const r = await runZodEnvkit({ cwd: dir, args: ["generate"], reject: false });
       expect(r.exitCode).not.toBe(0);
+      expect(r.all).toMatch(/Run:\s*npx zod-envkit generate/i);
     }, { unsafeCleanup: true });
   });
 
@@ -25,6 +26,7 @@ describe("ROBUST / meta invalid", () => {
 
       const out = (r.all ?? "").toLowerCase();
       expect(out).toMatch(/parse|json|syntax|failed|error|invalid/);
+      expect(r.all).toMatch(/Run:\s*npx zod-envkit generate/i);
     }, { unsafeCleanup: true });
   });
 
@@ -39,6 +41,17 @@ describe("ROBUST / meta invalid", () => {
       const out = r.all ?? "";
       expect(out).toMatch(/falling back|minimal meta|\.env\.example/i);
       expect(out).not.toMatch(/^❌/m);
+    }, { unsafeCleanup: true });
+  });
+
+  it("missing meta + empty .env.example => generate fails with actionable hint", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(path.join(dir, ".env.example"), "\n# comment only\n");
+
+      const r = await runZodEnvkit({ cwd: dir, args: ["generate"], reject: false });
+      expect(r.exitCode).not.toBe(0);
+      expect(r.all).toMatch(/no parseable variables|нет распознаваемых переменных/i);
+      expect(r.all).toMatch(/Add at least one KEY=value|create env\.meta\.json/i);
     }, { unsafeCleanup: true });
   });
 
