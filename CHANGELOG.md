@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/nxtxe/zod-envkit/compare/v1.3.2...v1.3.3) (2026-04-08)
+
+
+### Bug Fixes
+
+* **cli:** lock output stability contract ([b65cca2](https://github.com/nxtxe/zod-envkit/commit/b65cca20de01563cf67f1cdac09ebde988834412))
+
 ## [1.3.3](https://github.com/nxtxe/zod-envkit/compare/v1.3.2...v1.3.3) (2026-03-xx)
 
 
