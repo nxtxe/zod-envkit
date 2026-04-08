@@ -100,6 +100,35 @@ describe("CLI E2E / check", () => {
     }, { unsafeCleanup: true });
   });
 
+  it("check --strict output stays deterministic across repeated runs", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "EXTRA=1\n");
+
+      const run1 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--strict", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+      const run2 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--strict", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(run1.exitCode).toBe(1);
+      expect(run2.exitCode).toBe(1);
+
+      // Exact string lock to prevent accidental formatting drift.
+      expect(run2.all).toBe(run1.all);
+    }, { unsafeCleanup: true });
+  });
+
   it("check --strict ignores host env noise (dotenv-only unknown check)", async () => {
     await withDir(async ({ path: dir }) => {
       await writeFile(

@@ -48,4 +48,30 @@ describe("CLI E2E / dotenv priority", () => {
       expect(r.all).not.toContain("3000");
     }, { unsafeCleanup: true });
   });
+
+  it("dotenv parser handles BOM, trailing spaces, and duplicate keys predictably", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+
+      // First file includes BOM + duplicate key; dotenv.parse keeps the last one.
+      await writeFile(path.join(dir, ".env"), "\uFEFFPORT=3000\nPORT=3100\n");
+      // Second file overrides with a value that has spaces around "=".
+      await writeFile(path.join(dir, ".env.local"), "PORT =  4200  \n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["show", "--dotenv", ".env,.env.local", "--mask-mode", "none"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toContain("4200");
+      expect(r.all).not.toContain("3100");
+      expect(r.all).not.toContain("3000");
+    }, { unsafeCleanup: true });
+  });
 });

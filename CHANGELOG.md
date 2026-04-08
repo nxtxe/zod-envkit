@@ -1,9 +1,21 @@
-## [1.3.3](https://github.com/nxtxe/zod-envkit/compare/v1.3.2...v1.3.3) (2026-04-08)
+## [1.3.4](https://github.com/nxtxe/zod-envkit/compare/v1.3.3...v1.3.4) (2026-03-xx)
 
 
 ### Bug Fixes
 
-* **cli:** lock output stability contract ([b65cca2](https://github.com/nxtxe/zod-envkit/commit/b65cca20de01563cf67f1cdac09ebde988834412))
+* deterministic output polish:
+  * lock stable ordering and formatting of grouped `check --strict` errors across repeated runs
+* masking edge hardening:
+  * add coverage for short secret values (`1-2` chars) in `partial/full` modes
+  * keep case-insensitive secret detection stable (`Api_Key`, `my_password`)
+* dotenv parsing robustness:
+  * add coverage for BOM, trailing spaces, and duplicate keys with deterministic override behavior
+* fallback clarity hardening:
+  * extend tests for empty/comment-only `.env.example` fallback path
+* CLI smoke hardening:
+  * repeated `--help`, `--version`, `show`, and `check` invocations across locales
+* docs consistency patch:
+  * keep EN/RU CLI contract sections aligned (no behavior changes)
 
 ## [1.3.3](https://github.com/nxtxe/zod-envkit/compare/v1.3.2...v1.3.3) (2026-03-xx)
 

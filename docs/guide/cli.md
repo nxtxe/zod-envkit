@@ -8,6 +8,19 @@ Run:
 npx zod-envkit --help
 ```
 
+Deep handbook for onboarding and advanced workflows:
+
+```bash
+npx zod-envkit help --all
+```
+
+Language can be selected explicitly:
+
+```bash
+npx zod-envkit help --all --lang en
+npx zod-envkit help --all --lang ru
+```
+
 ## generate
 
 Generate `.env.example` and documentation from `env.meta.json`.
@@ -143,6 +156,7 @@ npx zod-envkit generate -c examples/env.meta.json
 For the 1.x line, the following CLI behavior is treated as stable contract:
 
 * `--help` lists the core commands: `generate`, `show`, `check`, `init`
+* `help --all` prints an extended handbook (quick start, workflows, full command reference)
 * `--version` prints a SemVer version string
 * exit codes remain predictable:
   * `0` on success

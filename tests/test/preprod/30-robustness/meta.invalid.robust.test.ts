@@ -44,9 +44,9 @@ describe("ROBUST / meta invalid", () => {
     }, { unsafeCleanup: true });
   });
 
-  it("missing meta + empty .env.example => generate fails with actionable hint", async () => {
+  it("missing meta + empty/comment-only .env.example => generate fails with actionable hint", async () => {
     await withDir(async ({ path: dir }) => {
-      await writeFile(path.join(dir, ".env.example"), "\n# comment only\n");
+      await writeFile(path.join(dir, ".env.example"), "\n   \n# comment only\n   # another\n  \n");
 
       const r = await runZodEnvkit({ cwd: dir, args: ["generate"], reject: false });
       expect(r.exitCode).not.toBe(0);

@@ -8,6 +8,19 @@ zod-envkit включает CLI для генерации документаци
 npx zod-envkit --help
 ```
 
+Расширенная справка для глубокого ознакомления и рабочих сценариев:
+
+```bash
+npx zod-envkit help --all
+```
+
+Язык можно указать явно:
+
+```bash
+npx zod-envkit help --all --lang en
+npx zod-envkit help --all --lang ru
+```
+
 ## generate
 
 Генерация `.env.example` и документации из `env.meta.json`.
@@ -143,6 +156,7 @@ npx zod-envkit generate -c examples/env.meta.json
 В ветке 1.x следующее поведение CLI считается стабильным контрактом:
 
 * `--help` содержит основные команды: `generate`, `show`, `check`, `init`
+* `help --all` выводит расширенный справочник (быстрый старт, workflow, полная справка по командам)
 * `--version` выводит версию в формате SemVer
 * exit-коды остаются предсказуемыми:
   * `0` при успехе
