@@ -137,3 +137,17 @@ the CLI will detect it automatically, or you can pass an explicit config:
 ```bash
 npx zod-envkit generate -c examples/env.meta.json
 ```
+
+## CLI contract stability
+
+For the 1.x line, the following CLI behavior is treated as stable contract:
+
+* `--help` lists the core commands: `generate`, `show`, `check`, `init`
+* `--version` prints a SemVer version string
+* exit codes remain predictable:
+  * `0` on success
+  * `1` on user/config validation errors
+* `show` keeps stable table header columns:
+  * `Key`, `Required`, `Present`, `Value`, `Description`
+
+Non-breaking updates may improve wording and hints, but should not change these contract points.

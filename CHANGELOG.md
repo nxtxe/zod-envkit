@@ -1,23 +1,19 @@
+## [1.3.3](https://github.com/nxtxe/zod-envkit/compare/v1.3.2...v1.3.3) (2026-03-xx)
+
+
+### Bug Fixes
+
+* output stability lock for CLI contract:
+  * harden tests that lock `--help` command list, `--version` behavior, and exit-code semantics
+  * lock stable `show` table headers (`Key`, `Required`, `Present`, `Value`, `Description`)
+* document CLI stability policy in docs (EN + RU) without changing runtime behavior
+
 ## [1.3.2](https://github.com/nxtxe/zod-envkit/compare/v1.3.1...v1.3.2) (2026-03-23)
 
 
 ### Bug Fixes
 
 * handle meta fallback edge case ([f54596e](https://github.com/nxtxe/zod-envkit/commit/f54596e9835f47076c079029f2c926228329d990))
-
-## [1.3.2](https://github.com/nxtxe/zod-envkit/compare/v1.3.1...v1.3.2) (2026-03-xx)
-
-
-### Bug Fixes
-
-* edge hardening for meta fallback:
-  * fail with actionable guidance when `.env.example` exists but has no parseable variables
-  * keep fallback behavior for valid `.env.example` (minimal meta generation)
-* improve robustness coverage for edge paths:
-  * invalid JSON meta
-  * missing meta + fallback behavior
-  * strict dotenv-only checks
-  * repeated runs/idempotency scenarios
 
 ## [1.3.1](https://github.com/nxtxe/zod-envkit/compare/v1.3.0...v1.3.1) (2026-03-19)
 

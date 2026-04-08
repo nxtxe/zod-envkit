@@ -4,7 +4,7 @@
 
 > **formatZodError**(`err`): `string`
 
-Defined in: [index.ts:128](https://github.com/nxtxe/zod-envkit/blob/6e3aface48044ce84679d1792e0960fa78d3a7d8/src/index.ts#L128)
+Defined in: [index.ts:128](https://github.com/nxtxe/zod-envkit/blob/6c2f8286529e7462dcfae414b9bd59c59e3ae54c/src/index.ts#L128)
 
 Format `ZodError` into a human-friendly multi-line message (one issue per line).
 

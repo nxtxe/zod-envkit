@@ -4,7 +4,7 @@
 
 > **LoadEnvOk**\<`T`\> = `object`
 
-Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6e3aface48044ce84679d1792e0960fa78d3a7d8/src/index.ts#L40)
+Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6c2f8286529e7462dcfae414b9bd59c59e3ae54c/src/index.ts#L40)
 
 Successful result of [loadEnv](../functions/loadEnv.md).
 
@@ -24,7 +24,7 @@ Successful result of [loadEnv](../functions/loadEnv.md).
 
 > **env**: `z.infer`\<`T`\>
 
-Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6e3aface48044ce84679d1792e0960fa78d3a7d8/src/index.ts#L40)
+Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6c2f8286529e7462dcfae414b9bd59c59e3ae54c/src/index.ts#L40)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6e3aface48044
 
 > **ok**: `true`
 
-Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6e3aface48044ce84679d1792e0960fa78d3a7d8/src/index.ts#L40)
+Defined in: [index.ts:40](https://github.com/nxtxe/zod-envkit/blob/6c2f8286529e7462dcfae414b9bd59c59e3ae54c/src/index.ts#L40)
