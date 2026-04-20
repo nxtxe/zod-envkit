@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/nxtxe/zod-envkit/compare/v1.3.3...v1.3.4) (2026-04-20)
+
+
+### Bug Fixes
+
+* **cli:** harden 1.3.4 output stability and edge robustness ([e3f52d7](https://github.com/nxtxe/zod-envkit/commit/e3f52d78917f726f08f7213fd31c00a52ca39deb))
+
 ## [1.3.4](https://github.com/nxtxe/zod-envkit/compare/v1.3.3...v1.3.4) (2026-03-xx)
 
 
