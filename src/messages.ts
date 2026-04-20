@@ -30,8 +30,11 @@ export const messages: Record<Lang, Record<string, string>> = {
     INVALID_FORMAT: "Invalid docs format",
     INVALID_MASK_MODE: "Invalid mask mode",
     INVALID_SORT: "Invalid sort mode",
+    INVALID_SCHEMA_MODE: "Invalid schema mode",
 
     INIT_INPUT_EMPTY: "Input env file is empty or not found:",
+    META_EMPTY_TIP_LINE_1: "Add at least one KEY=value line to .env.example,",
+    META_EMPTY_TIP_LINE_2: "or create env.meta.json and run: npx zod-envkit generate -c env.meta.json",
 
     SCHEMA_LOAD_FAILED: "Failed to load schema file:",
     SCHEMA_NOT_OBJECT: "Schema file must export a Zod object (z.object(...)).",
@@ -60,8 +63,11 @@ export const messages: Record<Lang, Record<string, string>> = {
     INVALID_FORMAT: "Неверный формат документации",
     INVALID_MASK_MODE: "Неверный режим маскировки",
     INVALID_SORT: "Неверный режим сортировки",
+    INVALID_SCHEMA_MODE: "Неверный режим schema",
 
     INIT_INPUT_EMPTY: "Файл окружения пуст или не найден:",
+    META_EMPTY_TIP_LINE_1: "Добавьте в .env.example хотя бы одну строку KEY=value,",
+    META_EMPTY_TIP_LINE_2: "или создайте env.meta.json и выполните: npx zod-envkit generate -c env.meta.json",
 
     SCHEMA_LOAD_FAILED: "Не удалось загрузить файл схемы:",
     SCHEMA_NOT_OBJECT: "Файл схемы должен экспортировать Zod object (z.object(...)).",

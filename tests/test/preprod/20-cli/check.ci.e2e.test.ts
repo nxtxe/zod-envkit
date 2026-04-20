@@ -249,6 +249,68 @@ describe("CLI E2E / check", () => {
     }, { unsafeCleanup: true });
   });
 
+  it("check --schema strict mismatch output stays deterministic across repeated runs", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nNODE_ENV=test\n");
+
+      const run1 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "strict", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+      const run2 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "strict", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(run1.exitCode).toBe(1);
+      expect(run2.exitCode).toBe(1);
+      expect(run2.all).toBe(run1.all);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --schema-mode invalid keeps same error structure in en and ru", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\n");
+
+      const en = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "oops", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+      const ru = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env", "--schema", SCHEMA_FIXTURE, "--schema-mode", "oops", "--lang", "ru"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(en.exitCode).toBe(1);
+      expect(ru.exitCode).toBe(1);
+
+      const enAll = en.all ?? "";
+      const ruAll = ru.all ?? "";
+      expect(enAll).toContain("warn | strict");
+      expect(ruAll).toContain("warn | strict");
+      expect(enAll.match(/^- /gm)?.length ?? 0).toBe(1);
+      expect(ruAll.match(/^- /gm)?.length ?? 0).toBe(1);
+      expect(enAll).toMatch(/Invalid schema mode/i);
+      expect(ruAll).toMatch(/Неверный режим schema/i);
+    }, { unsafeCleanup: true });
+  });
+
   it("check --schema with meta key not in schema fails in strict mode", async () => {
     await withDir(async ({ path: dir }) => {
       await writeFile(

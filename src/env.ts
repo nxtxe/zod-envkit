@@ -82,7 +82,7 @@ const SECRET_PATTERNS: ReadonlyArray<(k: string) => boolean> = [
   (k) => k.includes("SESSION"),
   (k) => k.includes("CREDENTIAL"),
   (k) => k.includes("CREDS"),
-  (k) => k.includes("DATABASE_URL") || k === "DB_URL",
+  (k) => k.includes("DATABASE_URL") || k === "DB_URL" || k === "POSTGRES_URL" || k === "MYSQL_URL" || k === "DATABASE",
   (k) => k.includes("CONNECTION_STRING"),
 ];
 

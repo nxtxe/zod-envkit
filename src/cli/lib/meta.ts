@@ -104,8 +104,8 @@ export function loadMeta(lang: Lang, configFile: string): { meta: EnvMeta; confi
         `- ${examplePath}`,
         "",
         t(lang, "META_TIP"),
-        "  Add at least one KEY=value line to .env.example,",
-        "  or create env.meta.json and run: npx zod-envkit generate -c env.meta.json",
+        `  ${t(lang, "META_EMPTY_TIP_LINE_1")}`,
+        `  ${t(lang, "META_EMPTY_TIP_LINE_2")}`,
       ]);
     }
 

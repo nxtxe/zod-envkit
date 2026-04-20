@@ -74,4 +74,88 @@ describe("CLI E2E / dotenv priority", () => {
       expect(r.all).not.toContain("3000");
     }, { unsafeCleanup: true });
   });
+
+  it("--dotenv empty string falls back to default .env", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=4300\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["show", "--dotenv", "", "--mask-mode", "none"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toContain("4300");
+    }, { unsafeCleanup: true });
+  });
+
+  it("--dotenv with extra commas/spaces is normalized", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3100\n");
+      await writeFile(path.join(dir, ".env.local"), "PORT=5100\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["show", "--dotenv", ",, .env, , .env.local ,", "--mask-mode", "none"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toContain("5100");
+      expect(r.all).not.toContain("3100");
+    }, { unsafeCleanup: true });
+  });
+
+  it("repeated files in --dotenv list keep deterministic override result", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3200\n");
+      await writeFile(path.join(dir, ".env.local"), "PORT=6200\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["show", "--dotenv", ".env,.env,.env.local,.env.local", "--mask-mode", "none"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toContain("6200");
+      expect(r.all).not.toContain("3200");
+    }, { unsafeCleanup: true });
+  });
+
+  it("only missing dotenv files do not crash and check reports missing required vars", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env.missing,.env.also-missing"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/Missing|required|Отсутствуют|обязател/i);
+      expect(r.all).toContain("PORT");
+    }, { unsafeCleanup: true });
+  });
 });

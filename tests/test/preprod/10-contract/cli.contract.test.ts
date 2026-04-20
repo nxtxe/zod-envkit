@@ -122,4 +122,22 @@ describe("CONTRACT / CLI", () => {
     expect(res.stdout).toContain("Value");
     expect(res.stdout).toContain("Description");
   });
+
+  it("help --all keeps stable section shape in en and ru", async () => {
+    const en = await execa("node", [CLI, "help", "--all", "--lang", "en"], { reject: false });
+    const ru = await execa("node", [CLI, "help", "--all", "--lang", "ru"], { reject: false });
+
+    expect(en.exitCode).toBe(0);
+    expect(ru.exitCode).toBe(0);
+
+    expect(en.stdout).toContain("=== zod-envkit deep help ===");
+    expect(en.stdout).toContain("Quick start:");
+    expect(en.stdout).toContain("Recommended workflows:");
+    expect(en.stdout).toContain("Detailed command reference:");
+
+    expect(ru.stdout).toContain("=== zod-envkit подробная справка ===");
+    expect(ru.stdout).toContain("Быстрый старт:");
+    expect(ru.stdout).toContain("Рекомендуемые workflow:");
+    expect(ru.stdout).toContain("Детальная справка по командам:");
+  });
 });

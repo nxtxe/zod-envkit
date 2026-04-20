@@ -64,7 +64,7 @@ export function registerCheck(program: Command, getLang: () => Lang) {
       if (opts.schema) {
         const schemaMode = String(opts.schemaMode ?? "strict").toLowerCase();
         if (schemaMode !== "warn" && schemaMode !== "strict") {
-          fail(lang, "INVALID_FORMAT", ["--schema-mode must be warn or strict"]);
+          fail(lang, "INVALID_SCHEMA_MODE", ["- warn | strict"]);
         }
 
         const { keys: schemaKeys } = await loadSchemaFile(opts.schema, lang);
@@ -79,7 +79,7 @@ export function registerCheck(program: Command, getLang: () => Lang) {
           const lines: string[] = [];
           if (inSchemaNotMeta.length) {
             lines.push(`❌ ${t(lang, "SCHEMA_VARS_NOT_IN_META")}`);
-            inSchemaNotMeta.forEach((k) => lines.push(`- ${k}`));
+            inSchemaNotMeta.sort((a, b) => a.localeCompare(b)).forEach((k) => lines.push(`- ${k}`));
             lines.push(`   ${t(lang, "SCHEMA_HINT_ADD_TO_META")}`);
             lines.push("");
           }
