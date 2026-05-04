@@ -1,3 +1,10 @@
+## [1.3.5](https://github.com/nxtxe/zod-envkit/compare/v1.3.4...v1.3.5) (2026-05-04)
+
+
+### Bug Fixes
+
+* **cli:** harden 1.3.5 stability checks and release hygiene ([74381b9](https://github.com/nxtxe/zod-envkit/commit/74381b97785a469bf5465d8839702f206acb4c2e))
+
 ## [1.3.4](https://github.com/nxtxe/zod-envkit/compare/v1.3.3...v1.3.4) (2026-04-20)
 
 
