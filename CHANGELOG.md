@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/nxtxe/zod-envkit/compare/v1.3.5...v1.4.0) (2026-05-19)
+
+
+### Features
+
+* **cli:** add --production flag scaffold for check command ([01f3a02](https://github.com/nxtxe/zod-envkit/commit/01f3a02cfba0b991e3403968848818d73e570e0b))
+
 ## [1.3.5](https://github.com/nxtxe/zod-envkit/compare/v1.3.4...v1.3.5) (2026-05-04)
 
 
