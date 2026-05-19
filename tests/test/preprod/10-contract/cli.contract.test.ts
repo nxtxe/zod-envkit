@@ -123,6 +123,63 @@ describe("CONTRACT / CLI", () => {
     expect(res.stdout).toContain("Description");
   });
 
+  it("check --help lists --production", async () => {
+    const { stdout, exitCode } = await execa("node", [CLI, "check", "--help"], { reject: false });
+
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("--production");
+    expect(stdout).toMatch(/production guard|Production guard/i);
+  });
+
+  it("check --production is recognized and does not change exit codes yet", async () => {
+    const dir = tmpDir();
+    fs.writeFileSync(
+      path.join(dir, "env.meta.json"),
+      JSON.stringify({ PORT: { required: true, example: "3000" } }, null, 2)
+    );
+    fs.writeFileSync(path.join(dir, ".env"), "PORT=3000\n");
+
+    const ok = await execa("node", [CLI, "check", "--dotenv", ".env"], {
+      cwd: dir,
+      reject: false,
+    });
+    const okProduction = await execa("node", [CLI, "check", "--dotenv", ".env", "--production"], {
+      cwd: dir,
+      reject: false,
+    });
+
+    expect(ok.exitCode).toBe(0);
+    expect(okProduction.exitCode).toBe(ok.exitCode);
+
+    const missingDir = tmpDir();
+    fs.writeFileSync(
+      path.join(missingDir, "env.meta.json"),
+      JSON.stringify({ PORT: { required: true, example: "3000" } }, null, 2)
+    );
+
+    const missing = await execa("node", [CLI, "check", "--dotenv", ".env"], {
+      cwd: missingDir,
+      reject: false,
+    });
+    const missingProduction = await execa(
+      "node",
+      [CLI, "check", "--dotenv", ".env", "--production"],
+      { cwd: missingDir, reject: false }
+    );
+
+    expect(missing.exitCode).toBe(1);
+    expect(missingProduction.exitCode).toBe(missing.exitCode);
+  });
+
+  it("help --all includes check --production in command reference", async () => {
+    const { stdout, exitCode } = await execa("node", [CLI, "help", "--all", "--lang", "en"], {
+      reject: false,
+    });
+
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("--production");
+  });
+
   it("help --all keeps stable section shape in en and ru", async () => {
     const en = await execa("node", [CLI, "help", "--all", "--lang", "en"], { reject: false });
     const ru = await execa("node", [CLI, "help", "--all", "--lang", "ru"], { reject: false });

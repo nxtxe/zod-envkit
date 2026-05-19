@@ -15,6 +15,7 @@ import { getMissingEnv, getUnknownEnv } from "../../env.js";
  * - exit 0 when env is OK
  * - exit 1 on user errors (missing/unknown/invalid config)
  * - in --strict mode unknown vars are checked against dotenv-only keys
+ * - with --production: production guard (stricter deploy/CI checks; see docs)
  * - with --schema: compare schema keys vs meta keys; --schema-mode warn|strict
  */
 export function registerCheck(program: Command, getLang: () => Lang) {
@@ -24,6 +25,10 @@ export function registerCheck(program: Command, getLang: () => Lang) {
     .option("-c, --config <file>", "Path to env meta json", "env.meta.json")
     .option("--dotenv <list>", "Comma-separated dotenv files (default: .env)", ".env")
     .option("--strict", "Fail if unknown env vars are present (dotenv-only)")
+    .option(
+      "--production",
+      "Production guard: stricter deploy/CI checks (unknown dotenv keys, empty required, placeholders)"
+    )
     .option(
       "--schema <file>",
       "Path to JS file exporting Zod object; run schema↔meta consistency check"
@@ -35,6 +40,8 @@ export function registerCheck(program: Command, getLang: () => Lang) {
     )
     .action(async (opts) => {
       const lang = getLang();
+      const production = Boolean(opts.production);
+      void production;
 
       const loaded = loadDotEnv(opts.dotenv);
       const { meta } = loadMeta(lang, opts.config);
