@@ -6,7 +6,8 @@ function readJson(filePath) {
 }
 
 function getLatestChangelogVersion(changelog) {
-  const match = changelog.match(/^##\s+\[(\d+\.\d+\.\d+)\]/m);
+  // semantic-release uses `# [x.y.z]` for the latest entry and `## [x.y.z]` for older ones
+  const match = changelog.match(/^#{1,2}\s+\[(\d+\.\d+\.\d+)\]/);
   return match ? match[1] : null;
 }
 
