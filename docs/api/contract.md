@@ -43,7 +43,7 @@ Any symbol exported from the package entrypoint is considered **stable public AP
 The CLI interface is also part of the public API, including:
 
 * Commands: `generate`, `show`, `check`, `init`
-* Documented CLI flags and options
+* Documented CLI flags and options (including `check --production`, `check --strict`, `check --schema`)
 * Default behaviors
 * Exit codes
 * Output formats (including masking behavior)

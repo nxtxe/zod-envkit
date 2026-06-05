@@ -131,44 +131,27 @@ describe("CONTRACT / CLI", () => {
     expect(stdout).toMatch(/production guard|Production guard/i);
   });
 
-  it("check --production is recognized and does not change exit codes yet", async () => {
+  it("check --production fails on unknown dotenv vars while default check passes", async () => {
     const dir = tmpDir();
     fs.writeFileSync(
       path.join(dir, "env.meta.json"),
       JSON.stringify({ PORT: { required: true, example: "3000" } }, null, 2)
     );
-    fs.writeFileSync(path.join(dir, ".env"), "PORT=3000\n");
+    fs.writeFileSync(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
 
     const ok = await execa("node", [CLI, "check", "--dotenv", ".env"], {
       cwd: dir,
       reject: false,
     });
-    const okProduction = await execa("node", [CLI, "check", "--dotenv", ".env", "--production"], {
+    const production = await execa("node", [CLI, "check", "--dotenv", ".env", "--production"], {
       cwd: dir,
       reject: false,
     });
 
     expect(ok.exitCode).toBe(0);
-    expect(okProduction.exitCode).toBe(ok.exitCode);
-
-    const missingDir = tmpDir();
-    fs.writeFileSync(
-      path.join(missingDir, "env.meta.json"),
-      JSON.stringify({ PORT: { required: true, example: "3000" } }, null, 2)
-    );
-
-    const missing = await execa("node", [CLI, "check", "--dotenv", ".env"], {
-      cwd: missingDir,
-      reject: false,
-    });
-    const missingProduction = await execa(
-      "node",
-      [CLI, "check", "--dotenv", ".env", "--production"],
-      { cwd: missingDir, reject: false }
-    );
-
-    expect(missing.exitCode).toBe(1);
-    expect(missingProduction.exitCode).toBe(missing.exitCode);
+    expect(production.exitCode).toBe(1);
+    expect(production.stderr || production.stdout).toMatch(/Unknown|неизвест/i);
+    expect(production.stderr || production.stdout).toContain("EXTRA");
   });
 
   it("help --all includes check --production in command reference", async () => {

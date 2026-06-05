@@ -233,8 +233,15 @@ npx zod-envkit check
 npx zod-envkit check --strict
 ```
 
+Production guard (более строгие проверки для deploy/CI; неизвестные ключи из dotenv — как в `--strict`):
+
+```bash
+npx zod-envkit check --production
+```
+
 - завершает процесс с кодом `1`, если отсутствуют обязательные переменные
-- в `--strict` режиме также падает при наличии неизвестных переменных
+- в `--strict` режиме также падает при неизвестных переменных (только ключи из dotenv)
+- с `--production` также падает при неизвестных переменных из dotenv (тот же dotenv-only scope, что у `--strict`)
 
 ---
 

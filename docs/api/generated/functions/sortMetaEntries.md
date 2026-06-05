@@ -4,7 +4,7 @@
 
 > **sortMetaEntries**(`meta`, `sort?`): \[`string`, [`EnvMetaEntry`](../type-aliases/EnvMetaEntry.md)\][]
 
-Defined in: [generate.ts:167](https://github.com/nxtxe/zod-envkit/blob/5f56fca0f9994c65565b1d8eb35835c05b8d2352/src/generate.ts#L167)
+Defined in: [generate.ts:167](https://github.com/nxtxe/zod-envkit/blob/01f3a02cfba0b991e3403968848818d73e570e0b/src/generate.ts#L167)
 
 Sort meta entries.
 

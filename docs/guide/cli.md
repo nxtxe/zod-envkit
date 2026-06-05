@@ -100,6 +100,22 @@ Also fails if unknown variables are present (not listed in `env.meta.json`):
 npx zod-envkit check --strict
 ```
 
+Unknown-variable checks use **dotenv-loaded keys only** — variables present only in the host `process.env` are ignored.
+
+### Production guard
+
+Stricter deploy/CI checks before release or production deploy:
+
+```bash
+npx zod-envkit check --production
+```
+
+With `--production`, unknown variables from dotenv files fail the check the same way as `--strict`. Host-only variables that are not in the loaded dotenv chain are still ignored.
+
+Use this in production pipelines when you want guardrails beyond the default `check`, without passing `--strict` explicitly. Additional production rules (empty required values, placeholder values) are added in later releases.
+
+`--production` and `--strict` can be combined; unknown-variable validation runs once (no duplicate error sections).
+
 ### Dotenv chain
 
 ```bash

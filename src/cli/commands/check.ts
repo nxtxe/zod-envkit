@@ -15,7 +15,7 @@ import { getMissingEnv, getUnknownEnv } from "../../env.js";
  * - exit 0 when env is OK
  * - exit 1 on user errors (missing/unknown/invalid config)
  * - in --strict mode unknown vars are checked against dotenv-only keys
- * - with --production: production guard (stricter deploy/CI checks; see docs)
+ * - with --production: unknown dotenv keys fail like --strict (more rules in later releases)
  * - with --schema: compare schema keys vs meta keys; --schema-mode warn|strict
  */
 export function registerCheck(program: Command, getLang: () => Lang) {
@@ -41,7 +41,7 @@ export function registerCheck(program: Command, getLang: () => Lang) {
     .action(async (opts) => {
       const lang = getLang();
       const production = Boolean(opts.production);
-      void production;
+      const strictEffective = Boolean(opts.strict) || production;
 
       const loaded = loadDotEnv(opts.dotenv);
       const { meta } = loadMeta(lang, opts.config);
@@ -55,7 +55,7 @@ export function registerCheck(program: Command, getLang: () => Lang) {
         sections.push("");
       }
 
-      if (opts.strict) {
+      if (strictEffective) {
         const unknown = getUnknownEnv(meta, loaded.env as unknown as NodeJS.ProcessEnv);
         if (unknown.length) {
           sections.push(t(lang, "UNKNOWN_ENV"));

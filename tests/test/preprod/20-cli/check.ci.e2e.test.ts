@@ -151,6 +151,103 @@ describe("CLI E2E / check", () => {
     }, { unsafeCleanup: true });
   });
 
+  it("check --production fails on unknown env vars from dotenv", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=1\nEXTRA=1\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/Unknown|неизвест/i);
+      expect(r.all).toMatch(/dotenv-loaded|dotenv|dotenv-файл/i);
+      expect(r.all).toContain("EXTRA");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production ignores host env noise (dotenv-only unknown check)", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: true,
+        env: { EXTRA_HOST_NOISE: "1" },
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).not.toMatch(/EXTRA_HOST_NOISE/i);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production output stays deterministic across repeated runs", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
+
+      const run1 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+      const run2 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(run1.exitCode).toBe(1);
+      expect(run2.exitCode).toBe(1);
+      expect(run2.all).toBe(run1.all);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production unknown output stays deterministic in ru", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
+
+      const run1 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "ru"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+      const run2 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "ru"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(run1.exitCode).toBe(1);
+      expect(run2.exitCode).toBe(1);
+      expect(run2.all).toBe(run1.all);
+    }, { unsafeCleanup: true });
+  });
+
   it("check without --strict passes when unknown vars present in dotenv", async () => {
     await withDir(async ({ path: dir }) => {
       await writeFile(
