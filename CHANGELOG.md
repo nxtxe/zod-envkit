@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/nxtxe/zod-envkit/compare/v1.4.0...v1.5.0) (2026-06-06)
+
+
+### Bug Fixes
+
+* **ci:** use npm trusted publishing for semantic-release ([2f05e0b](https://github.com/nxtxe/zod-envkit/commit/2f05e0b9e45c385160bcc42bafbc70db6078b52f))
+* **release:** accept semantic-release changelog heading in hygiene check ([e40a655](https://github.com/nxtxe/zod-envkit/commit/e40a655270798157a2afc4388f9a490576efd12b))
+
+
+### Features
+
+* **cli:** fail on unknown dotenv keys in check --production mode ([ff52897](https://github.com/nxtxe/zod-envkit/commit/ff528978966982d0f59530b170d712efb86c09e6))
+
 # [1.4.0](https://github.com/nxtxe/zod-envkit/compare/v1.3.5...v1.4.0) (2026-05-19)
 
 
