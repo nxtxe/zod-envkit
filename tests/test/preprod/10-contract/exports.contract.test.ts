@@ -18,6 +18,7 @@ describe("CONTRACT / exports", () => {
       // env contract helpers
       "checkEnv",
       "getMissingEnv",
+      "getEmptyRequiredEnv",
       "getUnknownEnv",
       "isSecretKey",
 

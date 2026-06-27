@@ -248,6 +248,116 @@ describe("CLI E2E / check", () => {
     }, { unsafeCleanup: true });
   });
 
+  it("check --production fails on empty required dotenv value (PORT=)", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/empty|пуст/i);
+      expect(r.all).toContain("PORT");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production fails on whitespace-only required dotenv value", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), 'PORT="   "\n');
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/empty|пуст/i);
+      expect(r.all).toContain("PORT");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check without --production keeps current behavior for whitespace-only dotenv value", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), 'PORT="   "\n');
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toMatch(/ok|в порядке/i);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check without --production still fails on empty dotenv value (PORT=)", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/Missing|required|Отсутствуют|обязател/i);
+      expect(r.all).toContain("PORT");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production empty required output stays deterministic across repeated runs", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=\n");
+
+      const run1 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+      const run2 = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(run1.exitCode).toBe(1);
+      expect(run2.exitCode).toBe(1);
+      expect(run2.all).toBe(run1.all);
+    }, { unsafeCleanup: true });
+  });
+
   it("check without --strict passes when unknown vars present in dotenv", async () => {
     await withDir(async ({ path: dir }) => {
       await writeFile(

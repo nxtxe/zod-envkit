@@ -4,7 +4,7 @@
 
 > **mustLoadEnv**\<`T`\>(`schema`): `output`\<`T`\>
 
-Defined in: [index.ts:104](https://github.com/nxtxe/zod-envkit/blob/e40a655270798157a2afc4388f9a490576efd12b/src/index.ts#L104)
+Defined in: [index.ts:104](https://github.com/nxtxe/zod-envkit/blob/0c9a53271099c245d2ca4ef19568ad5b8dec23a3/src/index.ts#L104)
 
 Fail-fast wrapper around [loadEnv](loadEnv.md).
 

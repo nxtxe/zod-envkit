@@ -4,7 +4,7 @@
 
 > **LoadEnvOptions** = `object`
 
-Defined in: [index.ts:25](https://github.com/nxtxe/zod-envkit/blob/e40a655270798157a2afc4388f9a490576efd12b/src/index.ts#L25)
+Defined in: [index.ts:25](https://github.com/nxtxe/zod-envkit/blob/0c9a53271099c245d2ca4ef19568ad5b8dec23a3/src/index.ts#L25)
 
 Options for [loadEnv](../functions/loadEnv.md).
 
@@ -18,7 +18,7 @@ Options for [loadEnv](../functions/loadEnv.md).
 
 > `optional` **throwOnError**: `boolean`
 
-Defined in: [index.ts:31](https://github.com/nxtxe/zod-envkit/blob/e40a655270798157a2afc4388f9a490576efd12b/src/index.ts#L31)
+Defined in: [index.ts:31](https://github.com/nxtxe/zod-envkit/blob/0c9a53271099c245d2ca4ef19568ad5b8dec23a3/src/index.ts#L31)
 
 If true, throws `ZodError` instead of returning `{ ok: false }`.
 

@@ -20,6 +20,7 @@
 - [formatZodError](functions/formatZodError.md)
 - [generateEnvDocs](functions/generateEnvDocs.md)
 - [generateEnvExample](functions/generateEnvExample.md)
+- [getEmptyRequiredEnv](functions/getEmptyRequiredEnv.md)
 - [getMissingEnv](functions/getMissingEnv.md)
 - [getUnknownEnv](functions/getUnknownEnv.md)
 - [isSecretKey](functions/isSecretKey.md)

@@ -44,6 +44,32 @@ export function getMissingEnv(
 }
 
 /**
+ * Return required keys from `meta` that are present in `env` but empty after trim.
+ *
+ * Used by the CLI in `--production` mode to catch dotenv entries like `PORT=` or `PORT="   "`
+ * without changing default `check` behavior for whitespace-only values.
+ *
+ * @public
+ * @since 1.5.1
+ */
+export function getEmptyRequiredEnv(
+  meta: EnvMeta,
+  env: Record<string, string>
+): string[] {
+  const empty: string[] = [];
+
+  for (const [key, m] of Object.entries(meta)) {
+    const required = m.required !== false;
+    if (!required) continue;
+    if (!Object.prototype.hasOwnProperty.call(env, key)) continue;
+    if (env[key].trim() === "") empty.push(key);
+  }
+
+  empty.sort((a, b) => a.localeCompare(b));
+  return empty;
+}
+
+/**
  * Return keys present in `env` that are not defined in `meta`.
  *
  * Note: the result is returned in stable alphabetical order.

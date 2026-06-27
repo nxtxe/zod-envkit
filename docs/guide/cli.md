@@ -110,9 +110,16 @@ Stricter deploy/CI checks before release or production deploy:
 npx zod-envkit check --production
 ```
 
-With `--production`, unknown variables from dotenv files fail the check the same way as `--strict`. Host-only variables that are not in the loaded dotenv chain are still ignored.
+With `--production`:
 
-Use this in production pipelines when you want guardrails beyond the default `check`, without passing `--strict` explicitly. Additional production rules (empty required values, placeholder values) are added in later releases.
+* unknown variables from dotenv files fail the check the same way as `--strict`
+* required variables present in dotenv but empty after trim fail (`PORT=`, `PORT="   "`, etc.)
+
+Empty-value checks use dotenv-loaded keys only — the default `check` without `--production` does not fail on whitespace-only dotenv values.
+
+Host-only variables that are not in the loaded dotenv chain are still ignored for unknown checks.
+
+Use this in production pipelines when you want guardrails beyond the default `check`, without passing `--strict` explicitly. Additional production rules (placeholder values) are added in later releases.
 
 `--production` and `--strict` can be combined; unknown-variable validation runs once (no duplicate error sections).
 

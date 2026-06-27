@@ -6,7 +6,7 @@ import { loadDotEnv } from "../lib/dotenv.js";
 import { loadMeta } from "../lib/meta.js";
 import { loadSchemaFile } from "../lib/schema.js";
 import { fail } from "../lib/fail.js";
-import { getMissingEnv, getUnknownEnv } from "../../env.js";
+import { getMissingEnv, getUnknownEnv, getEmptyRequiredEnv } from "../../env.js";
 
 /**
  * Register `zod-envkit check`.
@@ -15,7 +15,7 @@ import { getMissingEnv, getUnknownEnv } from "../../env.js";
  * - exit 0 when env is OK
  * - exit 1 on user errors (missing/unknown/invalid config)
  * - in --strict mode unknown vars are checked against dotenv-only keys
- * - with --production: unknown dotenv keys fail like --strict (more rules in later releases)
+ * - with --production: unknown dotenv keys fail like --strict; empty required dotenv values fail
  * - with --schema: compare schema keys vs meta keys; --schema-mode warn|strict
  */
 export function registerCheck(program: Command, getLang: () => Lang) {
@@ -48,10 +48,23 @@ export function registerCheck(program: Command, getLang: () => Lang) {
 
       const sections: string[] = [];
 
-      const missing = getMissingEnv(meta, process.env);
+      const emptyRequired = production
+        ? getEmptyRequiredEnv(meta, loaded.env)
+        : [];
+      const emptyRequiredSet = new Set(emptyRequired);
+
+      const missing = getMissingEnv(meta, process.env).filter(
+        (key) => !emptyRequiredSet.has(key)
+      );
       if (missing.length) {
         sections.push(t(lang, "MISSING_ENV"));
         missing.forEach((k) => sections.push(`- ${k}`));
+        sections.push("");
+      }
+
+      if (production && emptyRequired.length) {
+        sections.push(t(lang, "EMPTY_REQUIRED_ENV"));
+        emptyRequired.forEach((k) => sections.push(`- ${k}`));
         sections.push("");
       }
 

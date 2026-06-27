@@ -239,6 +239,7 @@ npx zod-envkit check --production
 * exits with code `1` if required variables are missing
 * in `--strict` mode also fails on unknown variables (dotenv-loaded keys only)
 * with `--production` also fails on unknown dotenv variables (same dotenv-only scope as `--strict`)
+* with `--production` also fails when a required dotenv key is present but empty after trim (`PORT=`, `PORT="   "`)
 
 ---
 
