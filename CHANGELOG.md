@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/nxtxe/zod-envkit/compare/v1.5.0...v1.5.1) (2026-06-27)
+
+
+### Bug Fixes
+
+* **cli:** fail on empty required dotenv values in check --production ([0c46748](https://github.com/nxtxe/zod-envkit/commit/0c46748e4740c97d7fde7bb1a39b7dd4bb11109e))
+
 # [1.5.0](https://github.com/nxtxe/zod-envkit/compare/v1.4.0...v1.5.0) (2026-06-06)
 
 
