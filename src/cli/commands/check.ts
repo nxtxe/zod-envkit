@@ -7,6 +7,10 @@ import { loadMeta } from "../lib/meta.js";
 import { loadSchemaFile } from "../lib/schema.js";
 import { fail } from "../lib/fail.js";
 import { getMissingEnv, getUnknownEnv, getEmptyRequiredEnv } from "../../env.js";
+import {
+  findProductionPlaceholders,
+  formatPlaceholderHit,
+} from "../lib/production-placeholder.js";
 
 /**
  * Register `zod-envkit check`.
@@ -15,7 +19,7 @@ import { getMissingEnv, getUnknownEnv, getEmptyRequiredEnv } from "../../env.js"
  * - exit 0 when env is OK
  * - exit 1 on user errors (missing/unknown/invalid config)
  * - in --strict mode unknown vars are checked against dotenv-only keys
- * - with --production: unknown dotenv keys fail like --strict; empty required dotenv values fail
+ * - with --production: unknown dotenv keys fail like --strict; empty required and placeholder values fail
  * - with --schema: compare schema keys vs meta keys; --schema-mode warn|strict
  */
 export function registerCheck(program: Command, getLang: () => Lang) {
@@ -66,6 +70,15 @@ export function registerCheck(program: Command, getLang: () => Lang) {
         sections.push(t(lang, "EMPTY_REQUIRED_ENV"));
         emptyRequired.forEach((k) => sections.push(`- ${k}`));
         sections.push("");
+      }
+
+      if (production) {
+        const placeholders = findProductionPlaceholders(meta, loaded.env);
+        if (placeholders.length) {
+          sections.push(t(lang, "PLACEHOLDER_ENV"));
+          placeholders.forEach((hit) => sections.push(formatPlaceholderHit(hit)));
+          sections.push("");
+        }
       }
 
       if (strictEffective) {

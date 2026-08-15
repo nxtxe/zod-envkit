@@ -240,6 +240,7 @@ npx zod-envkit check --production
 * in `--strict` mode also fails on unknown variables (dotenv-loaded keys only)
 * with `--production` also fails on unknown dotenv variables (same dotenv-only scope as `--strict`)
 * with `--production` also fails when a required dotenv key is present but empty after trim (`PORT=`, `PORT="   "`)
+* with `--production` also fails on placeholder stubs (meta `example` match, `changeme`/`todo`/`xxx`, `<...>`, `YOUR_*_HERE`)
 
 ---
 

@@ -179,7 +179,8 @@ describe("CLI E2E / check", () => {
         path.join(dir, "env.meta.json"),
         makeMeta([{ key: "PORT", required: true, example: "3000" }])
       );
-      await writeFile(path.join(dir, ".env"), "PORT=3000\n");
+      // value must differ from meta example so placeholder rule does not fire
+      await writeFile(path.join(dir, ".env"), "PORT=8080\n");
 
       const r = await runZodEnvkit({
         cwd: dir,
@@ -200,8 +201,7 @@ describe("CLI E2E / check", () => {
         path.join(dir, "env.meta.json"),
         makeMeta([{ key: "PORT", required: true, example: "3000" }])
       );
-      await writeFile(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
-
+      await writeFile(path.join(dir, ".env"), "PORT=8080\nEXTRA=1\n");
       const run1 = await runZodEnvkit({
         cwd: dir,
         args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
@@ -227,8 +227,7 @@ describe("CLI E2E / check", () => {
         path.join(dir, "env.meta.json"),
         makeMeta([{ key: "PORT", required: true, example: "3000" }])
       );
-      await writeFile(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
-
+      await writeFile(path.join(dir, ".env"), "PORT=8080\nEXTRA=1\n");
       const run1 = await runZodEnvkit({
         cwd: dir,
         args: ["check", "--production", "--dotenv", ".env", "--lang", "ru"],
@@ -355,6 +354,157 @@ describe("CLI E2E / check", () => {
       expect(run1.exitCode).toBe(1);
       expect(run2.exitCode).toBe(1);
       expect(run2.all).toBe(run1.all);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production fails when value matches meta example", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=3000\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toMatch(/Placeholder|placeholder/i);
+      expect(r.all).toContain("PORT");
+      expect(r.all).toMatch(/matches meta example/i);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production fails on literal placeholders (changeme/todo/xxx)", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([
+          { key: "APP_NAME", required: true, example: "my-app" },
+          { key: "FEATURE", required: true, example: "on" },
+          { key: "CODE", required: true, example: "abc" },
+        ])
+      );
+      await writeFile(path.join(dir, ".env"), "APP_NAME=changeme\nFEATURE=TODO\nCODE=xxx\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toContain("APP_NAME");
+      expect(r.all).toContain("FEATURE");
+      expect(r.all).toContain("CODE");
+      expect(r.all).toMatch(/literal: changeme/);
+      expect(r.all).toMatch(/literal: todo/);
+      expect(r.all).toMatch(/literal: xxx/);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production fails on angle-bracket and YOUR_*_HERE templates", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([
+          { key: "HOST", required: true, example: "localhost" },
+          { key: "CLIENT_ID", required: true, example: "id" },
+        ])
+      );
+      await writeFile(
+        path.join(dir, ".env"),
+        "HOST=<HOSTNAME>\nCLIENT_ID=YOUR_CLIENT_ID_HERE\n"
+      );
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toContain("HOST");
+      expect(r.all).toContain("CLIENT_ID");
+      expect(r.all).toMatch(/angle-bracket template/);
+      expect(r.all).toMatch(/YOUR_\*_HERE template/);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production does not false-positive on real URLs or valid values", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([
+          { key: "PORT", required: true, example: "3000" },
+          { key: "SITE_URL", required: true, example: "https://example.com" },
+          { key: "NOTE", required: false, example: "note" },
+        ])
+      );
+      await writeFile(
+        path.join(dir, ".env"),
+        "PORT=8080\nSITE_URL=https://api.example.com/v1/todo?x=1\nNOTE=ready\n"
+      );
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toMatch(/ok|в порядке/i);
+      expect(r.all).not.toMatch(/Placeholder|placeholder/i);
+    }, { unsafeCleanup: true });
+  });
+
+  it("check --production masks secret placeholder output (no raw value)", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "API_KEY", required: true, example: "sk_live_xxx" }])
+      );
+      await writeFile(path.join(dir, ".env"), "API_KEY=changeme\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--production", "--dotenv", ".env", "--lang", "en"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(1);
+      expect(r.all).toContain("API_KEY");
+      expect(r.all).toMatch(/literal placeholder/);
+      expect(r.all).not.toMatch(/literal: changeme/);
+      expect(r.all).not.toContain("sk_live_xxx");
+    }, { unsafeCleanup: true });
+  });
+
+  it("check without --production allows placeholder values", async () => {
+    await withDir(async ({ path: dir }) => {
+      await writeFile(
+        path.join(dir, "env.meta.json"),
+        makeMeta([{ key: "PORT", required: true, example: "3000" }])
+      );
+      await writeFile(path.join(dir, ".env"), "PORT=changeme\n");
+
+      const r = await runZodEnvkit({
+        cwd: dir,
+        args: ["check", "--dotenv", ".env"],
+        reject: false,
+        inheritProcessEnv: false,
+      });
+
+      expect(r.exitCode).toBe(0);
+      expect(r.all).toMatch(/ok|в порядке/i);
     }, { unsafeCleanup: true });
   });
 

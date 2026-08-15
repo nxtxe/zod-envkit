@@ -114,12 +114,24 @@ With `--production`:
 
 * unknown variables from dotenv files fail the check the same way as `--strict`
 * required variables present in dotenv but empty after trim fail (`PORT=`, `PORT="   "`, etc.)
+* placeholder / stub values fail (v1 rules below)
 
-Empty-value checks use dotenv-loaded keys only — the default `check` without `--production` does not fail on whitespace-only dotenv values.
+Empty-value and placeholder checks use dotenv-loaded keys only — the default `check` without `--production` does not apply these rules.
 
 Host-only variables that are not in the loaded dotenv chain are still ignored for unknown checks.
 
-Use this in production pipelines when you want guardrails beyond the default `check`, without passing `--strict` explicitly. Additional production rules (placeholder values) are added in later releases.
+#### Placeholder rules (v1)
+
+A dotenv value is treated as a placeholder when it:
+
+* equals the non-empty meta `example` for that key
+* is an exact case-insensitive literal: `changeme`, `todo`, `xxx`
+* is a whole-value angle-bracket template: `<SOMETHING>` (not URLs)
+* is a whole-value `YOUR_*_HERE` template (e.g. `YOUR_API_KEY_HERE`)
+
+Error lines show **key + reason**. Raw values are never printed; for secret-looking keys (`isSecretKey`) literal tokens are also suppressed.
+
+Use this in production pipelines when you want guardrails beyond the default `check`, without passing `--strict` explicitly.
 
 `--production` and `--strict` can be combined; unknown-variable validation runs once (no duplicate error sections).
 

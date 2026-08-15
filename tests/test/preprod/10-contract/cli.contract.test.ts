@@ -137,8 +137,7 @@ describe("CONTRACT / CLI", () => {
       path.join(dir, "env.meta.json"),
       JSON.stringify({ PORT: { required: true, example: "3000" } }, null, 2)
     );
-    fs.writeFileSync(path.join(dir, ".env"), "PORT=3000\nEXTRA=1\n");
-
+    fs.writeFileSync(path.join(dir, ".env"), "PORT=8080\nEXTRA=1\n");
     const ok = await execa("node", [CLI, "check", "--dotenv", ".env"], {
       cwd: dir,
       reject: false,

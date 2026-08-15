@@ -26,6 +26,7 @@ export const messages: Record<Lang, Record<string, string>> = {
     ENV_OK: "Environment looks good.",
     MISSING_ENV: "Missing required environment variables:",
     EMPTY_REQUIRED_ENV: "Required environment variables are empty (production; dotenv-loaded keys):",
+    PLACEHOLDER_ENV: "Placeholder environment values (production; dotenv-loaded keys):",
     UNKNOWN_ENV: "Unknown environment variables (strict mode; only dotenv-loaded keys):",
 
     INVALID_FORMAT: "Invalid docs format",
@@ -60,6 +61,7 @@ export const messages: Record<Lang, Record<string, string>> = {
     ENV_OK: "Переменные окружения в порядке.",
     MISSING_ENV: "Отсутствуют обязательные переменные окружения:",
     EMPTY_REQUIRED_ENV: "Обязательные переменные окружения пустые (production; только из dotenv-файлов):",
+    PLACEHOLDER_ENV: "Обнаружены placeholder-значения (production; только из dotenv-файлов):",
     UNKNOWN_ENV: "Обнаружены неизвестные переменные окружения (strict; только из dotenv-файлов):",
 
     INVALID_FORMAT: "Неверный формат документации",

@@ -243,6 +243,7 @@ npx zod-envkit check --production
 - в `--strict` режиме также падает при неизвестных переменных (только ключи из dotenv)
 - с `--production` также падает при неизвестных переменных из dotenv (тот же dotenv-only scope, что у `--strict`)
 - с `--production` также падает, если обязательный ключ есть в dotenv, но пустой после trim (`PORT=`, `PORT="   "`)
+- с `--production` также падает на placeholder-заглушки (совпадение с meta `example`, `changeme`/`todo`/`xxx`, `<...>`, `YOUR_*_HERE`)
 
 ---
 
